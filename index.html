@@ -27,11 +27,10 @@
   <title>Cosmic.Link ~ Stellar transactions over URL</title>
   <meta name="description" content="Cosmic.Link provides a convenient way to
   share Stellar transactions as URLs.">
-  <link rel="stylesheet" type="text/css" href="reset.css">
   <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 
-<body id="body" onload="start()">
+<body id="body" onload="lib.start()">
 
   <img id="tamper">
 
@@ -39,45 +38,43 @@
     <h1>Cosmic.Link</h1><span id="query"></span>
   </header>
 
-  <div id="page" class="page">
+  <main>
     <div id="main" class="content">
-      <h2>You're being offered to sign a Stellar transaction.</h2>
-      <aside><a href="javascript:switchPage(main, explanation)">What does that mean?</a></aside>
+      <h2>You're being offered to sign a Stellar transaction</h2>
+      <aside><a href="javascript:lib.switchPage(main, explanation)">What does that mean?</a></aside>
       <hr>
-      <span class="step">Step 1: Check the transaction</span>
-      <p>
-        <div id="CL_htmlNode">
-          Loading... <span class="CL_loadingAnim"></span>
-        </div>
-      </p>
+      <h3>Step 1: Check the transaction</h3>
+      <div id="CL_htmlNode">
+        Loading... <span class="CL_loadingAnim"></span>
+      </div>
       <hr>
-      <span class="step">Step 2: Select an authenticator service</span>
+      <h3>Step 2: Select an authenticator service</h3>
       <form>
-        <select id="authenticators" onchange="selectAuthenticator()">
+        <select id="authenticators" onchange="lib.selectAuthenticator()">
           <option value="stellarAuthenticator">Stellar Authenticator</option>
         </select>
       </form>
       <hr>
-      <span class="step">Step 3: Go & sign the transaction</span>
+      <h3>Step 3: Go & sign the transaction</h3>
       <form onsubmit="return redirect()">
         <input type="submit" value="Sign in my browser">
-        <span id="redirect" onClick="javascript:switchRedirection()">
+        <span id="redirect" onClick="lib.switchRedirection()">
           <span id="checkbox">✘</span> Automatic redirection
         </span>
       </form>
 
       <form>
         <div id="qrcode">
-          <input type="button" value="Sign on my phone" onClick="switchQR()">
+          <input type="button" value="Sign on my phone" onClick="lib.switchQR()">
           <div id="QR"></div>
         </div>
       </form>
     </div>
-  </div>
+  </main>
 
   <div id="hidden">
     <div id="explanation" class="content">
-      <p><a href="javascript:switchPage(explanation, main)" class="back">&lt;&lt; Back</a></p>
+      <p><a href="javascript:lib.switchPage(explanation, main)" class="back">&lt;&lt; Back</a></p>
       <h2>Warm welcome to the Stellar network !</h2>
       <p>
         The Stellar network is a cryptocurrency platform on which we can
@@ -127,8 +124,6 @@
   </div>
 
   <script src="bower-js-stellar-sdk/stellar-sdk.min.js"></script>
-  <script src="cosmic-lib/cosmic-lib.js"></script>
-  <script src="qrcodejs/qrcode.min.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

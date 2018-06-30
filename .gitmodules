@@ -1,9 +1,0 @@
-[submodule "qrcodejs"]
-	path = qrcodejs
-	url = https://github.com/davidshimjs/qrcodejs
-[submodule "bower-js-stellar-sdk"]
-	path = bower-js-stellar-sdk
-	url = https://github.com/stellar/bower-js-stellar-sdk
-[submodule "cosmic-lib"]
-	path = cosmic-lib
-	url = https://github.com/MisterTicot/js-cosmic-lib

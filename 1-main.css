@@ -16,6 +16,7 @@ header
 	top: 0;
 	max-width: 100%;
 	overflow: hidden;
+  text-overflow: ellipsis;
 	font-style: italic;
 	color: dimgrey;
 }
@@ -23,7 +24,7 @@ header
 h1
 {
 	display: inline;
-	margin: 0.2em;
+	margin: 0.2em 0;
 	font-size: 1.2em;
 	text-transform: uppercase;
 }
@@ -31,61 +32,53 @@ h1
 
 header span
 {
-	font-size: 0.8em;
+	font-size: 0.9em;
 	white-space: nowrap;
-	-o-text-overflow: ellipsis;
-	   text-overflow: ellipsis;
 }
 
-#tamper
-{
-	position: absolute;
-	pointer-events: none;
-	max-height: 50%;
-	max-width: 40%;
-	margin: auto;
-	filter: grayscale(50%) opacity(30%);
-	-webkit-filter: grayscale(50%) opacity(30%);
-	-ms-transform: rotate(180deg);
-		transform: rotate(180deg);
-	-webkit-transform: rotate(180deg);
-}
-
-.page
+main
 {
 	max-width: 40em;
-	margin: 1em auto;
+	margin: 0.5em auto;
 	border: 0.2em solid lightgrey;
 	border-radius: 1em;
 	overflow: hidden;
 	background-color: white;
-	-webkit-box-shadow: 0.1em 0.1em 0.3em darkgrey;
-			box-shadow: 0.1em 0.1em 0.3em darkgrey;
+	box-shadow: 0.1em 0.1em 0.3em darkgrey;
 }
 
-.content
+main div
 {
 	padding: 0 0.5em;
 }
 
-/* Content formatting */
 
 h2
 {
-	font-size: 1em;
+	font-size: 1.1em;
 	font-weight: normal;
 	text-align: center;
+}
+
+h3
+{
+	margin: 0;
+	padding: 0.2em 0 0.2em 0;
+	font-weight: bolder;
+	font-size: 0.8em;
+	text-transform: uppercase;
+	font-stretch: condensed;
 }
 
 hr
 {
 	border: 0;
-	height: 0.2em;
-	background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, 0)), color-stop(lightgrey), to(rgba(0, 0, 0, 0)));
-	background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), lightgrey, rgba(0, 0, 0, 0));
-	background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0), lightgrey, rgba(0, 0, 0, 0));
+	height: 0.1em;
 	background-image: linear-gradient(to right, rgba(0, 0, 0, 0), lightgrey, rgba(0, 0, 0, 0));
 }
+
+
+/* Content formatting */
 
 form
 {
@@ -166,16 +159,19 @@ a:hover
 	margin: 0;
 }
 
-#qrcode img {
+#qrcode canvas {
 	margin: auto;
 	padding: 0.3em;
 }
 
-.step
+
+#tamper
 {
-	padding: 0.2em 0 0.2em 0;
-	font-weight: bold;
-	font-size: 0.8em;
-	text-transform: uppercase;
-	font-stretch: condensed;
+	position: absolute;
+	pointer-events: none;
+	max-height: 50%;
+	max-width: 40%;
+	margin: auto;
+	filter: grayscale(50%) opacity(30%);
+  transform: rotate(180deg);
 }
