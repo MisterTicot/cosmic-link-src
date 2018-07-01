@@ -18,8 +18,13 @@
       return false
     }
 
-    if (localStorage.redirect == "true" && location.search.length > 1) redirect()
-    else history.replaceState({}, '', '/' + location.search)
+    if (localStorage.redirect == "true" && location.search.length > 1) {
+      redirect()
+    } else {
+      history.replaceState({}, '',
+        location.pathname.replace(/[^\/]*$/,'') + location.search)
+      console.log(location.pathname.replace(/[^\/]*$/,''))
+    }
   </script>
 
   <meta charset="UTF-8">
