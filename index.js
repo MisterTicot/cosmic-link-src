@@ -2,6 +2,11 @@ const CosmicLink = require('cosmic-lib').CosmicLink
 const node = require('./node')
 const QRCode = require('qrcode')
 
+/// Service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('worker.js').catch(console.error)
+}
+
 var cosmicLink
 exports.start = function () {
   refreshRedirection()
