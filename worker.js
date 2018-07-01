@@ -1,5 +1,5 @@
 const ROOT = location.protocol + '//' + location.host + '/'
-const VERSION = '0.1.26'
+const VERSION = '0.1.27'
 const CACHE_NAME = VERSION + ':cache'
 const CACHE_FILES = [
   '/',
@@ -39,7 +39,7 @@ self.addEventListener('fetch', function (event) {
   console.log('Fetching resource: ' + filename + '...')
 
   event.respondWith(
-    caches.match(event.request)
+    caches.match(event.request, { ignoreSearch: true })
       .then(function (cached) {
         const networked = fetch(event.request)
           .then(fetchedFromNetwork)
