@@ -40,18 +40,13 @@ main
 {
 	max-width: 40em;
 	margin: 0.5em auto;
+	padding: 0 0.5em;
 	border: 0.2em solid lightgrey;
 	border-radius: 1em;
 	overflow: hidden;
 	background-color: white;
 	box-shadow: 0.1em 0.1em 0.3em darkgrey;
 }
-
-main div
-{
-	padding: 0 0.5em;
-}
-
 
 h2
 {
