@@ -1,5 +1,5 @@
 Before beta release (planned for this summer):
-* Make the website available off-line using service worker
+* Add more authenticators
 
 Before stable release (planned for this autumn):
 * Have the website performing integrity-check using data on the
