@@ -6,7 +6,8 @@ const CACHE_FILES = [
   'index.html',
   'main.css',
   'main.js',
-  'bower-js-stellar-sdk/stellar-sdk.min.js'
+  'bower-js-stellar-sdk/stellar-sdk.min.js',
+  'icons/512x512.png'
 ]
 
 self.addEventListener('install', function (event) {

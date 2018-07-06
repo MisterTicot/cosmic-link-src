@@ -12,6 +12,10 @@
 	html { font-size: 1.4em; }
 }
 
+@media (min-width: 64em) and (min-height: 64em) {
+	html { font-size: 1.5em }
+}
+
 @media (min-width: 160em) {
 	html { font-size: 1.6em; }
 }
@@ -279,6 +283,16 @@ input:focus:enabled
 
 #hidden {
 	display: none;
+}
+
+#logo {
+	z-index: -1;
+	position: absolute;
+	top: 0;
+	max-height: 50%;
+	max-width: 40%;
+	filter: grayscale(30%) opacity(70%);
+	transform: translate(-20%, -20%);
 }
 
 #tamper
