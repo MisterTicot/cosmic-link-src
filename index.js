@@ -1,30 +1,186 @@
 const CosmicLink = require('cosmic-lib').CosmicLink
-const node = require('./node')
 const QRCode = require('qrcode')
+
+const node = require('./node')
+
+const authenticators = require('./authenticators')
 
 /// Service worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('worker.js').catch(console.error)
 }
 
-var cosmicLink
-exports.start = function () {
-  refreshRedirection()
-  setTamper()
+/// HTML elements
+const authenticatorSelector = node.grab('#authenticators')
 
-  if (location.search.length > 1) {
-    cosmicLink = new CosmicLink(document.URL)
+const accountIdBox = node.grab('#accountId')
+const networkDiv = node.grab('#network')
+const publicNetworkRadio = node.grab('#publicNetwork')
+const testNetworkRadio = node.grab('#testNetwork')
 
-    cosmicLink.getQuery().then(function (query) {
-      node.append(node.grab('#query'), '/' + query)
-    })
+const redirectionForm = node.grab('#redirection')
+const gotoButton = node.grab('input', redirectionForm)
+const checkbox = node.grab('#checkbox')
 
-    refreshQR()
-  } else {
-    var transactionNode = node.grab('#CL_htmlNode')
-    node.clear(transactionNode)
-    node.append(transactionNode, 'No transaction')
+const textareaForm = node.grab('#textarea')
+const xdrBox = node.grab('textarea', textareaForm)
+
+const QrButton = node.grab('input', node.grab('#qrcode'))
+const qrDiv = node.grab('#QR')
+
+let authenticator, cosmicLink, transaction
+
+exports.init = function () {
+  node.append(node.grab('#query'), location.search)
+
+  authenticators.nodes.forEach(entry => node.append(authenticatorSelector, entry))
+  if (localStorage.redirect === 'true') checkbox.checked = true
+  if (localStorage.accountId) accountIdBox.value = localStorage.accountId
+  if (localStorage.network) {
+    if (localStorage.network === 'public') publicNetworkRadio.checked = true
+    else if (localStorage.network === 'test') testNetworkRadio.checked = true
   }
+
+  if (localStorage.QR === 'true') {
+    QrButton.className = 'enabled'
+    node.show(qrDiv)
+  }
+
+  if (location.search.length < 2) {
+    node.rewrite(node.grab('#CL_htmlNode'), 'No transaction')
+    redirectionForm.onsubmit = () => false
+  }
+
+  if (localStorage.authenticator && authenticators[localStorage.authenticator]) {
+    authenticatorSelector.value = localStorage.authenticator
+  } else {
+    authenticatorSelector.value = 'Stellar Authenticator'
+  }
+  authenticatorSelector.onchange()
+
+  setTamper()
+}
+
+authenticatorSelector.onchange = function (event) {
+  authenticator = authenticators[authenticatorSelector.value]
+
+  localStorage.authenticator = authenticator.name
+
+  if (authenticator.url) node.show(redirectionForm)
+  else node.hide(redirectionForm)
+
+  if (authenticator.accountId) node.show(accountIdBox, networkDiv)
+  else node.hide(accountIdBox, networkDiv)
+
+  if (authenticator.textarea) node.show(textareaForm)
+  else node.hide(textareaForm)
+
+  if (event) {
+    localStorage.redirect = false
+    checkbox.checked = false
+  }
+
+  if (location.search.length < 2) {
+    if (authenticator.url) {
+      gotoButton.value = 'Go to ' + authenticator.name
+      gotoButton.onclick = () => location = authenticator.url
+      gotoButton.disabled = undefined
+    }
+  } else {
+    computeTransaction()
+  }
+}
+
+function computeTransaction () {
+  if (location.search.length < 2) return
+
+  gotoButton.value = '…'
+  gotoButton.disabled = true
+  xdrBox.placeholder = 'Computing...'
+  xdrBox.value = ''
+  xdrBox.disabled = true
+  node.rewrite(qrDiv, node.create('canvas', '.CL_loadingAnim'))
+
+  let network, accountId
+
+  if (authenticator.accountId) {
+    accountId = accountIdBox.value
+    network = publicNetworkRadio.checked ? 'public' : 'test'
+  }
+
+  cosmicLink = new CosmicLink(location.search, network, accountId)
+  transaction = authenticator.handle(cosmicLink)
+
+  const saveTransaction = transaction
+  transaction
+    .then(function (value) {
+      if (transaction === saveTransaction) refreshTransaction(value)
+    })
+    .catch(function (error) {
+      if (transaction === saveTransaction) transactionError(error)
+    })
+}
+
+function refreshTransaction (value) {
+  if (localStorage.redirect === 'true') {
+    location.replace(value)
+    return
+  }
+
+  if (authenticator.accountId) {
+    cosmicLink.getTdesc().then(tdesc => refreshAccountIdForm(tdesc))
+  }
+
+  if (authenticator.url) {
+    gotoButton.value = 'Go to ' + authenticator.name
+    gotoButton.disabled = undefined
+  }
+
+  if (authenticator.textarea) {
+    xdrBox.value = value
+    xdrBox.disabled = undefined
+  }
+
+  refreshQR(value)
+}
+
+function refreshAccountIdForm (tdesc) {
+  if (tdesc.source) {
+    accountIdBox.value = tdesc.source
+    accountIdBox.disabled = true
+  }
+  if (tdesc.network) {
+    publicNetworkRadio.disabled = true
+    testNetworkRadio.disabled = true
+    if (tdesc.network === 'public') publicNetworkRadio.checked = true
+    else testNetworkRadio.checked = true
+  }
+}
+
+function transactionError (error) {
+  if (authenticator.url) gotoButton.value = error.message
+  if (authenticator.textarea) xdrBox.placeholder = error.message
+  node.clear(qrDiv)
+}
+
+redirectionForm.onsubmit = function () {
+  transaction.then(url => location = url)
+  return false
+}
+
+accountIdBox.onchange = function () {
+  localStorage.accountId = accountIdBox.value
+  computeTransaction()
+}
+
+publicNetworkRadio.onchange = testNetworkRadio.onchange = function () {
+  localStorage.network = publicNetworkRadio.checked ? 'public' : 'test'
+  computeTransaction()
+}
+
+checkbox.onchange = function () {
+  if (checkbox.checked) localStorage.redirect = 'true'
+  else localStorage.redirect = 'false'
 }
 
 const main = node.grab('main')
@@ -35,48 +191,23 @@ exports.switchPage = function (from, to) {
 }
 
 exports.switchQR = function () {
-  if (localStorage.QR === 'true') localStorage.QR = false
-  else localStorage.QR = true
-  refreshQR()
-}
-
-const QRdiv = node.grab('#QR')
-function refreshQR () {
   if (localStorage.QR === 'true') {
-    cosmicLink.getQuery().then(function (query) {
-      const url = getAuthenticatorUrl() + query
-      const canvas = node.create('canvas')
-      QRCode.toCanvas(canvas, url, { margin: 0, scale: 5 })
-      node.append(QRdiv, canvas)
-    })
+    node.hide(qrDiv)
+    localStorage.QR = false
+    QrButton.className = undefined
   } else {
-    node.clear(QRdiv)
+    node.show(qrDiv)
+    localStorage.QR = true
+    QrButton.className = 'enabled'
   }
 }
 
-exports.switchRedirection = function () {
-  if (localStorage.redirect === 'true') localStorage.redirect = false
-  else localStorage.redirect = true
-  refreshRedirection()
-}
-
-const checkbox = node.grab('#checkbox')
-const redirect = node.grab('#redirect')
-function refreshRedirection () {
-  if (localStorage.redirect === 'true') {
-    checkbox.textContent = '✔'
-    redirect.className = 'enabled'
-  } else {
-    checkbox.textContent = '✘'
-    redirect.className = ''
-  }
-}
-
-const selector = node.grab('#authenticators')
-function selectAuthenticator () {
-  const value = selector.value
-  localStorage.authenticator = value
-  refreshQR()
+function refreshQR (value) {
+  node.clear(qrDiv)
+  const canvas = node.create('canvas')
+  QRCode.toCanvas(canvas, value, { margin: 0, scale: 5 })
+  canvas.title = value
+  node.append(qrDiv, canvas)
 }
 
 /** * Experimental Robot Factory ***/
@@ -99,4 +230,16 @@ function myHash () {
 const tamper = node.grab('#tamper')
 function setTamper () {
   tamper.src = 'https://robohash.org/' + myHash()
+}
+
+/// Copy content helper
+
+exports.copyContent = function (element) {
+  if (node.copyContent(element) && document.activeElement.value) {
+    const prevNode = node.grab('#copied')
+    if (prevNode) node.destroy(prevNode)
+    const copiedNode = node.create('span', '#copied', 'Copied')
+    element.parentNode.insertBefore(copiedNode, element.nextSibling)
+    setTimeout(() => { copiedNode.hidden = true }, 3000)
+  }
 }

@@ -53,7 +53,16 @@ node.clear = function (element) {
  * @param
  * */
 node.copyContent = function (element) {
-  element.select()
+  if (element.select) {
+    element.select()
+  } else if (window.getSelection) {
+    const range = document.createRange()
+    range.selectNode(element)
+    window.getSelection().removeAllRanges()
+    window.getSelection().addRange(range)
+  } else {
+    return
+  }
   return document.execCommand('copy')
 }
 

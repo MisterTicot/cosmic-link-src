@@ -5,23 +5,24 @@
   <meta name="viewport" content="width=device-width">
 
   <script>
-    /*** Immediate redirection if requested by user ***/
+    /*** Immediate redirection when possible ***/
     var authenticators = {
-      stellarAuthenticator: "https://stellar-authenticator.org/"
+      'Stellar Authenticator': 'https://stellar-authenticator.org/',
+
+      /** Backward compatibility **/
+      'stellarAuthenticator': 'https://stellar-authenticator.org'
     }
 
     function getAuthenticatorUrl(){
-      if(!localStorage.authenticator) localStorage.authenticator = "stellarAuthenticator"
       return authenticators[localStorage.authenticator]
     }
 
-    function redirect(){
+    if (
+      localStorage.redirect === 'true' &&
+      location.search.length > 1 &&
+      getAuthenticatorUrl()
+    ) {
       location.replace(getAuthenticatorUrl() + location.search)
-      return false
-    }
-
-    if (localStorage.redirect == "true" && location.search.length > 1) {
-      redirect()
     } else {
       history.replaceState({}, '',
         location.pathname.replace(/[^\/]*$/,'') + location.search)
@@ -39,9 +40,9 @@
     content="Cosmic.Link provides a convenient way to share Stellar
     transactions as URLs.">
 
-  <meta property="og:image" content="https://test.cosmic.link/icons/180x180.png">
-  <meta property="og:image:height" content="180">
-  <meta property="og:image:width" content="180">
+  <meta property="og:image" content="https://test.cosmic.link/icons/192x192.png">
+  <meta property="og:image:height" content="192">
+  <meta property="og:image:width" content="192">
 
   <link rel="manifest" href="manifest.json">
   <link rel="mask-icon" href="icons/safari.svg" color="#5bbad5">
@@ -51,57 +52,76 @@
   <link rel="shortcut icon" href="icons/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="icons/16x16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="icons/32x32.png">
-  <link rel="apple-touch-icon" sizes="192x192" href="icons/192x192.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/180x180.png">
 
   <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 
-<body id="body" onload="lib.start()">
+<body id="body" onload="lib.init()">
 
-  <img id="tamper">
-
-  <header>
-    <h1>Cosmic.Link</h1><span id="query"></span>
+  <header onclick="lib.copyContent(this)">
+    <h1>https://cosmic.link/</h1><span id="query"></span>
   </header>
 
   <main>
     <div id="main" class="content">
       <h2>You're being offered to sign a Stellar transaction</h2>
       <aside><a href="javascript:lib.switchPage(main, explanation)">What does that mean?</a></aside>
+
       <hr>
+
       <h3>Step 1: Check the transaction</h3>
       <div id="CL_htmlNode">
         Loading... <span class="CL_loadingAnim"></span>
       </div>
+
       <hr>
-      <h3>Step 2: Select an authenticator service</h3>
-      <form>
-        <select id="authenticators" onchange="lib.selectAuthenticator()">
-          <option value="stellarAuthenticator">Stellar Authenticator</option>
+
+      <h3>Step 2: Select an Authenticator</h3>
+      <form onsubmit="return false">
+        <select id="authenticators">
+          <option value="" disabled selected hidden>Loading...</option>
         </select>
-      </form>
-      <hr>
-      <h3>Step 3: Go & sign the transaction</h3>
-      <form onsubmit="return redirect()">
-        <input type="submit" value="Sign in my browser">
-        <span id="redirect" onClick="lib.switchRedirection()">
-          <span id="checkbox">✘</span> Automatic redirection
-        </span>
+        <input id="accountId" type="text" placeholder="Your Account Address or ID"
+          style="display:none">
+        <div id="network" style="display:none">
+          <input id="publicNetwork" type="radio" name="network" value="public"
+            checked>
+          <label for="publicNetwork">Public network</label>
+          <input id="testNetwork" type="radio" name="network" value="test">
+          <label for="testNetwork">Test network</label>
+        </div>
       </form>
 
-      <form>
-        <div id="qrcode">
-          <input type="button" value="Sign on my phone" onClick="lib.switchQR()">
-          <div id="QR"></div>
-        </div>
+      <hr>
+
+      <h3>Step 3: Sign the Transaction</h3>
+      <form id="redirection" style="display:none">
+        <input type="submit" value="…" disabled>
+        <input id="checkbox" type="checkbox">
+        <label for="checkbox">Automatic redirection</label>
+      </form>
+
+      <form id="textarea" style="display:none">
+        <textarea id="xdr" rows="3" readonly onclick="lib.copyContent(this)">
+        </textarea>
+      </form>
+
+      <form id="qrcode">
+          <input type="button" value="QR Code" onclick="lib.switchQR()">
+          <div id="QR" style="display:none"></div>
       </form>
     </div>
   </main>
 
+  <img id="tamper">
+
   <div id="hidden">
     <div id="explanation" class="content">
-      <p><a href="javascript:lib.switchPage(explanation, main)" class="back">&lt;&lt; Back</a></p>
-      <h2>Warm welcome to the Stellar network !</h2>
+      <h2>Warm welcome to the Stellar network!</h2>
+      <hr>
+
       <p>
         The Stellar network is a cryptocurrency platform on which we can
         create accounts and perform transactions. It's a bit like a bank,
@@ -125,7 +145,7 @@
         In order to sign a Stellar transaction, you need to have an
         account with a minimum amount of the native currency, called
         lumen (XLM). At this time, the minimum amount is 1 lumen, valued
-        between $.30 and $.50. Once in, you'll be able to close your
+        between $.20 and $.50. Once in, you'll be able to close your
         account and get your money back at any time, if you wish to do so.
       </p>
       <p>
@@ -139,13 +159,23 @@
       </p>
       <p>
         The Stellar network and core programs are maintained by the Stellar
-        Foundation. Their <a href="https://stellar.org">website</a> is a good
-        place to start if you want to learn more. <br />
-        We also have a <a href="https://galactictalk.org">community forum</a>.
+        Foundation. Their
+        <a href="https://stellar.org" title="https://stellar.org"
+          target="_blank" rel="noopener">website</a>
+        is a good place to start if you want to learn more. <br>
+        We also have a
+        <a href="https://galactictalk.org" title="https://galactictalk.org"
+          target="_blank" rel="noopener">community forum</a>.
       </p>
       <p>
         We wish you a happy discovery :)
       </p>
+
+      <hr>
+      <form>
+        <input type="button" onclick="lib.switchPage(explanation, main)"
+          value="Back">
+      <form>
     </div>
   </div>
 
