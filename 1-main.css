@@ -1,6 +1,21 @@
 /* Toolkit */
 
-#hidden { display: none; }
+@media (min-width: 64em) {
+	html { font-size: 1.2em; }
+}
+
+@media (min-width: 85.375em) {
+	html { font-size: 1.3em; }
+}
+
+@media (min-width: 120em) {
+	html { font-size: 1.4em; }
+}
+
+@media (min-width: 160em) {
+	html { font-size: 1.6em; }
+}
+
 
 /* Page layout */
 
@@ -8,7 +23,6 @@ body
 {
 	background-color: aliceblue;
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
-	font-size: 1.2em;
 }
 
 header
@@ -16,22 +30,29 @@ header
 	top: 0;
 	max-width: 100%;
 	overflow: hidden;
-  text-overflow: ellipsis;
+	text-overflow: ellipsis;
 	font-style: italic;
 	color: dimgrey;
+
+	transition: 0.3s all ease;
+}
+
+header:hover {
+	color: black;
+	cursor: pointer;
 }
 
 h1
 {
 	display: inline;
 	margin: 0.2em 0;
-	font-size: 1.2em;
-	text-transform: uppercase;
+	vertical-align: middle;
+	font-size: 1.25em;
 }
-
-
+	
 header span
 {
+	vertical-align: middle;
 	font-size: 0.9em;
 	white-space: nowrap;
 }
@@ -41,16 +62,19 @@ main
 	max-width: 40em;
 	margin: 0.5em auto;
 	padding: 0 0.5em;
-	border: 0.2em solid lightgrey;
+	border: 3px solid lightgrey;
 	border-radius: 1em;
 	overflow: hidden;
 	background-color: white;
 	box-shadow: 0.1em 0.1em 0.3em darkgrey;
 }
 
+
+/* Content styling */
+
 h2
 {
-	font-size: 1.1em;
+	font-size: 1.2em;
 	font-weight: normal;
 	text-align: center;
 }
@@ -72,35 +96,6 @@ hr
 	background-image: linear-gradient(to right, rgba(0, 0, 0, 0), lightgrey, rgba(0, 0, 0, 0));
 }
 
-
-/* Content formatting */
-
-form
-{
-	text-align: center;
-}
-
-form select, form [type="button"], form [type="submit"], #qrcode
-{
-	display: block;
-	clear: both;
-	width: 100%;
-	max-width: 30em;
-	margin: 1em auto 0.1em auto;
-	border-radius: 0.2em;
-}
-
-[type="button"]:hover, [type="submit"]:hover
-{
-	background-color: lightgrey;
-	cursor: pointer;
-}
-
-[type="checkbox"] {
-	width: 1.1em;
-	height: 1.1em;
-}
-
 aside
 {
 	text-align: right;
@@ -115,35 +110,138 @@ a:link
 {
 	text-decoration: none;
 	color: grey;
+
+	transition: 0.3s all ease;
 }
 
 a:hover
 {
 	color: burlywood;
-	text-decoration: underline;
 }
 
-#redirect
+/* Form styling */
+
+form
 {
-	display: block;
 	clear: both;
+	max-width: 30em;
+	margin: 0.75em auto;
+	text-align: center;
+}
+
+textarea,
+select,
+button,
+input,
+label
+{
+	display: inline-block;
 	width: 100%;
 	max-width: 30em;
-	margin: auto;
+	box-sizing: border-box;
+	margin: 0.2em 0;
+	padding: 0.2em;
+	border: solid 2px lightgrey;
 	border-radius: 0.2em;
+	overflow: hidden;
+	background-color: ghostwhite;
+	
+	transition: all 0.3s ease;
 }
 
-#redirect.enabled
+textarea:hover:enabled,
+select:hover:enabled,
+button:hover:enabled,
+input:hover:enabled
 {
-	background-color: lightgreen;
+	border: solid 2px darkgrey;
 }
 
-#redirect:hover
+textarea:focus:enabled,
+select:focus:enabled,
+button:focus:enabled,
+input:focus:enabled
 {
-	background-color: mediumseagreen;
+	outline: 0;
+	box-shadow: 0 0 0px 2px lightsteelblue;
+}
+
+
+[type="button"]:hover:enabled,
+[type="submit"]:hover:enabled,
+[type="button"].enabled
+{
+	background-color: lightgrey;
 	cursor: pointer;
 }
 
+[type="checkbox"],
+[type="radio"]
+{
+	display: none;
+}
+
+[type="checkbox"] + label,
+[type="radio"] + label
+{
+	margin: 0.1em 0;
+	border: none;
+	background-color: white;
+	padding: 0.1em;
+	font-style: italic;
+	color: dimgrey;
+}
+
+[type="radio"] + label
+{
+	width: 45%;
+}
+
+[type="checkbox"] + label::before,
+[type="radio"] + label::before
+{
+	content: "✘";
+	margin-right: 0.5em;
+}
+
+[type="checkbox"]:checked:disabled + label,
+[type="radio"]:checked:disabled + label
+{
+	box-shadow: inset 0 0 3px 1px darkgrey;
+	color: black;
+	font-style: normal;
+}
+
+[type="checkbox"]:checked:enabled + label,
+[type="radio"]:checked:enabled + label
+{
+	background-color: lightgreen;
+	color: black;
+	font-style: normal;
+}
+
+[type="checkbox"]:checked + label::before,
+[type="radio"]:checked + label::before
+{
+	content: "✔";
+}
+
+[type="checkbox"]:enabled + label:hover,
+[type="radio"]:enabled + label:hover
+{
+	background-color: mediumseagreen;
+	color: black;
+	cursor: pointer;
+}
+
+
+/* Individual elements styling */
+
+#CL_htmlNode
+{
+	display: inline-block;
+	margin-top: 0.5em;
+}
 
 #qrcode
 {
@@ -154,19 +252,43 @@ a:hover
 	margin: 0;
 }
 
+#qrcode .CL_loadingAnim {
+	width: 5em;
+	height: 5em;
+	margin: 1em auto;
+	border-width: 0.75em;
+}
+
 #qrcode canvas {
 	margin: auto;
 	padding: 0.3em;
 }
 
+#copied
+{
+	position: absolute;
+	transform: translate(-4.1em, 0.25em);
+	width: 3em;
+	background-color: ghostwhite;
+	background-color: rgba(248, 248, 255, 0.9);
+	padding: 0.05em 0.5em;
+	font-weight: bold;
+	color: mediumseagreen;
+}
+
+
+#hidden {
+	display: none;
+}
 
 #tamper
 {
-	position: absolute;
+	position: fixed;
+	bottom: 0;
+	right: 0;
 	pointer-events: none;
 	max-height: 50%;
 	max-width: 40%;
 	margin: auto;
 	filter: grayscale(50%) opacity(30%);
-  transform: rotate(180deg);
 }
