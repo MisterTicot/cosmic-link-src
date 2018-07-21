@@ -1,23 +1,28 @@
 /* Toolkit */
 
-@media (min-width: 64em) {
+@media screen and (min-width: 48em), screen and (min-height: 37.5em)
+{
+	html { font-size: 1.1em; }
+}
+
+@media screen and (min-width: 64em), screen and (min-height: 48em)
+{
 	html { font-size: 1.2em; }
 }
 
-@media (min-width: 85.375em) {
+@media screen and (min-width: 85.375em), screen and (min-height: 64em)
+{
 	html { font-size: 1.3em; }
 }
 
-@media (min-width: 120em) {
-	html { font-size: 1.4em; }
+@media (min-width: 120em), screen and (min-height: 85.375em)
+{
+	html { font-size: 1.7em; }
 }
 
-@media (min-width: 64em) and (min-height: 64em) {
-	html { font-size: 1.5em }
-}
-
-@media (min-width: 160em) {
-	html { font-size: 1.6em; }
+@media (min-width: 160em)
+{
+	html { font-size: 2.4em; }
 }
 
 

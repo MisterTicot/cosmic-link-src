@@ -1,9 +1,7 @@
 const CosmicLink = require('cosmic-lib').CosmicLink
-const QRCode = require('qrcode')
-
 const node = require('./node')
-
 const authenticators = require('./authenticators')
+const QRCode = require('qrcode')
 
 /// Service worker
 if ('serviceWorker' in navigator) {
@@ -164,7 +162,7 @@ function transactionError (error) {
 }
 
 redirectionForm.onsubmit = function () {
-  transaction.then(url => location = url)
+  transaction.then(url => location.replace(url))
   return false
 }
 
