@@ -106,7 +106,8 @@ function computeTransaction () {
     network = publicNetworkRadio.checked ? 'public' : 'test'
   }
 
-  cosmicLink = new CosmicLink(location.search, network, accountId)
+  cosmicLink = new CosmicLink(location.search,
+    { network: network, user: accountId })
   transaction = authenticator.handle(cosmicLink)
 
   const saveTransaction = transaction
