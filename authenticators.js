@@ -1,63 +1,84 @@
 const node = require('./node')
 
-exports.array = []
-exports.nodes = []
+/****************************** Authenticators ********************************/
 
-let handlers = {
-  cosmiclink: function (authenticator, cosmicLink) {
+let authenticators = {
+  'Stellar Authenticator': {
+    protocol: 'cosmiclink',
+    url: 'https://stellar-authenticator.org/'
+  },
+  'Stellar Laboratory': {
+    protocol: 'stellarlab',
+    url: 'https://stellar.org/laboratory/#txsigner',
+  },
+  'Sep0007 Wallet': {
+    protocol: 'sep0007',
+    url: 'web+stellar:tx/'
+  },
+  'Copy/Paste XDR': {
+    protocol: 'copy'
+  }
+}
+
+
+/******************************** Protocols ***********************************/
+const protocols = {}
+
+protocols.cosmiclink = {
+  handler: function (authenticator, cosmicLink) {
     return cosmicLink.getQuery().then(query => authenticator.url + query)
-  },
+  }
+}
 
-  sep0007: function (authenticator, cosmicLink) {
-    return cosmicLink.getXdr().then(function (xdr) {
-      let query = '?xdr=' + encodeURIComponent(xdr)
-      if (cosmicLink.network === 'test') {
-        query += '&network_passphrase='
-        query += encodeURIComponent('Test SDF Network ; September 2015')
-      }
-      return authenticator.url + query
-    })
-  },
+protocols.stellarlab = {
+  accountId: true,
+  handler: async function (authenticator, cosmicLink) {
+    const xdr = await cosmicLink.getXdr()
+    const encodedXdr = encodeURIComponent(xdr)
+    const query = `?xdr=${encodedXdr}&network=${cosmicLink.network}`
+    return authenticator.url + query
+  }
+}
 
-  stellarlab: function (authenticator, cosmicLink) {
-    return cosmicLink.getXdr().then(function (xdr) {
-      const encodedXdr = encodeURIComponent(xdr)
-      const query = `?xdr=${encodedXdr}&network=${cosmicLink.network}`
-      return authenticator.url + query
-    })
-  },
+protocols.sep0007 = {
+  accountId: true,
+  handler: async function (authenticator, cosmicLink) {
+    const xdr = await cosmicLink.getXdr()
+    let query = '?xdr=' + encodeURIComponent(xdr)
+    if (cosmicLink.network === 'test') {
+      query += '&network_passphrase=Test%20SDF%20Network%20%3B%20September%202015'
+    }
+    return authenticator.url + query
+  }
+}
 
-  xdr: function (authenticator, cosmicLink) {
+protocols.copy = {
+  accountId: true,
+  redirection: false,
+  textarea: true,
+  handler: function (authenticator, cosmicLink) {
     return cosmicLink.getXdr()
   }
 }
 
-let authenticators = {
-  'Stellar Authenticator': {
-    handler: handlers.cosmiclink,
-    url: 'https://stellar-authenticator.org/'
-  },
-  'Stellar Laboratory': {
-    handler: handlers.stellarlab,
-    url: 'https://stellar.org/laboratory/#txsigner',
-    accountId: true
-  },
-  'Sep0007 Wallet': {
-    handler: handlers.sep0007,
-    url: 'web+stellar:tx/',
-    accountId: true
-  },
-  'Copy/Paste XDR': {
-    handler: handlers.xdr,
-    accountId: true,
-    textarea: true
-  }
+protocols.defaults = {
+  redirection: true,
+  qrCode: true  
 }
 
+
+/**************************** Build module ************************************/
+
+exports.array = []
+exports.nodes = []
+
 class Authenticator {
-  constructor (name, config) {
+  constructor (name, protocol, url, options) {
     this.name = name
-    for (name in config) this[name] = config[name]
+    this.protocol = protocol
+    this.url = url
+    Object.assign(this, protocols.defaults, protocols[protocol], options)
+    console.log(this)
   }
 
   handle (cosmicLink) {
@@ -69,11 +90,16 @@ class Authenticator {
   }
 }
 
-function addAuthenticator (name, config) {
-  const authenticator = new Authenticator(name, config)
+function addAuthenticator (name, protocol, url, options) {
+  const authenticator = new Authenticator(name, protocol, url, options)
   exports.array.push(authenticator)
   exports.nodes.push(authenticator.node)
   exports[name] = authenticator
 }
 
-for (let name in authenticators) addAuthenticator(name, authenticators[name])
+for (let name in authenticators) {
+  const protocol = authenticators[name].protocol
+  const url = authenticators[name].url
+  const options = authenticators[name].options
+  addAuthenticator(name, protocol, url, options)
+}

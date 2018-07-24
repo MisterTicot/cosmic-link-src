@@ -23,8 +23,9 @@ const checkbox = node.grab('#checkbox')
 const textareaForm = node.grab('#textarea')
 const xdrBox = node.grab('textarea', textareaForm)
 
-const QrButton = node.grab('input', node.grab('#qrcode'))
-const qrDiv = node.grab('#QR')
+const qrForm = node.grab('#qrform')
+const QrButton = node.grab('input', qrform)
+const qrCode = node.grab('#qrcode')
 
 let authenticator, cosmicLink, transaction
 
@@ -41,7 +42,7 @@ exports.init = function () {
 
   if (localStorage.QR === 'true') {
     QrButton.className = 'enabled'
-    node.show(qrDiv)
+    node.show(qrCode)
   }
 
   if (location.search.length < 2) {
@@ -61,7 +62,6 @@ exports.init = function () {
 
 authenticatorSelector.onchange = function (event) {
   authenticator = authenticators[authenticatorSelector.value]
-
   localStorage.authenticator = authenticator.name
 
   if (authenticator.url) node.show(redirectionForm)
@@ -69,9 +69,15 @@ authenticatorSelector.onchange = function (event) {
 
   if (authenticator.accountId) node.show(accountIdBox, networkDiv)
   else node.hide(accountIdBox, networkDiv)
+  
+  if (authenticator.redirection) node.show(redirectionForm)
+  else node.hide(redirectionForm)
 
   if (authenticator.textarea) node.show(textareaForm)
   else node.hide(textareaForm)
+  
+  if (authenticator.qrCode) node.show(qrForm)
+  else node.hide(qrForm)
 
   if (event) {
     localStorage.redirect = false
@@ -97,7 +103,7 @@ function computeTransaction () {
   xdrBox.placeholder = 'Computing...'
   xdrBox.value = ''
   xdrBox.disabled = true
-  node.rewrite(qrDiv, node.create('canvas', '.CL_loadingAnim'))
+  node.rewrite(qrcode, node.create('canvas', '.CL_loadingAnim'))
 
   let network, accountId
 
@@ -159,7 +165,7 @@ function refreshAccountIdForm (tdesc) {
 function transactionError (error) {
   if (authenticator.url) gotoButton.value = error.message
   if (authenticator.textarea) xdrBox.placeholder = error.message
-  node.clear(qrDiv)
+  node.clear(qrCode)
 }
 
 redirectionForm.onsubmit = function () {
@@ -191,22 +197,22 @@ exports.switchPage = function (from, to) {
 
 exports.switchQR = function () {
   if (localStorage.QR === 'true') {
-    node.hide(qrDiv)
+    node.hide(qrCode)
     localStorage.QR = false
     QrButton.className = undefined
   } else {
-    node.show(qrDiv)
+    node.show(qrCode)
     localStorage.QR = true
     QrButton.className = 'enabled'
   }
 }
 
 function refreshQR (value) {
-  node.clear(qrDiv)
+  node.clear(qrCode)
   const canvas = node.create('canvas')
   QRCode.toCanvas(canvas, value, { margin: 0, scale: 5 })
   canvas.title = value
-  node.append(qrDiv, canvas)
+  node.append(qrCode, canvas)
 }
 
 /** * Experimental Robot Factory ***/
