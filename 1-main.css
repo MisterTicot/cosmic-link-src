@@ -175,7 +175,7 @@ select:hover:enabled,
 button:hover:enabled,
 input:hover:enabled
 {
-	border: solid 2px #909090	;
+	border: solid 2px #909090;
 }
 
 textarea:focus:enabled,
