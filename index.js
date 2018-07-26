@@ -108,14 +108,20 @@ authenticatorSelector.onchange = function (event) {
 }
 
 function setupAccountIdBox () {
+  accountIdBox.disabled = undefined
+  accountIdBox.readOnly = false
+  accountIdBox.onclick = undefined
+  accountIdBox.style.cursor = undefined
+
   if (authenticator.getAccountId) {
     accountIdBox.value = ''
     accountIdBox.placeholder = 'Connecting...'
     accountIdBox.disabled = true
     const saveName = authenticator.name
+
     authenticator.getAccountId().then(accountId => {
       if (authenticator.name !== saveName) return
-      accountIdBox.value = accountId
+      setAccountIdBoxReadonly(accountId)
       computeTransaction()
     }).catch(error => {
       node.hide(accountDiv)
@@ -124,8 +130,6 @@ function setupAccountIdBox () {
   } else {
     if (localStorage.accountId) accountIdBox.value = localStorage.accountId
     accountIdBox.placeholder = 'Your Account Address or ID'
-    accountIdBox.disabled = undefined
-    accountIdBox.onclick = undefined
   }
 }
 
@@ -177,7 +181,7 @@ async function computeTransaction () {
     })
 }
 
-function clearMsgboxes() {
+function clearMsgboxes () {
   display(accountMsgbox); display(redirectionMsgbox)
 }
 
@@ -209,8 +213,7 @@ function refreshTransaction (value) {
 function refreshAccountIdForm (tdesc) {
   if (tdesc.source) {
     display(accountMsgbox)
-    accountIdBox.value = tdesc.source
-    accountIdBox.disabled = true
+    setAccountIdBoxReadonly(tdesc.source)
   }
   if (tdesc.network) {
     publicNetworkRadio.disabled = true
@@ -218,6 +221,14 @@ function refreshAccountIdForm (tdesc) {
     if (tdesc.network === 'public') publicNetworkRadio.checked = true
     else testNetworkRadio.checked = true
   }
+}
+
+function setAccountIdBoxReadonly (value) {
+  accountIdBox.disabled = false
+  accountIdBox.readOnly = true
+  accountIdBox.value = value
+  accountIdBox.style.cursor = 'pointer'
+  accountIdBox.onclick = () => exports.copyContent(accountIdBox)
 }
 
 async function buttonOnClick (value) {
@@ -339,7 +350,7 @@ exports.copyContent = function (element) {
     const prevNode = node.grab('#copied')
     if (prevNode) node.destroy(prevNode)
     const copiedNode = node.create('span', '#copied', 'Copied')
-    element.parentNode.insertBefore(copiedNode, element.nextSibling)
+    element.parentNode.insertBefore(copiedNode, element)
     setTimeout(() => { copiedNode.hidden = true }, 3000)
   }
 }

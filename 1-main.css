@@ -1,4 +1,4 @@
-/* Toolkit */
+/* Screen-size handling */
 
 @media screen and (min-width: 48em), screen and (min-height: 37.5em)
 {
@@ -25,6 +25,11 @@
 	html { font-size: 2.4em; }
 }
 
+/* Universal rules */
+
+*[onclick]:hover {
+	cursor: pointer;
+}
 
 /* Page layout */
 
@@ -39,6 +44,7 @@ header
 	top: 0;
 	max-width: 100%;
 	overflow: hidden;
+	white-space: nowrap;
 	text-overflow: ellipsis;
 	font-style: italic;
 	color: dimgrey;
@@ -48,7 +54,6 @@ header
 
 header:hover {
 	color: black;
-	cursor: pointer;
 }
 
 h1
@@ -133,6 +138,7 @@ a:hover
 form
 {
 	clear: both;
+	position: relative;
 	max-width: 30em;
 	margin: 0.75em auto;
 	text-align: center;
@@ -145,9 +151,9 @@ input,
 label
 {
 	display: inline-block;
+	box-sizing: border-box;
 	width: 100%;
 	max-width: 30em;
-	box-sizing: border-box;
 	margin: 0.2em 0;
 	padding: 0.2em;
 	border: solid 2px lightgrey;
@@ -158,12 +164,18 @@ label
 	transition: all 0.3s ease;
 }
 
+textarea[readonly],
+input[readonly]
+{
+	color: dimgrey;
+}
+
 textarea:hover:enabled,
 select:hover:enabled,
 button:hover:enabled,
 input:hover:enabled
 {
-	border: solid 2px darkgrey;
+	border: solid 2px #909090	;
 }
 
 textarea:focus:enabled,
@@ -175,13 +187,18 @@ input:focus:enabled
 	box-shadow: 0 0 0px 2px lightsteelblue;
 }
 
+[type="button"],
+[type="submit"]
+{
+	background-color: whitesmoke;
+}
+
 
 [type="button"]:hover:enabled,
 [type="submit"]:hover:enabled,
 [type="button"].enabled
 {
 	background-color: lightgrey;
-	cursor: pointer;
 }
 
 [type="checkbox"],
@@ -240,7 +257,6 @@ input:focus:enabled
 {
 	background-color: mediumseagreen;
 	color: black;
-	cursor: pointer;
 }
 
 
@@ -288,10 +304,12 @@ input:focus:enabled
 #copied
 {
 	position: absolute;
-	transform: translate(-4.1em, 0.25em);
-	width: 3em;
+	right: 0;
+	transform: translate(-0.1em, 0.24em);
+	box-sizing: border-box;
+	width: 4em;
 	background-color: ghostwhite;
-	background-color: rgba(248, 248, 255, 0.9);
+	background-color: rgba(245, 245, 245, 0.8);
 	padding: 0.05em 0.5em;
 	font-weight: bold;
 	color: mediumseagreen;
