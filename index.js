@@ -1,3 +1,4 @@
+const cosmicLib = require('cosmic-lib')
 const CosmicLink = require('cosmic-lib').CosmicLink
 const node = require('./node')
 const authenticators = require('./authenticators')
@@ -11,20 +12,22 @@ if ('serviceWorker' in navigator) {
 /// HTML elements
 const authenticatorSelector = node.grab('#authenticators')
 
+const accountDiv = node.grab('#accountDiv')
 const accountIdBox = node.grab('#accountId')
-const networkDiv = node.grab('#network')
 const publicNetworkRadio = node.grab('#publicNetwork')
 const testNetworkRadio = node.grab('#testNetwork')
+const accountMsgbox = node.grab('#accountMsgbox')
 
 const redirectionForm = node.grab('#redirection')
 const gotoButton = node.grab('input', redirectionForm)
 const checkbox = node.grab('#checkbox')
+const redirectionMsgbox = node.grab('#redirectionMsgbox')
 
 const textareaForm = node.grab('#textarea')
 const xdrBox = node.grab('textarea', textareaForm)
 
 const qrForm = node.grab('#qrform')
-const QrButton = node.grab('input', qrform)
+const QrButton = node.grab('input', qrForm)
 const qrCode = node.grab('#qrcode')
 
 let authenticator, cosmicLink, transaction
@@ -34,10 +37,13 @@ exports.init = function () {
 
   authenticators.nodes.forEach(entry => node.append(authenticatorSelector, entry))
   if (localStorage.redirect === 'true') checkbox.checked = true
-  if (localStorage.accountId) accountIdBox.value = localStorage.accountId
+  if (localStorage.accountId) {
+    cosmicLib.defaults.user = accountIdBox.value = localStorage.accountId
+  }
   if (localStorage.network) {
     if (localStorage.network === 'public') publicNetworkRadio.checked = true
     else if (localStorage.network === 'test') testNetworkRadio.checked = true
+    cosmicLib.defaults.network = localStorage.network
   }
 
   if (localStorage.QR === 'true') {
@@ -61,23 +67,25 @@ exports.init = function () {
 }
 
 authenticatorSelector.onchange = function (event) {
+  if (authenticator && authenticator.onExit) authenticator.onExit()
   authenticator = authenticators[authenticatorSelector.value]
   localStorage.authenticator = authenticator.name
 
-  if (authenticator.url) node.show(redirectionForm)
-  else node.hide(redirectionForm)
+  /// Clear message boxes.
+  display(accountMsgbox); display(redirectionMsgbox)
 
-  if (authenticator.accountId) node.show(accountIdBox, networkDiv)
-  else node.hide(accountIdBox, networkDiv)
-  
+  if (authenticator.accountId) {
+    setupAccountIdBox()
+    node.show(accountIdBox, accountDiv)
+  } else {
+    node.hide(accountIdBox, accountDiv)
+  }
+
   if (authenticator.redirection) node.show(redirectionForm)
   else node.hide(redirectionForm)
 
   if (authenticator.textarea) node.show(textareaForm)
   else node.hide(textareaForm)
-  
-  if (authenticator.qrCode) node.show(qrForm)
-  else node.hide(qrForm)
 
   if (event) {
     localStorage.redirect = false
@@ -86,37 +94,79 @@ authenticatorSelector.onchange = function (event) {
 
   if (location.search.length < 2) {
     if (authenticator.url) {
-      gotoButton.value = 'Go to ' + authenticator.name
+      gotoButton.value = authenticator.buttonText
       gotoButton.onclick = () => location = authenticator.url
       gotoButton.disabled = undefined
+    } else {
+      gotoButton.value = 'No transaction'
+      gotoButton.disabled = true
     }
   } else {
+    if (authenticator.qrCode) node.show(qrForm)
+    else node.hide(qrForm)
     computeTransaction()
   }
 }
 
-function computeTransaction () {
+function setupAccountIdBox () {
+  if (authenticator.getAccountId) {
+    accountIdBox.value = ''
+    accountIdBox.placeholder = 'Connecting...'
+    accountIdBox.disabled = true
+    const saveName = authenticator.name
+    authenticator.getAccountId().then(accountId => {
+      if (authenticator.name !== saveName) return
+      accountIdBox.value = accountId
+      computeTransaction()
+    }).catch(error => {
+      node.hide(accountDiv)
+      display(accountMsgbox, 'error', error.message + '.')
+    })
+  } else {
+    if (localStorage.accountId) accountIdBox.value = localStorage.accountId
+    accountIdBox.placeholder = 'Your Account Address or ID'
+    accountIdBox.disabled = undefined
+    accountIdBox.onclick = undefined
+  }
+}
+
+async function computeTransaction () {
   if (location.search.length < 2) return
 
-  gotoButton.value = '…'
-  gotoButton.disabled = true
-  xdrBox.placeholder = 'Computing...'
-  xdrBox.value = ''
-  xdrBox.disabled = true
-  node.rewrite(qrcode, node.create('canvas', '.CL_loadingAnim'))
+  if (authenticator.redirection) {
+    gotoButton.value = '…'
+    gotoButton.disabled = true
+  }
+
+  if (authenticator.textarea) {
+    xdrBox.placeholder = 'Computing...'
+    xdrBox.value = ''
+    xdrBox.disabled = true
+  }
+
+  if (authenticator.qrCode) {
+    node.rewrite(qrCode, node.create('canvas', '.CL_loadingAnim'))
+  }
 
   let network, accountId
-
   if (authenticator.accountId) {
     accountId = accountIdBox.value
-    network = publicNetworkRadio.checked ? 'public' : 'test'
+    network = currentNetwork()
   }
 
   cosmicLink = new CosmicLink(location.search,
     { network: network, user: accountId })
-  transaction = authenticator.handle(cosmicLink)
 
-  const saveTransaction = transaction
+  if (authenticator.accountId && !accountId) {
+    if (!authenticator.getAccountId) {
+      if (authenticator.redirection) gotoButton.value = 'No source defined'
+      if (authenticator.textarea) xdrBox.placeholder = 'No source defined'
+      if (authenticator.qrCode) node.clear(qrCode)
+    }
+    return
+  }
+
+  const saveTransaction = transaction = authenticator.handle(cosmicLink)
   transaction
     .then(function (value) {
       if (transaction === saveTransaction) refreshTransaction(value)
@@ -126,19 +176,21 @@ function computeTransaction () {
     })
 }
 
+function currentNetwork () {
+  return publicNetworkRadio.checked ? 'public' : 'test'
+}
+
 function refreshTransaction (value) {
-  if (localStorage.redirect === 'true') {
-    location.replace(value)
-    return
+  if (authenticator.redirection) {
+    gotoButton.value = authenticator.buttonText
+    gotoButton.disabled = undefined
+    gotoButton.onclick = () => buttonOnClick(value)
   }
+
+  if (localStorage.redirect === 'true') buttonOnClick(value)
 
   if (authenticator.accountId) {
     cosmicLink.getTdesc().then(tdesc => refreshAccountIdForm(tdesc))
-  }
-
-  if (authenticator.url) {
-    gotoButton.value = 'Go to ' + authenticator.name
-    gotoButton.disabled = undefined
   }
 
   if (authenticator.textarea) {
@@ -146,7 +198,7 @@ function refreshTransaction (value) {
     xdrBox.disabled = undefined
   }
 
-  refreshQR(value)
+  if (authenticator.qrCode) refreshQR(value)
 }
 
 function refreshAccountIdForm (tdesc) {
@@ -162,24 +214,60 @@ function refreshAccountIdForm (tdesc) {
   }
 }
 
+async function buttonOnClick (value) {
+  if (typeof value === 'string') location.replace(value)
+  else if (typeof value === 'function') {
+    display(redirectionMsgbox, 'info', 'Waiting for confirmation...')
+    gotoButton.disabled = true
+    value().then(sendTransaction).catch(error => {
+      display(redirectionMsgbox, 'error', error.message + '.')
+      gotoButton.disabled = false
+    })
+  }
+}
+
+async function sendTransaction (transaction) {
+  cosmicLink = new CosmicLink(transaction, { network: currentNetwork() })
+  cosmicLink.getQuery().then(query => history.replaceState({}, '', query))
+  cosmicLink.getTdesc().then(tdesc => refreshAccountIdForm(tdesc))
+
+  display(redirectionMsgbox, 'info', 'Sending to the network...')
+
+  try {
+    const response = await cosmicLink.send()
+    console.log(response)
+    display(redirectionMsgbox, 'info', 'Transaction validated')
+    if (document.referrer) {
+      gotoButton.value = 'Close'
+      gotoButton.onclick = () => history.back()
+      gotoButton.disabled = false
+    } else {
+      gotoButton.value = 'Done'
+    }
+  } catch (error) {
+    console.error(error.response)
+    display(redirectionMsgbox, 'error', error.message + '.')
+  }
+}
+
+function display (element, type = '', message = '') {
+  const classname = type ? '.' + type : null
+  node.rewrite(element, node.create('span', classname, message))
+}
+
 function transactionError (error) {
   if (authenticator.url) gotoButton.value = error.message
   if (authenticator.textarea) xdrBox.placeholder = error.message
   node.clear(qrCode)
 }
 
-redirectionForm.onsubmit = function () {
-  transaction.then(url => location.replace(url))
-  return false
-}
-
 accountIdBox.onchange = function () {
-  localStorage.accountId = accountIdBox.value
+  localStorage.accountId = cosmicLib.defaults.user = accountIdBox.value
   computeTransaction()
 }
 
 publicNetworkRadio.onchange = testNetworkRadio.onchange = function () {
-  localStorage.network = publicNetworkRadio.checked ? 'public' : 'test'
+  localStorage.network = cosmicLib.defaults.network = currentNetwork()
   computeTransaction()
 }
 
@@ -208,11 +296,12 @@ exports.switchQR = function () {
 }
 
 function refreshQR (value) {
-  node.clear(qrCode)
+  if (!authenticator.qrCode || !value) return
+
   const canvas = node.create('canvas')
   QRCode.toCanvas(canvas, value, { margin: 0, scale: 5 })
   canvas.title = value
-  node.append(qrCode, canvas)
+  node.rewrite(qrCode, canvas)
 }
 
 /** * Experimental Robot Factory ***/

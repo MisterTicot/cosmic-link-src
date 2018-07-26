@@ -85,24 +85,28 @@
         <select id="authenticators">
           <option value="" disabled selected hidden>Loading...</option>
         </select>
-        <input id="accountId" type="text" placeholder="Your Account Address or ID"
-          style="display:none">
-        <div id="network" style="display:none">
-          <input id="publicNetwork" type="radio" name="network" value="public"
-            checked>
-          <label for="publicNetwork">Public network</label>
-          <input id="testNetwork" type="radio" name="network" value="test">
-          <label for="testNetwork">Test network</label>
+        <div id="accountDiv" style="display:none">
+          <input id="accountId" type="text">
+          <div id="network">
+            <input id="publicNetwork" type="radio" name="network" value="public"
+              checked>
+            <label for="publicNetwork">Public network</label>
+            <input id="testNetwork" type="radio" name="network" value="test">
+            <label for="testNetwork">Test network</label>
+          </div>
         </div>
+        <div id="accountMsgbox"></div>
       </form>
 
       <hr>
 
       <h3>Step 3: Sign the Transaction</h3>
-      <form id="redirection" style="display:none">
-        <input type="submit" value="…" disabled>
+
+      <form id="redirection">
+        <input type="button" value="…" disabled>
         <input id="checkbox" type="checkbox">
         <label for="checkbox">Automatic redirection</label>
+        <div id="redirectionMsgbox"></div>
       </form>
 
       <form id="textarea" style="display:none">
@@ -110,9 +114,9 @@
           placeholder="No transaction" disabled></textarea>
       </form>
 
-      <form id="qrcode">
+      <form id="qrform" style="display:none">
           <input type="button" value="QR Code" onclick="lib.switchQR()">
-          <div id="QR" style="display:none"></div>
+          <div id="qrcode" style="display:none"></div>
       </form>
     </div>
   </main>

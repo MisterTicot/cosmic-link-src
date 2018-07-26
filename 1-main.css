@@ -246,6 +246,18 @@ input:focus:enabled
 
 /* Individual elements styling */
 
+.error
+{
+	font-weight: bold;
+	color: tomato;
+}
+
+.info
+{
+	font-weight: bold;
+	color: mediumseagreen;
+}
+
 #CL_htmlNode
 {
 	display: inline-block;
