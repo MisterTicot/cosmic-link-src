@@ -71,8 +71,7 @@ authenticatorSelector.onchange = function (event) {
   authenticator = authenticators[authenticatorSelector.value]
   localStorage.authenticator = authenticator.name
 
-  /// Clear message boxes.
-  display(accountMsgbox); display(redirectionMsgbox)
+  clearMsgboxes()
 
   if (authenticator.accountId) {
     setupAccountIdBox()
@@ -133,6 +132,8 @@ function setupAccountIdBox () {
 async function computeTransaction () {
   if (location.search.length < 2) return
 
+  clearMsgboxes()
+
   if (authenticator.redirection) {
     gotoButton.value = '…'
     gotoButton.disabled = true
@@ -176,6 +177,10 @@ async function computeTransaction () {
     })
 }
 
+function clearMsgboxes() {
+  display(accountMsgbox); display(redirectionMsgbox)
+}
+
 function currentNetwork () {
   return publicNetworkRadio.checked ? 'public' : 'test'
 }
@@ -203,6 +208,7 @@ function refreshTransaction (value) {
 
 function refreshAccountIdForm (tdesc) {
   if (tdesc.source) {
+    display(accountMsgbox)
     accountIdBox.value = tdesc.source
     accountIdBox.disabled = true
   }
