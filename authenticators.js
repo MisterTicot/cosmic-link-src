@@ -44,7 +44,7 @@ protocols.stellarlab = {
 }
 
 function getLedgerModule () {
-  return import(/* webpackChunkName: "ledger" */ './ledger.js')
+  return import(/* webpackChunkName: "ledger" */ 'stellar-ledger-wallet')
     .then(ledger => ledger.default)
 }
 
@@ -60,10 +60,11 @@ protocols.ledgerwallet = {
   handler: async function (authenticator, cosmicLink) {
     const transaction = await cosmicLink.getTransaction()
     const ledger = await getLedgerModule()
-    return async function () {
-      await ledger.connect()
-      return ledger.sign(transaction)
-    }
+    return async () => ledger.sign(transaction)
+  },
+  refresh: async function (refresher) {
+    const ledger = await getLedgerModule()
+    ledger.onDisconnect = () => refresher()
   },
   onExit: async function () {
     const ledger = await getLedgerModule()

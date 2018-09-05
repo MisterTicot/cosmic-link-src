@@ -86,6 +86,8 @@ authenticatorSelector.onchange = function (event) {
   if (authenticator.textarea) node.show(textareaForm)
   else node.hide(textareaForm)
 
+  if (authenticator.refresh) authenticator.refresh(authenticatorSelector.onchange)
+
   if (event) {
     localStorage.redirect = false
     checkbox.checked = false
