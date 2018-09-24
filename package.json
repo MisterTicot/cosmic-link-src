@@ -1,6 +1,6 @@
 {
   "name": "cosmic-link",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "description": "The cosmic.link website",
   "main": "index.js",
   "scripts": {
