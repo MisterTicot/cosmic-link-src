@@ -1,8 +1,10 @@
 const cosmicLib = require('cosmic-lib')
 const CosmicLink = require('cosmic-lib').CosmicLink
-const node = require('./node')
+const dom = require('@cosmic-plus/jsutils/dom')
+const html = require('@cosmic-plus/jsutils/html')
+const QrCode = require('qrcode')
+
 const authenticators = require('./authenticators')
-const QRCode = require('qrcode')
 
 /// Service worker
 if ('serviceWorker' in navigator) {
@@ -10,115 +12,97 @@ if ('serviceWorker' in navigator) {
 }
 
 /// HTML elements
-const authenticatorSelector = node.grab('#authenticators')
-
-const accountDiv = node.grab('#accountDiv')
-const accountIdBox = node.grab('#accountId')
-const publicNetworkRadio = node.grab('#publicNetwork')
-const testNetworkRadio = node.grab('#testNetwork')
-const accountMsgbox = node.grab('#accountMsgbox')
-
-const redirectionForm = node.grab('#redirection')
-const gotoButton = node.grab('input', redirectionForm)
-const checkbox = node.grab('#checkbox')
-const redirectionMsgbox = node.grab('#redirectionMsgbox')
-
-const textareaForm = node.grab('#textarea')
-const xdrBox = node.grab('textarea', textareaForm)
-
-const qrForm = node.grab('#qrform')
-const QrButton = node.grab('input', qrForm)
-const qrCode = node.grab('#qrcode')
-
 let authenticator, cosmicLink, transaction
 
 exports.init = function () {
-  node.append(node.grab('#query'), location.search)
+  if (location.origin === 'null') dom.websiteUrl.textContent = location.pathname
+  else dom.websiteUrl.textContent = location.origin + location.pathname
+  dom.query.textContent = location.search
 
-  authenticators.nodes.forEach(entry => node.append(authenticatorSelector, entry))
-  if (localStorage.redirect === 'true') checkbox.checked = true
+  authenticators.nodes.forEach(entry => html.append(dom.authenticators, entry))
+  if (localStorage.redirect === 'true') dom.redirectionCheckbox.checked = true
   if (localStorage.accountId) {
-    cosmicLib.defaults.user = accountIdBox.value = localStorage.accountId
+    cosmicLib.defaults.user = dom.accountIdBox.value = localStorage.accountId
   }
   if (localStorage.network) {
-    if (localStorage.network === 'public') publicNetworkRadio.checked = true
-    else if (localStorage.network === 'test') testNetworkRadio.checked = true
+    if (localStorage.network === 'public') dom.publicNetworkRadio.checked = true
+    else if (localStorage.network === 'test') dom.testNetworkRadio.checked = true
     cosmicLib.defaults.network = localStorage.network
   }
 
   if (localStorage.QR === 'true') {
-    QrButton.className = 'enabled'
-    node.show(qrCode)
+    dom.qrButton.className = 'enabled'
+    html.show(dom.qrCode)
   }
 
   if (location.search.length < 2) {
-    node.rewrite(node.grab('#CL_htmlNode'), 'No transaction')
-    redirectionForm.onsubmit = () => false
+    html.rewrite(dom.CL_htmlNode, 'No transaction')
+    dom.redirectionForm.onsubmit = () => false
   }
 
   if (localStorage.authenticator && authenticators[localStorage.authenticator]) {
-    authenticatorSelector.value = localStorage.authenticator
+    dom.authenticators.value = localStorage.authenticator
   } else {
-    authenticatorSelector.value = 'Stellar Authenticator'
+    dom.authenticators.value = 'Stellar Authenticator'
   }
-  authenticatorSelector.onchange()
+  dom.authenticators.onchange()
 
   setTamper()
 }
 
-authenticatorSelector.onchange = function (event) {
+dom.authenticators.onchange = function (event) {
   if (authenticator && authenticator.onExit) authenticator.onExit()
-  authenticator = authenticators[authenticatorSelector.value]
+  authenticator = authenticators[dom.authenticators.value]
   localStorage.authenticator = authenticator.name
 
   clearMsgboxes()
 
   if (authenticator.accountId) {
     setupAccountIdBox()
-    node.show(accountIdBox, accountDiv)
+    html.show(dom.accountIdBox, dom.accountDiv)
   } else {
-    node.hide(accountIdBox, accountDiv)
+    html.hide(dom.accountIdBox, dom.accountDiv)
   }
 
-  if (authenticator.redirection) node.show(redirectionForm)
-  else node.hide(redirectionForm)
+  if (authenticator.redirection) html.show(dom.redirectionForm)
+  else html.hide(dom.redirectionForm)
 
-  if (authenticator.textarea) node.show(textareaForm)
-  else node.hide(textareaForm)
+  if (authenticator.textarea) html.show(dom.textareaForm)
+  else html.hide(dom.textareaForm)
 
-  if (authenticator.refresh) authenticator.refresh(authenticatorSelector.onchange)
+  if (authenticator.refresh) authenticator.refresh(dom.authenticators.onchange)
 
   if (event) {
     localStorage.redirect = false
-    checkbox.checked = false
+    dom.redirectionCheckbox.checked = false
   }
 
   if (location.search.length < 2) {
     if (authenticator.url) {
-      gotoButton.value = authenticator.buttonText
-      gotoButton.onclick = () => location = authenticator.url
-      gotoButton.disabled = undefined
+      dom.gotoButton.value = authenticator.buttonText
+      dom.gotoButton.onclick = () => location = authenticator.url
+      dom.gotoButton.disabled = undefined
     } else {
-      gotoButton.value = 'No transaction'
-      gotoButton.disabled = true
+      dom.gotoButton.value = 'No transaction'
+      dom.gotoButton.disabled = true
     }
   } else {
-    if (authenticator.qrCode) node.show(qrForm)
-    else node.hide(qrForm)
+    if (authenticator.qrCode) html.show(dom.qrForm)
+    else html.hide(dom.qrForm)
     computeTransaction()
   }
 }
 
 function setupAccountIdBox () {
-  accountIdBox.disabled = undefined
-  accountIdBox.readOnly = false
-  accountIdBox.onclick = undefined
-  accountIdBox.style.cursor = undefined
+  dom.accountIdBox.disabled = undefined
+  dom.accountIdBox.readOnly = false
+  dom.accountIdBox.onclick = undefined
+  dom.accountIdBox.style.cursor = undefined
 
   if (authenticator.getAccountId) {
-    accountIdBox.value = ''
-    accountIdBox.placeholder = 'Connecting...'
-    accountIdBox.disabled = true
+    dom.accountIdBox.value = ''
+    dom.accountIdBox.placeholder = 'Connecting...'
+    dom.accountIdBox.disabled = true
     const saveName = authenticator.name
 
     authenticator.getAccountId().then(accountId => {
@@ -126,12 +110,12 @@ function setupAccountIdBox () {
       setAccountIdBoxReadonly(accountId)
       computeTransaction()
     }).catch(error => {
-      node.hide(accountDiv)
-      display(accountMsgbox, 'error', error.message + '.')
+      html.hide(dom.accountDiv)
+      display(dom.accountMsgbox, 'error', error.message + '.')
     })
   } else {
-    if (localStorage.accountId) accountIdBox.value = localStorage.accountId
-    accountIdBox.placeholder = 'Your Account Address or ID'
+    if (localStorage.accountId) dom.accountIdBox.value = localStorage.accountId
+    dom.accountIdBox.placeholder = 'Your Account Address or ID'
   }
 }
 
@@ -141,23 +125,23 @@ async function computeTransaction () {
   clearMsgboxes()
 
   if (authenticator.redirection) {
-    gotoButton.value = '…'
-    gotoButton.disabled = true
+    dom.gotoButton.value = '…'
+    dom.gotoButton.disabled = true
   }
 
   if (authenticator.textarea) {
-    xdrBox.placeholder = 'Computing...'
-    xdrBox.value = ''
-    xdrBox.disabled = true
+    dom.xdrBox.placeholder = 'Computing...'
+    dom.xdrBox.value = ''
+    dom.xdrBox.disabled = true
   }
 
   if (authenticator.qrCode) {
-    node.rewrite(qrCode, node.create('canvas', '.CL_loadingAnim'))
+    html.rewrite(dom.qrCode, html.create('canvas', '.CL_loadingAnim'))
   }
 
   let network, accountId
   if (authenticator.accountId) {
-    accountId = accountIdBox.value
+    accountId = dom.accountIdBox.value
     network = currentNetwork()
   }
 
@@ -166,9 +150,9 @@ async function computeTransaction () {
 
   if (authenticator.accountId && !accountId) {
     if (!authenticator.getAccountId) {
-      if (authenticator.redirection) gotoButton.value = 'No source defined'
-      if (authenticator.textarea) xdrBox.placeholder = 'No source defined'
-      if (authenticator.qrCode) node.clear(qrCode)
+      if (authenticator.redirection) dom.gotoButton.value = 'No source defined'
+      if (authenticator.textarea) dom.xdrBox.placeholder = 'No source defined'
+      if (authenticator.qrCode) html.clear(dom.qrCode)
     }
     return
   }
@@ -184,18 +168,18 @@ async function computeTransaction () {
 }
 
 function clearMsgboxes () {
-  display(accountMsgbox); display(redirectionMsgbox)
+  display(dom.accountMsgbox); display(dom.redirectionMsgbox)
 }
 
 function currentNetwork () {
-  return publicNetworkRadio.checked ? 'public' : 'test'
+  return dom.publicNetworkRadio.checked ? 'public' : 'test'
 }
 
 function refreshTransaction (value) {
   if (authenticator.redirection) {
-    gotoButton.value = authenticator.buttonText
-    gotoButton.disabled = undefined
-    gotoButton.onclick = () => buttonOnClick(value)
+    dom.gotoButton.value = authenticator.buttonText
+    dom.gotoButton.disabled = undefined
+    dom.gotoButton.onclick = () => buttonOnClick(value)
   }
 
   if (localStorage.redirect === 'true') buttonOnClick(value)
@@ -205,8 +189,8 @@ function refreshTransaction (value) {
   }
 
   if (authenticator.textarea) {
-    xdrBox.value = value
-    xdrBox.disabled = undefined
+    dom.xdrBox.value = value
+    dom.xdrBox.disabled = undefined
   }
 
   if (authenticator.qrCode) refreshQR(value)
@@ -214,33 +198,33 @@ function refreshTransaction (value) {
 
 function refreshAccountIdForm (tdesc) {
   if (tdesc.source) {
-    display(accountMsgbox)
+    display(dom.accountMsgbox)
     setAccountIdBoxReadonly(tdesc.source)
   }
   if (tdesc.network) {
-    publicNetworkRadio.disabled = true
-    testNetworkRadio.disabled = true
-    if (tdesc.network === 'public') publicNetworkRadio.checked = true
-    else testNetworkRadio.checked = true
+    dom.publicNetworkRadio.disabled = true
+    dom.testNetworkRadio.disabled = true
+    if (tdesc.network === 'public') dom.publicNetworkRadio.checked = true
+    else dom.testNetworkRadio.checked = true
   }
 }
 
 function setAccountIdBoxReadonly (value) {
-  accountIdBox.disabled = false
-  accountIdBox.readOnly = true
-  accountIdBox.value = value
-  accountIdBox.style.cursor = 'pointer'
-  accountIdBox.onclick = () => exports.copyContent(accountIdBox)
+  dom.accountIdBox.disabled = false
+  dom.accountIdBox.readOnly = true
+  dom.accountIdBox.value = value
+  dom.accountIdBox.style.cursor = 'pointer'
+  dom.accountIdBox.onclick = () => exports.copyContent(dom.accountIdBox)
 }
 
 async function buttonOnClick (value) {
   if (typeof value === 'string') location.replace(value)
   else if (typeof value === 'function') {
-    display(redirectionMsgbox, 'info', 'Waiting for confirmation...')
-    gotoButton.disabled = true
+    display(dom.redirectionMsgbox, 'info', 'Waiting for confirmation...')
+    dom.gotoButton.disabled = true
     value().then(sendTransaction).catch(error => {
-      display(redirectionMsgbox, 'error', error.message + '.')
-      gotoButton.disabled = false
+      display(dom.redirectionMsgbox, 'error', error.message + '.')
+      dom.gotoButton.disabled = false
     })
   }
 }
@@ -250,77 +234,75 @@ async function sendTransaction (transaction) {
   cosmicLink.getQuery().then(query => history.replaceState({}, '', query))
   cosmicLink.getTdesc().then(tdesc => refreshAccountIdForm(tdesc))
 
-  display(redirectionMsgbox, 'info', 'Sending to the network...')
+  display(dom.redirectionMsgbox, 'info', 'Sending to the network...')
 
   try {
     const response = await cosmicLink.send()
     console.log(response)
-    display(redirectionMsgbox, 'info', 'Transaction validated')
+    display(dom.redirectionMsgbox, 'info', 'Transaction validated')
     if (document.referrer) {
-      gotoButton.value = 'Close'
-      gotoButton.onclick = () => history.back()
-      gotoButton.disabled = false
+      dom.gotoButton.value = 'Close'
+      dom.gotoButton.onclick = () => history.back()
+      dom.gotoButton.disabled = false
     } else {
-      gotoButton.value = 'Done'
+      dom.gotoButton.value = 'Done'
     }
   } catch (error) {
     console.error(error.response)
-    display(redirectionMsgbox, 'error', error.message + '.')
+    display(dom.redirectionMsgbox, 'error', error.message + '.')
   }
 }
 
 function display (element, type = '', message = '') {
   const classname = type ? '.' + type : null
-  node.rewrite(element, node.create('span', classname, message))
+  html.rewrite(element, html.create('span', classname, message))
 }
 
 function transactionError (error) {
-  if (authenticator.url) gotoButton.value = error.message
-  if (authenticator.textarea) xdrBox.placeholder = error.message
-  node.clear(qrCode)
+  if (authenticator.url) dom.gotoButton.value = error.message
+  if (authenticator.textarea) dom.xdrBox.placeholder = error.message
+  html.clear(dom.qrCode)
 }
-
-accountIdBox.onchange = function () {
-  localStorage.accountId = cosmicLib.defaults.user = accountIdBox.value
+dom.accountIdBox.onchange = function () {
+  localStorage.accountId = cosmicLib.defaults.user = dom.accountIdBox.value
   computeTransaction()
 }
 
-publicNetworkRadio.onchange = testNetworkRadio.onchange = function () {
+dom.publicNetworkRadio.onchange = dom.testNetworkRadio.onchange = function () {
   localStorage.network = cosmicLib.defaults.network = currentNetwork()
   computeTransaction()
 }
 
-checkbox.onchange = function () {
-  if (checkbox.checked) localStorage.redirect = 'true'
+dom.redirectionCheckbox.onchange = function () {
+  console.log
+  if (dom.redirectionCheckbox.checked) localStorage.redirect = 'true'
   else localStorage.redirect = 'false'
 }
 
-const main = node.grab('main')
-const hiddenDiv = node.grab('#hidden')
 exports.switchPage = function (from, to) {
-  node.append(node.grab('body'), from)
-  node.append(main, to)
+  html.append(dom.body, from)
+  html.append(dom.main, to)
 }
 
 exports.switchQR = function () {
   if (localStorage.QR === 'true') {
-    node.hide(qrCode)
+    html.hide(dom.qrCode)
     localStorage.QR = false
-    QrButton.className = undefined
+    dom.qrButton.className = undefined
   } else {
-    node.show(qrCode)
+    html.show(dom.qrCode)
     localStorage.QR = true
-    QrButton.className = 'enabled'
+    dom.qrButton.className = 'enabled'
   }
 }
 
 function refreshQR (value) {
   if (!authenticator.qrCode || !value) return
 
-  const canvas = node.create('canvas')
-  QRCode.toCanvas(canvas, value, { margin: 0, scale: 5 })
+  const canvas = html.create('canvas')
+  QrCode.toCanvas(canvas, value, { margin: 0, scale: 5 })
   canvas.title = value
-  node.rewrite(qrCode, canvas)
+  html.rewrite(dom.qrCode, canvas)
 }
 
 /** * Experimental Robot Factory ***/
@@ -340,18 +322,17 @@ function myHash () {
   return hash
 }
 
-const tamper = node.grab('#tamper')
 function setTamper () {
-  tamper.src = 'https://robohash.org/' + myHash()
+  dom.tamper.src = 'https://robohash.org/' + myHash()
 }
 
 /// Copy content helper
 
 exports.copyContent = function (element) {
-  if (node.copyContent(element) && document.activeElement.value) {
-    const prevNode = node.grab('#copied')
-    if (prevNode) node.destroy(prevNode)
-    const copiedNode = node.create('span', '#copied', 'Copied')
+  if (html.copyContent(element) && document.activeElement.value) {
+    const prevNode = html.grab('#copied')
+    if (prevNode) html.destroy(prevNode)
+    const copiedNode = html.create('span', '#copied', 'Copied')
     element.parentNode.insertBefore(copiedNode, element)
     setTimeout(() => { copiedNode.hidden = true }, 3000)
   }

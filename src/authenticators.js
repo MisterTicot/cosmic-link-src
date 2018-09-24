@@ -1,117 +1,17 @@
-const node = require('./node')
+const authenticators = exports
 
-/****************************** Authenticators ********************************/
+const html = require('@cosmic-plus/jsutils/html')
+const wallets = require('@cosmic-plus/base/wallets')
 
-let authenticators = {
-  'Stellar Authenticator': {
-    protocol: 'cosmiclink',
-    url: 'https://stellar-authenticator.org/'
-  },
-  'Ledger Wallet': {
-    protocol: 'ledgerwallet'
-  },
-  'Sep0007 Wallet': {
-    protocol: 'sep0007',
-    url: 'web+stellar:tx/'
-  },
-  'Stellar Laboratory': {
-    protocol: 'stellarlab',
-    url: 'https://stellar.org/laboratory/#txsigner',
-  },
-  'Copy/Paste XDR': {
-    protocol: 'copy'
-  }
-}
+const protocols = require('./protocols')
 
-
-/******************************** Protocols ***********************************/
-const protocols = {}
-
-protocols.cosmiclink = {
-  handler: function (authenticator, cosmicLink) {
-    return cosmicLink.getQuery().then(query => authenticator.url + query)
-  }
-}
-
-protocols.stellarlab = {
-  accountId: true,
-  handler: async function (authenticator, cosmicLink) {
-    const xdr = await cosmicLink.getXdr()
-    const encodedXdr = encodeURIComponent(xdr)
-    const query = `?xdr=${encodedXdr}&network=${cosmicLink.network}`
-    return authenticator.url + query
-  }
-}
-
-function getLedgerModule () {
-  return import(/* webpackChunkName: "ledger" */ 'stellar-ledger-wallet')
-    .then(ledger => ledger.default)
-}
-
-protocols.ledgerwallet = {
-  accountId: true,
-  buttonText: 'Sign with Ledger Wallet',
-  qrCode: false,
-  getAccountId: async function () {
-    const ledger = await getLedgerModule()
-    await ledger.connect()
-    return ledger.publicKey
-  },
-  handler: async function (authenticator, cosmicLink) {
-    const transaction = await cosmicLink.getTransaction()
-    const ledger = await getLedgerModule()
-    return async () => ledger.sign(transaction)
-  },
-  refresh: async function (refresher) {
-    const ledger = await getLedgerModule()
-    ledger.onDisconnect = () => refresher()
-  },
-  onExit: async function () {
-    const ledger = await getLedgerModule()
-    ledger.disconnect()
-  }
-}
-
-protocols.sep0007 = {
-  accountId: true,
-  handler: async function (authenticator, cosmicLink) {
-    const xdr = await cosmicLink.getXdr()
-    let query = '?xdr=' + encodeURIComponent(xdr)
-    if (cosmicLink.network === 'test') {
-      query += '&network_passphrase=Test%20SDF%20Network%20%3B%20September%202015'
-    }
-    return authenticator.url + query
-  }
-}
-
-protocols.copy = {
-  accountId: true,
-  redirection: false,
-  textarea: true,
-  handler: function (authenticator, cosmicLink) {
-    return cosmicLink.getXdr()
-  }
-}
-
-protocols.defaults = {
-  redirection: true,
-  qrCode: true
-}
-
-
-/**************************** Build module ************************************/
-
-exports.array = []
-exports.nodes = []
+authenticators.array = []
+authenticators.nodes = []
 
 class Authenticator {
-  constructor (name, protocol, url, options) {
-    this.name = name
-    this.protocol = protocol
-    this.url = url
-    Object.assign(this, protocols.defaults, protocols[protocol], options)
-    if (!this.buttonText && this.url) this.buttonText = 'Go to ' + this.name
-    console.log(this)
+  constructor (wallet) {
+    Object.assign(this, wallet, protocols[wallet.protocol])
+    if (!this.buttonText && this.redirection) this.buttonText = 'Go to ' + this.name
   }
 
   handle (cosmicLink) {
@@ -119,20 +19,15 @@ class Authenticator {
   }
 
   get node () {
-    return node.create('option', { value: this.name }, this.name)
+    return html.create('option', { value: this.name }, this.name)
   }
 }
 
-function addAuthenticator (name, protocol, url, options) {
-  const authenticator = new Authenticator(name, protocol, url, options)
+for (let entry in wallets) {
+  const wallet = wallets[entry]
+  const authenticator = new Authenticator(wallet)
+  console.log(authenticator)
   exports.array.push(authenticator)
   exports.nodes.push(authenticator.node)
-  exports[name] = authenticator
-}
-
-for (let name in authenticators) {
-  const protocol = authenticators[name].protocol
-  const url = authenticators[name].url
-  const options = authenticators[name].options
-  addAuthenticator(name, protocol, url, options)
+  exports[authenticator.name] = authenticator
 }

@@ -57,15 +57,15 @@
 <body id="body" onload="lib.init()">
 
   <header onclick="lib.copyContent(this)">
-    <h1>https://cosmic.link/</h1><span id="query"></span>
+    <h1 id="websiteUrl">=(G_G)=</h1><span id="query"></span>
   </header>
 
   <img id="logo" src="icons/512x512.png" alt="">
 
   <main>
-    <div id="main" class="page">
+    <div id="sign" class="page">
       <h2>You're being offered to sign a Stellar transaction</h2>
-      <aside><a href="javascript:lib.switchPage(main, explanation)">What does that mean?</a></aside>
+      <aside><a href="javascript:lib.switchPage(sign, explanation)">What does that mean?</a></aside>
 
       <hr>
 
@@ -76,19 +76,19 @@
 
       <hr>
 
-      <h3>Step 2: Select an Authenticator</h3>
+      <h3>Step 2: Select a Signing Method</h3>
       <form onsubmit="return false">
         <select id="authenticators">
           <option value="" disabled selected hidden>Loading...</option>
         </select>
         <div id="accountDiv" style="display:none">
-          <input id="accountId" type="text">
+          <input id="accountIdBox" type="text">
           <div id="network">
-            <input id="publicNetwork" type="radio" name="network" value="public"
+            <input id="publicNetworkRadio" type="radio" name="network" value="public"
               checked>
-            <label for="publicNetwork">Public network</label>
-            <input id="testNetwork" type="radio" name="network" value="test">
-            <label for="testNetwork">Test network</label>
+            <label for="publicNetworkRadio">Public network</label>
+            <input id="testNetworkRadio" type="radio" name="network" value="test">
+            <label for="testNetworkRadio">Test network</label>
           </div>
         </div>
         <div id="accountMsgbox"></div>
@@ -98,21 +98,21 @@
 
       <h3>Step 3: Sign the Transaction</h3>
 
-      <form id="redirection">
-        <input type="button" value="…" disabled>
-        <input id="checkbox" type="checkbox">
-        <label for="checkbox">Automatic redirection</label>
+      <form id="redirectionForm">
+        <input id="gotoButton" type="button" value="…" disabled>
+        <input id="redirectionCheckbox" type="checkbox">
+        <label for="redirectionCheckbox">Automatic redirection</label>
         <div id="redirectionMsgbox"></div>
       </form>
 
-      <form id="textarea" style="display:none">
-        <textarea id="xdr" rows="3" readonly onclick="lib.copyContent(this)"
+      <form id="textareaForm" style="display:none">
+        <textarea id="xdrBox" rows="3" readonly onclick="lib.copyContent(this)"
           placeholder="No transaction" disabled></textarea>
       </form>
 
-      <form id="qrform" style="display:none">
-          <input type="button" value="QR Code" onclick="lib.switchQR()">
-          <div id="qrcode" style="display:none"></div>
+      <form id="qrForm" style="display:none">
+          <input id="qrButton" type="button" value="QR Code" onclick="lib.switchQR()">
+          <div id="qrCode" style="display:none"></div>
       </form>
     </div>
   </main>
@@ -172,7 +172,7 @@
 
     <hr>
     <form>
-      <input type="button" onclick="lib.switchPage(explanation, main)"
+      <input type="button" onclick="lib.switchPage(explanation, sign)"
         value="Back">
     </form>
   </div>
