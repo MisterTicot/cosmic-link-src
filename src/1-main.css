@@ -2,88 +2,88 @@
 
 @media screen and (min-width: 748px), screen and (min-height: 584px)
 {
-	html { font-size: 1.1em; }
+  html { font-size: 1.1em; }
 }
 
 @media screen and (min-width: 1004px), screen and (min-height: 768px)
 {
-	html { font-size: 1.2em; }
+  html { font-size: 1.2em; }
 }
 
 @media screen and (min-width: 1346px), screen and (min-height: 1024px)
 {
-	html { font-size: 1.3em; }
+  html { font-size: 1.3em; }
 }
 
 @media (min-width: 2540px)
 {
-	html { font-size: 1.7em; }
+  html { font-size: 1.7em; }
 }
 
 @media (min-width: 160em)
 {
-	html { font-size: 2.4em; }
+  html { font-size: 2.4em; }
 }
 
 /* Page layout */
 
 html
 {
-	min-height: 100%;
-	box-sizing: border-box;
-	position: relative;
+  min-height: 100%;
+  box-sizing: border-box;
+  position: relative;
 }
 
 body
 {
-	height: 100%;
-	background-color: aliceblue;
-	font-family: "Trebuchet MS", Helvetica, sans-serif;
+  height: 100%;
+  background-color: aliceblue;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
 }
 
 header
 {
-	top: 0;
-	max-width: 100%;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	font-style: italic;
-	color: dimgrey;
+  top: 0;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-style: italic;
+  color: dimgrey;
 
-	transition: 0.2s all ease;
+  transition: 0.2s all ease;
 }
 
 header:hover {
-	color: black;
+  color: black;
 }
 
 h1
 {
-	display: inline;
-	margin: 0.2em 0;
-	vertical-align: middle;
-	font-size: 1.25em;
+  display: inline;
+  margin: 0.2em 0;
+  vertical-align: middle;
+  font-size: 1.25em;
 }
 
 header span
 {
-	vertical-align: middle;
-	font-size: 0.9em;
-	white-space: nowrap;
+  vertical-align: middle;
+  font-size: 0.9em;
+  white-space: nowrap;
 }
 
 main
 {
-	display: block;
-	max-width: 40em;
-	margin: 0.5em auto;
-	border: 3px solid lightgrey;
-	border-radius: 1em;
-	box-shadow: 0.1em 0.1em 0.3em darkgrey;
-	padding: 0 0.5em;
-	overflow: hidden;
-	background-color: white;
+  display: block;
+  max-width: 40em;
+  margin: 0.5em auto;
+  border: 3px solid lightgrey;
+  border-radius: 1em;
+  box-shadow: 0.1em 0.1em 0.3em darkgrey;
+  padding: 0 0.5em;
+  overflow: hidden;
+  background-color: white;
 }
 
 
@@ -91,61 +91,61 @@ main
 
 h2
 {
-	font-size: 1.2em;
-	font-weight: normal;
-	text-align: center;
+  font-size: 1.2em;
+  font-weight: normal;
+  text-align: center;
 }
 
 h3
 {
-	margin: 0;
-	padding: 0.2em 0 0.2em 0;
-	font-weight: bolder;
-	font-size: 0.8em;
-	text-transform: uppercase;
-	font-stretch: condensed;
+  margin: 0;
+  padding: 0.2em 0 0.2em 0;
+  font-weight: bolder;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  font-stretch: condensed;
 }
 
 hr
 {
-	border: 0;
-	height: 0.1em;
-	background-image: linear-gradient(to right, rgba(0, 0, 0, 0), lightgrey, rgba(0, 0, 0, 0));
+  border: 0;
+  height: 0.1em;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), lightgrey, rgba(0, 0, 0, 0));
 }
 
 aside
 {
-	text-align: right;
+  text-align: right;
 }
 
 aside a:link
 {
-	font-stretch: condensed;
+  font-stretch: condensed;
 }
 
 a:link
 {
-	text-decoration: none;
-	color: grey;
+  text-decoration: none;
+  color: grey;
 
-	transition: 0.2s all ease;
+  transition: 0.2s all ease;
 }
 
 a:hover
 {
-	color: burlywood;
-	cursor: pointer;
+  color: burlywood;
+  cursor: pointer;
 }
 
 /* Form styling */
 
 form
 {
-	clear: both;
-	position: relative;
-	max-width: 30em;
-	margin: 0.75em auto;
-	text-align: center;
+  clear: both;
+  position: relative;
+  max-width: 30em;
+  margin: 0.75em auto;
+  text-align: center;
 }
 
 textarea,
@@ -154,24 +154,24 @@ button,
 input,
 label
 {
-	display: inline-block;
-	box-sizing: border-box;
-	width: 100%;
-	max-width: 30em;
-	margin: 0.2em 0;
-	padding: 0.2em;
-	border: solid 2px lightgrey;
-	border-radius: 0.2em;
-	overflow: hidden;
-	background-color: ghostwhite;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 30em;
+  margin: 0.2em 0;
+  padding: 0.2em;
+  border: solid 2px lightgrey;
+  border-radius: 0.2em;
+  overflow: hidden;
+  background-color: ghostwhite;
 
-	transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 textarea[readonly],
 input[readonly]
 {
-	color: #505050;
+  color: #505050;
 }
 
 textarea:hover:enabled,
@@ -179,7 +179,7 @@ select:hover:enabled,
 button:hover:enabled,
 input:hover:enabled
 {
-	border: solid 2px #909090;
+  border: solid 2px #909090;
 }
 
 textarea:focus:enabled,
@@ -187,21 +187,21 @@ select:focus:enabled,
 button:focus:enabled,
 input:focus:enabled
 {
-	outline: 0;
-	box-shadow: 0 0 0px 2px lightsteelblue;
+  outline: 0;
+  box-shadow: 0 0 0px 2px lightsteelblue;
 }
 
 textarea[readonly]:hover,
 [type="text"][readonly]:hover,
 select:hover
 {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 [type="button"],
 [type="submit"]
 {
-	background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 
@@ -209,153 +209,153 @@ select:hover
 [type="submit"]:hover:enabled,
 [type="button"].enabled
 {
-	background-color: lightgrey;
-	cursor: pointer;
+  background-color: lightgrey;
+  cursor: pointer;
 }
 
 [type="checkbox"],
 [type="radio"]
 {
-	display: none;
+  display: none;
 }
 
 [type="checkbox"] + label,
 [type="radio"] + label
 {
-	margin: 0.1em 0;
-	border: none;
-	background-color: white;
-	padding: 0.1em;
-	font-style: italic;
-	color: dimgrey;
+  margin: 0.1em 0;
+  border: none;
+  background-color: white;
+  padding: 0.1em;
+  font-style: italic;
+  color: dimgrey;
 }
 
 [type="radio"] + label
 {
-	width: 45%;
+  width: 45%;
 }
 
 [type="checkbox"] + label::before,
 [type="radio"] + label::before
 {
-	content: "✘ ";
+  content: "✘ ";
 }
 
 [type="checkbox"]:checked:disabled + label,
 [type="radio"]:checked:disabled + label
 {
-	box-shadow: inset 0 0 3px 1px darkgrey;
-	color: black;
-	font-style: normal;
+  box-shadow: inset 0 0 3px 1px darkgrey;
+  color: black;
+  font-style: normal;
 }
 
 [type="checkbox"]:checked:enabled + label,
 [type="radio"]:checked:enabled + label
 {
-	background-color: lightgreen;
-	color: black;
-	font-style: normal;
+  background-color: lightgreen;
+  color: black;
+  font-style: normal;
 }
 
 [type="checkbox"]:checked + label::before,
 [type="radio"]:checked + label::before
 {
-	content: "✔ ";
+  content: "✔ ";
 }
 
 [type="checkbox"]:enabled + label:hover,
 [type="radio"]:enabled + label:hover
 {
-	background-color: mediumseagreen;
-	color: black;
-	cursor: pointer;
+  background-color: mediumseagreen;
+  color: black;
+  cursor: pointer;
 }
 
 
 /* Classes styling */
 
 main .page {
-	display: block;
+  display: block;
 }
 
 .page {
-	display: none;
+  display: none;
 }
 
 .error
 {
-	font-weight: bold;
-	color: tomato;
+  font-weight: bold;
+  color: tomato;
 }
 
 .info
 {
-	font-weight: bold;
-	color: mediumseagreen;
+  font-weight: bold;
+  color: mediumseagreen;
 }
 
 /* Individual elements styling */
 
 #CL_htmlNode
 {
-	display: inline-block;
-	margin-top: 0.5em;
+  display: inline-block;
+  margin-top: 0.5em;
 }
 
 #qrcode
 {
-	background-color: ghostwhite;
+  background-color: ghostwhite;
 }
 
 #qrcode input {
-	margin: 0;
+  margin: 0;
 }
 
 #qrcode .CL_loadingAnim {
-	width: 5em;
-	height: 5em;
-	margin: 1em auto;
-	border-width: 0.75em;
+  width: 5em;
+  height: 5em;
+  margin: 1em auto;
+  border-width: 0.75em;
 }
 
 #qrcode canvas {
-	margin: auto;
-	padding: 0.3em;
+  margin: auto;
+  padding: 0.3em;
 }
 
 #copied
 {
-	position: absolute;
-	right: 0;
-	transform: translate(-0.1em, 0.24em);
-	box-sizing: border-box;
-	width: 4em;
-	background-color: ghostwhite;
-	background-color: rgba(245, 245, 245, 0.8);
-	padding: 0.05em 0.5em;
-	font-weight: bold;
-	color: mediumseagreen;
+  position: absolute;
+  right: 0;
+  transform: translate(-0.1em, 0.24em);
+  box-sizing: border-box;
+  width: 4em;
+  background-color: ghostwhite;
+  background-color: rgba(245, 245, 245, 0.8);
+  padding: 0.05em 0.5em;
+  font-weight: bold;
+  color: mediumseagreen;
 }
 
 #logo {
-	z-index: -1;
-	position: absolute;
-	top: 0;
-	max-height: 50%;
-	max-width: 40%;
-	opacity: 0.7;
-	filter: grayscale(30%);
-	transform: translate(-20%, -20%);
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  max-height: 50%;
+  max-width: 40%;
+  opacity: 0.7;
+  filter: grayscale(30%);
+  transform: translate(-20%, -20%);
 }
 
 #tamper
 {
-	position: fixed;
-	pointer-events: none;
-	max-height: 50%;
-	max-width: 40%;
-	bottom: 0;
-	right: 0;
-	opacity: 0.3;
-	filter: grayscale(50%);
+  position: fixed;
+  pointer-events: none;
+  max-height: 50%;
+  max-width: 40%;
+  bottom: 0;
+  right: 0;
+  opacity: 0.3;
+  filter: grayscale(50%);
 }
