@@ -63,7 +63,7 @@
   <img id="logo" src="icons/512x512.png" alt="">
 
   <main>
-    <div id="main" class="content">
+    <div id="main" class="page">
       <h2>You're being offered to sign a Stellar transaction</h2>
       <aside><a href="javascript:lib.switchPage(main, explanation)">What does that mean?</a></aside>
 
@@ -117,69 +117,67 @@
     </div>
   </main>
 
-  <img id="tamper">
+  <div id="explanation" class="page">
+    <h2>Warm welcome to the Stellar network!</h2>
+    <hr>
 
-  <div id="hidden">
-    <div id="explanation" class="content">
-      <h2>Warm welcome to the Stellar network!</h2>
-      <hr>
+    <p>
+      The Stellar network is a cryptocurrency platform on which we can
+      create accounts and perform transactions. It's a bit like a bank,
+      except it's public and decentralized.
+    </p>
+    <p>
+      Because it's public, each of us can contribute to the network by
+      various means, like programing services such as this one. We can
+      also emit our own currencies or tokens, build secure voting systems
+      and other things to be invented. :)
+    </p>
+    <p>
+      Because it's properly decentralized, it's protected from anybody
+      that could want to disrupt or hijack the network for its own
+      benefit. Our funds are secured by cryptographic algorithms and
+      resilience. Resilience means that several nodes on the network
+      have a full copy of the data, and that the various independent
+      nodes have to agree together for the transactions to be performed.
+    </p>
+    <p>
+      In order to sign a Stellar transaction, you need to have an
+      account with a minimum amount of the native currency, called
+      lumen (XLM). At this time, the minimum amount is 1 lumen, valued
+      between $.20 and $.50. Once in, you'll be able to close your
+      account and get your money back at any time, if you wish to do so.
+    </p>
+    <p>
+      Cosmic links are normal web links that describe a Stellar
+      transaction. When you click on them and own a Stellar account,
+      you're given the possibility to sign and send the transaction to
+      the network. Those transactions are for payment but also for
+      currency conversion, change in account settings or sending short
+      messages. Cosmic links may looks like:
+      https://cosmic.link/?setOption&...
+    </p>
+    <p>
+      The Stellar network and core programs are maintained by the Stellar
+      Foundation. Their
+      <a href="https://stellar.org" title="https://stellar.org"
+        target="_blank" rel="noopener">website</a>
+      is a good place to start if you want to learn more. <br>
+      We also have a
+      <a href="https://galactictalk.org" title="https://galactictalk.org"
+        target="_blank" rel="noopener">community forum</a>.
+    </p>
+    <p>
+      We wish you a happy discovery :)
+    </p>
 
-      <p>
-        The Stellar network is a cryptocurrency platform on which we can
-        create accounts and perform transactions. It's a bit like a bank,
-        except it's public and decentralized.
-      </p>
-      <p>
-        Because it's public, each of us can contribute to the network by
-        various means, like programing services such as this one. We can
-        also emit our own currencies or tokens, build secure voting systems
-        and other things to be invented. :)
-      </p>
-      <p>
-        Because it's properly decentralized, it's protected from anybody
-        that could want to disrupt or hijack the network for its own
-        benefit. Our funds are secured by cryptographic algorithms and
-        resilience. Resilience means that several nodes on the network
-        have a full copy of the data, and that the various independent
-        nodes have to agree together for the transactions to be performed.
-      </p>
-      <p>
-        In order to sign a Stellar transaction, you need to have an
-        account with a minimum amount of the native currency, called
-        lumen (XLM). At this time, the minimum amount is 1 lumen, valued
-        between $.20 and $.50. Once in, you'll be able to close your
-        account and get your money back at any time, if you wish to do so.
-      </p>
-      <p>
-        Cosmic links are normal web links that describe a Stellar
-        transaction. When you click on them and own a Stellar account,
-        you're given the possibility to sign and send the transaction to
-        the network. Those transactions are for payment but also for
-        currency conversion, change in account settings or sending short
-        messages. Cosmic links may looks like:
-        https://cosmic.link/?setOption&...
-      </p>
-      <p>
-        The Stellar network and core programs are maintained by the Stellar
-        Foundation. Their
-        <a href="https://stellar.org" title="https://stellar.org"
-          target="_blank" rel="noopener">website</a>
-        is a good place to start if you want to learn more. <br>
-        We also have a
-        <a href="https://galactictalk.org" title="https://galactictalk.org"
-          target="_blank" rel="noopener">community forum</a>.
-      </p>
-      <p>
-        We wish you a happy discovery :)
-      </p>
-
-      <hr>
-      <form>
-        <input type="button" onclick="lib.switchPage(explanation, main)"
-          value="Back">
-      <form>
-    </div>
+    <hr>
+    <form>
+      <input type="button" onclick="lib.switchPage(explanation, main)"
+        value="Back">
+    </form>
   </div>
+
+  <img id="tamper">
 
   <script src="stellar-sdk.js"></script>
   <script src="main.js"></script>

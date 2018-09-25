@@ -298,7 +298,7 @@ checkbox.onchange = function () {
 const main = node.grab('main')
 const hiddenDiv = node.grab('#hidden')
 exports.switchPage = function (from, to) {
-  node.append(hiddenDiv, from)
+  node.append(node.grab('body'), from)
   node.append(main, to)
 }
 

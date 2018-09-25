@@ -27,8 +27,16 @@
 
 /* Page layout */
 
+html
+{
+	min-height: 100%;
+	box-sizing: border-box;
+	position: relative;
+}
+
 body
 {
+	height: 100%;
 	background-color: aliceblue;
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
 }
@@ -67,14 +75,15 @@ header span
 
 main
 {
+	display: block;
 	max-width: 40em;
 	margin: 0.5em auto;
-	padding: 0 0.5em;
 	border: 3px solid lightgrey;
 	border-radius: 1em;
+	box-shadow: 0.1em 0.1em 0.3em darkgrey;
+	padding: 0 0.5em;
 	overflow: hidden;
 	background-color: white;
-	box-shadow: 0.1em 0.1em 0.3em darkgrey;
 }
 
 
@@ -186,7 +195,7 @@ textarea[readonly]:hover,
 [type="text"][readonly]:hover,
 select:hover
 {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 [type="button"],
@@ -263,7 +272,15 @@ select:hover
 }
 
 
-/* Individual elements styling */
+/* Classes styling */
+
+main .page {
+	display: block;
+}
+
+.page {
+	display: none;
+}
 
 .error
 {
@@ -276,6 +293,8 @@ select:hover
 	font-weight: bold;
 	color: mediumseagreen;
 }
+
+/* Individual elements styling */
 
 #CL_htmlNode
 {
@@ -318,29 +337,25 @@ select:hover
 	color: mediumseagreen;
 }
 
-
-#hidden {
-	display: none;
-}
-
 #logo {
 	z-index: -1;
 	position: absolute;
 	top: 0;
 	max-height: 50%;
 	max-width: 40%;
-	filter: grayscale(30%) opacity(70%);
+	opacity: 0.7;
+	filter: grayscale(30%);
 	transform: translate(-20%, -20%);
 }
 
 #tamper
 {
 	position: fixed;
-	bottom: 0;
-	right: 0;
 	pointer-events: none;
 	max-height: 50%;
 	max-width: 40%;
-	margin: auto;
-	filter: grayscale(50%) opacity(30%);
+	bottom: 0;
+	right: 0;
+	opacity: 0.3;
+	filter: grayscale(50%);
 }

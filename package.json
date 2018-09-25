@@ -21,7 +21,7 @@
   "author": "Mister.Ticot",
   "license": "MIT",
   "repository": "github:MisterTicot/cosmic-link.git",
-  "browserList": "last 4 versions, > 0.1%",
+  "browserslist": "last 4 versions, > 0.1%",
   "devDependencies": {
     "autoprefixer-cli": "^1.0.0",
     "babel-loader": "^7.1.5",
