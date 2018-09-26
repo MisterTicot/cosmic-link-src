@@ -1,5 +1,5 @@
 /**
- * With this service worker, the whole application is installed in cach each
+ * With this service worker, the whole application is installed in cache each
  * time an update is available and run from there.
  */
 
@@ -28,7 +28,7 @@ self.addEventListener('install', function (event) {
 })
 
 self.addEventListener('activate', function (event) {
-  event.waitUntil(cleanCaches(CACHE_NAME))
+  event.waitUntil(cleanCache())
 })
 
 self.addEventListener('fetch', function (event) {
@@ -66,10 +66,10 @@ function precache (files) {
 /**
  * Wipe every caches expect `cacheName`.
  */
-function cleanCaches () {
+function cleanCache () {
   return caches.keys().then(function (keys) {
     return Promise.all(
-      keys.filter(key => key !== CACHE_NAME).map(key => {
+      keys.map(key => {
         console.log('Deleting: ' + key)
         caches.delete(key)
       })
