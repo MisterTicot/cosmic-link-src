@@ -1,6 +1,6 @@
 {
   "name": "cosmic-link",
-  "version": "0.11.4",
+  "version": "0.12.0",
   "description": "The cosmic.link website",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "get": "git submodule update --init --recursive",
     "build-css": "cat src/*.css | autoprefixer-cli -o web/main.css",
     "build-html": "cp -f src/*.html web",
-    "build-js": "webpack -p; cp node_modules/stellar-sdk/dist/stellar-sdk.min.js web/stellar-sdk.js",
+    "build-js": "webpack -p && cp node_modules/stellar-sdk/dist/stellar-sdk.min.js web/stellar-sdk.js",
     "build-misc": "cp AUTHORS LICENSE README.md package-lock.json web",
     "build": "for i in js css html misc; do npm run build-$i || return; done",
     "check": "npm run get && cp web/package-lock.json . && npm run ci && npm run build && cd web && git status",
@@ -30,11 +30,11 @@
     "babel-preset-env": "^1.7.0",
     "live-server": "^1.2.0",
     "standard": "^11.0.1",
-    "webpack": "^4.16.5",
+    "webpack": "^4.19.1",
     "webpack-cli": "^2.1.4"
   },
   "dependencies": {
-    "cosmic-lib": "^0.11.0",
+    "cosmic-lib": "^0.11.2",
     "qrcode": "^1.2.2",
     "stellar-ledger-wallet": "^0.2.0"
   }
