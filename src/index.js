@@ -6,7 +6,7 @@ const QRCode = require('qrcode')
 
 /// Service worker
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('worker.js').catch(console.error)
+  navigator.serviceWorker.register('worker.js')
 }
 
 /// HTML elements
