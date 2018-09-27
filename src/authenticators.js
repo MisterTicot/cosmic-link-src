@@ -14,7 +14,7 @@ class Authenticator {
     if (!this.buttonText && this.redirection) this.buttonText = 'Go to ' + this.name
   }
 
-  handle (cosmicLink) {
+  async handle (cosmicLink) {
     return this.handler(this, cosmicLink)
   }
 

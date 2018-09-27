@@ -21,14 +21,6 @@ exports.init = function () {
 
   authenticators.nodes.forEach(entry => html.append(dom.authenticators, entry))
   if (localStorage.redirect === 'true') dom.redirectionCheckbox.checked = true
-  if (localStorage.accountId) {
-    cosmicLib.defaults.user = dom.accountIdBox.value = localStorage.accountId
-  }
-  if (localStorage.network) {
-    if (localStorage.network === 'public') dom.publicNetworkRadio.checked = true
-    else if (localStorage.network === 'test') dom.testNetworkRadio.checked = true
-    cosmicLib.defaults.network = localStorage.network
-  }
 
   if (localStorage.QR === 'true') {
     dom.qrButton.className = 'enabled'
@@ -36,7 +28,7 @@ exports.init = function () {
   }
 
   if (location.search.length < 2) {
-    html.rewrite(dom.CL_htmlNode, 'No transaction')
+    html.rewrite(dom.cosmiclink_description, 'No transaction')
     dom.redirectionForm.onsubmit = () => false
   }
 
@@ -60,7 +52,11 @@ dom.authenticators.onchange = function (event) {
   if (authenticator.accountId) {
     setupAccountIdBox()
     html.show(dom.accountIdBox, dom.accountDiv)
+    cosmicLib.config.source = dom.accountIdBox.value
+    cosmicLib.config.network = currentNetwork()
   } else {
+    delete cosmicLib.config.source
+    cosmicLib.config.network = 'public'
     html.hide(dom.accountIdBox, dom.accountDiv)
   }
 
@@ -99,17 +95,21 @@ function setupAccountIdBox () {
   dom.accountIdBox.onclick = undefined
   dom.accountIdBox.style.cursor = undefined
 
+  if (localStorage.network === 'public') dom.publicNetworkRadio.checked = true
+  else if (localStorage.network === 'test') dom.testNetworkRadio.checked = true
+
   if (authenticator.getAccountId) {
     dom.accountIdBox.value = ''
     dom.accountIdBox.placeholder = 'Connecting...'
     dom.accountIdBox.disabled = true
-    const saveName = authenticator.name
 
+    const saveName = authenticator.name
     authenticator.getAccountId().then(accountId => {
       if (authenticator.name !== saveName) return
       setAccountIdBoxReadonly(accountId)
       computeTransaction()
     }).catch(error => {
+      if (authenticator.name !== saveName) return
       html.hide(dom.accountDiv)
       display(dom.accountMsgbox, 'error', error.message + '.')
     })
@@ -124,6 +124,14 @@ async function computeTransaction () {
 
   clearMsgboxes()
 
+  if (authenticator.accountId) {
+    cosmicLib.config.network = currentNetwork()
+    cosmicLib.config.source = dom.accountIdBox.value
+  } else {
+    cosmicLib.config.network = 'public'
+    delete cosmicLib.config.source
+  }
+
   if (authenticator.redirection) {
     dom.gotoButton.value = '…'
     dom.gotoButton.disabled = true
@@ -136,19 +144,15 @@ async function computeTransaction () {
   }
 
   if (authenticator.qrCode) {
-    html.rewrite(dom.qrCode, html.create('canvas', '.CL_loadingAnim'))
+    html.rewrite(dom.qrCode, html.create('canvas', '.cosmiclib_loadingAnim'))
   }
 
-  let network, accountId
-  if (authenticator.accountId) {
-    accountId = dom.accountIdBox.value
-    network = currentNetwork()
-  }
+  await cosmicLib.load.css('cosmic-lib.css')
+  cosmicLink = new CosmicLink(location.search)
 
-  cosmicLink = new CosmicLink(location.search,
-    { network: network, user: accountId })
+  if (authenticator.accountId) refreshAccountIdForm(cosmicLink)
 
-  if (authenticator.accountId && !accountId) {
+  if (authenticator.accountId && !dom.accountIdBox.value) {
     if (!authenticator.getAccountId) {
       if (authenticator.redirection) dom.gotoButton.value = 'No source defined'
       if (authenticator.textarea) dom.xdrBox.placeholder = 'No source defined'
@@ -158,17 +162,16 @@ async function computeTransaction () {
   }
 
   const saveTransaction = transaction = authenticator.handle(cosmicLink)
-  transaction
-    .then(function (value) {
-      if (transaction === saveTransaction) refreshTransaction(value)
-    })
-    .catch(function (error) {
-      if (transaction === saveTransaction) transactionError(error)
-    })
+  transaction.then(function (value) {
+    if (transaction === saveTransaction) refreshTransaction(value)
+  }).catch(function (error) {
+    if (transaction === saveTransaction) transactionError(error)
+  })
 }
 
 function clearMsgboxes () {
-  display(dom.accountMsgbox); display(dom.redirectionMsgbox)
+  display(dom.accountMsgbox, null)
+  display(dom.redirectionMsgbox, null)
 }
 
 function currentNetwork () {
@@ -184,10 +187,6 @@ function refreshTransaction (value) {
 
   if (localStorage.redirect === 'true') buttonOnClick(value)
 
-  if (authenticator.accountId) {
-    cosmicLink.getTdesc().then(tdesc => refreshAccountIdForm(tdesc))
-  }
-
   if (authenticator.textarea) {
     dom.xdrBox.value = value
     dom.xdrBox.disabled = undefined
@@ -196,15 +195,15 @@ function refreshTransaction (value) {
   if (authenticator.qrCode) refreshQR(value)
 }
 
-function refreshAccountIdForm (tdesc) {
-  if (tdesc.source) {
+function refreshAccountIdForm (cosmicLink) {
+  if (cosmicLink.tdesc.source && !authenticator.getAccountId) {
     display(dom.accountMsgbox)
-    setAccountIdBoxReadonly(tdesc.source)
+    setAccountIdBoxReadonly(cosmicLink.tdesc.source)
   }
-  if (tdesc.network) {
+  if (cosmicLink.tdesc.network) {
     dom.publicNetworkRadio.disabled = true
     dom.testNetworkRadio.disabled = true
-    if (tdesc.network === 'public') dom.publicNetworkRadio.checked = true
+    if (cosmicLink.tdesc.network === 'public') dom.publicNetworkRadio.checked = true
     else dom.testNetworkRadio.checked = true
   }
 }
@@ -230,15 +229,12 @@ async function buttonOnClick (value) {
 }
 
 async function sendTransaction (transaction) {
-  cosmicLink = new CosmicLink(transaction, { network: currentNetwork() })
-  cosmicLink.getQuery().then(query => history.replaceState({}, '', query))
-  cosmicLink.getTdesc().then(tdesc => refreshAccountIdForm(tdesc))
-
   display(dom.redirectionMsgbox, 'info', 'Sending to the network...')
+  history.replaceState({}, '', cosmicLink.query)
+  refreshAccountIdForm(cosmicLink)
 
   try {
     const response = await cosmicLink.send()
-    console.log(response)
     display(dom.redirectionMsgbox, 'info', 'Transaction validated')
     if (document.referrer) {
       dom.gotoButton.value = 'Close'
@@ -259,22 +255,21 @@ function display (element, type = '', message = '') {
 }
 
 function transactionError (error) {
-  if (authenticator.url) dom.gotoButton.value = error.message
-  if (authenticator.textarea) dom.xdrBox.placeholder = error.message
+  if (authenticator.url) dom.gotoButton.value = cosmicLink.status
+  if (authenticator.textarea) dom.xdrBox.placeholder = cosmicLink.status
   html.clear(dom.qrCode)
 }
 dom.accountIdBox.onchange = function () {
-  localStorage.accountId = cosmicLib.defaults.user = dom.accountIdBox.value
+  localStorage.accountId = dom.accountIdBox.value
   computeTransaction()
 }
 
 dom.publicNetworkRadio.onchange = dom.testNetworkRadio.onchange = function () {
-  localStorage.network = cosmicLib.defaults.network = currentNetwork()
+  localStorage.network = currentNetwork()
   computeTransaction()
 }
 
 dom.redirectionCheckbox.onchange = function () {
-  console.log
   if (dom.redirectionCheckbox.checked) localStorage.redirect = 'true'
   else localStorage.redirect = 'false'
 }
@@ -300,7 +295,7 @@ function refreshQR (value) {
   if (!authenticator.qrCode || !value) return
 
   const canvas = html.create('canvas')
-  QrCode.toCanvas(canvas, value, { margin: 0, scale: 5 })
+  QrCode.toCanvas(canvas, value, { margin: 0, scale: 4 })
   canvas.title = value
   html.rewrite(dom.qrCode, canvas)
 }

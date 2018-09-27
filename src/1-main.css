@@ -296,7 +296,7 @@ main .page {
 
 /* Individual elements styling */
 
-#CL_htmlNode
+#cosmiclink_description
 {
   display: inline-block;
   margin-top: 0.5em;
@@ -311,7 +311,7 @@ main .page {
   margin: 0;
 }
 
-#qrcode .CL_loadingAnim {
+#qrcode .cosmiclib_loadingAnim {
   width: 5em;
   height: 5em;
   margin: 1em auto;

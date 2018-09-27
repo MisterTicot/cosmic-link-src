@@ -1,12 +1,14 @@
 /**
  * Protocols handlers.
+ * 
+ * @exports protocols
+ * @private
  */
-
 const protocols = exports
 
 protocols.cosmiclink = {
   handler: function (authenticator, cosmicLink) {
-    return cosmicLink.getQuery().then(query => authenticator.url + query)
+    return authenticator.url + cosmicLink.query
   }
 }
 
@@ -20,9 +22,10 @@ protocols.ledgerwallet = {
     return ledger.publicKey
   },
   handler: async function (authenticator, cosmicLink) {
-    const transaction = await cosmicLink.getTransaction()
+    await cosmicLink.lock()
     const ledger = await getLedgerModule()
-    return async () => ledger.sign(transaction)
+    cosmicLink.selectNetwork()
+    return async () => ledger.sign(cosmicLink.transaction)
   },
   refresh: async function (refresher) {
     const ledger = await getLedgerModule()
@@ -40,22 +43,18 @@ function getLedgerModule () {
 }
 
 protocols.sep0007 = {
-  accountId: true,
   handler: async function (authenticator, cosmicLink) {
-    const xdr = await cosmicLink.getXdr()
-    let query = '?xdr=' + encodeURIComponent(xdr)
-    if (cosmicLink.network === 'test') {
-      query += '&network_passphrase=Test%20SDF%20Network%20%3B%20September%202015'
-    }
-    return authenticator.url + query
+    await cosmicLink.lock().catch(console.error)
+    console.log(cosmicLink)
+    return cosmicLink.sep7
   }
 }
 
 protocols.stellarlab = {
   accountId: true,
   handler: async function (authenticator, cosmicLink) {
-    const xdr = await cosmicLink.getXdr()
-    const encodedXdr = encodeURIComponent(xdr)
+    await cosmicLink.lock()
+    const encodedXdr = encodeURIComponent(cosmicLink.xdr)
     const query = `?xdr=${encodedXdr}&network=${cosmicLink.network}`
     return authenticator.url + query
   }
@@ -65,8 +64,9 @@ protocols.copy = {
   accountId: true,
   redirection: false,
   textarea: true,
-  handler: function (authenticator, cosmicLink) {
-    return cosmicLink.getXdr()
+  handler: async function (authenticator, cosmicLink) {
+    await cosmicLink.lock()
+    return cosmicLink.xdr
   }
 }
 

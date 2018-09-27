@@ -11,6 +11,7 @@ const TIMEOUT = 1000
 const CACHE_NAME = `${PACKAGE}-${VERSION}`
 const CACHE_FILES = [
   '/',
+  'cosmic-lib.css',
   'index.html',
   'ledger.js',
   'main.css',
