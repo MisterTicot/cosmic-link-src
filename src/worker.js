@@ -4,7 +4,7 @@
  */
 
 const ENABLED = true
-const PACKAGE = 'Cosmic.Link'
+const PACKAGE = require('../package.json').name
 const VERSION = require('../package.json').version
 const ROOT = `${location.protocol}//${location.host}/`
 const TIMEOUT = 1000
@@ -23,8 +23,8 @@ const CACHE_FILES = [
 self.addEventListener('install', function (event) {
   console.log(`Installing ${CACHE_NAME}...`)
   event.waitUntil(precache(CACHE_FILES)
-    .then(self.skipWaiting())
-    .then(console.log(`${CACHE_NAME} installed`))
+    .then(() => self.skipWaiting())
+    .then(() => console.log(`${CACHE_NAME} installed`))
   )
 })
 
@@ -59,21 +59,16 @@ const startByRoot = new RegExp('^' + ROOT)
  * Cache `files` into `cacheName`, then return.
  */
 function precache (files) {
-  return caches.open(CACHE_NAME).then(function (cache) {
-    return cache.addAll(files)
-  })
+  return caches.open(CACHE_NAME).then(cache => cache.addAll(files))
 }
 
 /**
- * Wipe every caches expect `cacheName`.
+ * Wipe every caches except **CACHE_NAME**.
  */
 function cleanCache () {
   return caches.keys().then(function (keys) {
     return Promise.all(
-      keys.map(key => {
-        console.log('Deleting: ' + key)
-        caches.delete(key)
-      })
+      keys.map(key => { if (key !== CACHE_NAME) caches.delete(key) })
     )
   })
 }
