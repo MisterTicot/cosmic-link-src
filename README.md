@@ -2,6 +2,7 @@
 
 * Sources: https://github.com/cosmic-plus/webapp-cosmic-link
 * Build: https://github.com/cosmic-plus/https-cosmic-link
+* Website: https://cosmic.link
 
 The website is served directly from the GitHub repository, thanks to CloudFlare
 CDN. More precisely, what is served is the HEAD of the master branch of the
