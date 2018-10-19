@@ -3,7 +3,8 @@
  * time an update is available and run from there.
  */
 
-const ENABLED = true
+const hostname = location.host.replace(/:.*/,'')
+const ENABLED = hostname !== 'localhost' && hostname !== '127.0.0.1'
 const PACKAGE = require('../package.json').name
 const VERSION = require('../package.json').version
 const ROOT = `${location.protocol}//${location.host}/`
