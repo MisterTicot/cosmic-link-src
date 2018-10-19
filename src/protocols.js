@@ -6,6 +6,11 @@
  */
 const protocols = exports
 
+function getLedgerModule () {
+  return import(/* webpackChunkName: "ledger" */ '@cosmic-plus/ledger-wallet')
+    .then(ledger => ledger.default)
+}
+
 protocols.cosmiclink = {
   handler: function (authenticator, cosmicLink) {
     return authenticator.url + cosmicLink.query
@@ -35,11 +40,6 @@ protocols.ledgerwallet = {
     const ledger = await getLedgerModule()
     ledger.disconnect()
   }
-}
-
-function getLedgerModule () {
-  return import(/* webpackChunkName: "ledger" */ 'stellar-ledger-wallet')
-    .then(ledger => ledger.default)
 }
 
 protocols.sep0007 = {
