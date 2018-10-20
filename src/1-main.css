@@ -15,12 +15,12 @@
   html { font-size: 1.3em; }
 }
 
-@media (min-width: 2540px)
+@media (min-width: 1900px), screen and (min-height: 1366px)
 {
   html { font-size: 1.7em; }
 }
 
-@media (min-width: 160em)
+@media (min-width: 2540px)
 {
   html { font-size: 2.4em; }
 }
