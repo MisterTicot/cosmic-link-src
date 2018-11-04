@@ -1,13 +1,13 @@
 /**
  * Protocols handlers.
- * 
+ *
  * @exports protocols
  * @private
  */
 const protocols = exports
 
 function getLedgerModule () {
-  return import(/* webpackChunkName: "ledger" */ '@cosmic-plus/ledger-wallet')
+  return import(/* webpackChunkName: "ledger" */ "@cosmic-plus/ledger-wallet")
     .then(ledger => ledger.default)
 }
 
@@ -19,7 +19,7 @@ protocols.cosmiclink = {
 
 protocols.ledgerwallet = {
   accountId: true,
-  buttonText: 'Sign with Ledger Wallet',
+  buttonText: "Sign with Ledger Wallet",
   qrCode: false,
   getAccountId: async function () {
     const ledger = await getLedgerModule()
@@ -45,7 +45,6 @@ protocols.ledgerwallet = {
 protocols.sep0007 = {
   handler: async function (authenticator, cosmicLink) {
     await cosmicLink.lock().catch(console.error)
-    console.log(cosmicLink)
     return cosmicLink.sep7
   }
 }
