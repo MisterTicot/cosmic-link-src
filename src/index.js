@@ -6,291 +6,340 @@ const QrCode = require("qrcode")
 
 const authenticators = require("./authenticators")
 
-/// Service worker
+// Service worker
 if (navigator.serviceWorker) navigator.serviceWorker.register("worker.js")
 
-/// HTML elements
-let authenticator, cosmicLink, transaction
+// Global variables
+const the = {}
 
+the.query = location.search.length > 1 && location.search
+the.cosmicLink = undefined
+the.transaction = undefined
+
+the.authenticator = authenticators[localStorage.authenticator || "Stellar Authenticator"]
+the.accountId = undefined
+the.network = localStorage.network
+
+the.redirect = localStorage.redirect === "true"
+the.qrCode = localStorage.QR === "true"
+
+
+// Run once page is fully loaded
 exports.init = function () {
+  // Header
   if (location.origin === "null") dom.websiteUrl.textContent = location.pathname
   else dom.websiteUrl.textContent = location.origin + location.pathname
   dom.query.textContent = location.search
 
+  // Step 1: Transaction
+  if (!the.query) html.rewrite(dom.cosmiclink_description, "No transaction")
+
+  // Step 2: Authenticator
   authenticators.nodes.forEach(entry => html.append(dom.authenticators, entry))
-  if (localStorage.redirect === "true") dom.redirectionCheckbox.checked = true
+  dom.authenticators.value = the.authenticator.name
+  dom.accountIdBox.value = the.accountId
+  networkUI.set(the.network)
 
-  if (localStorage.QR === "true") {
-    dom.qrButton.className = "enabled"
-    html.show(dom.qrCode)
-  }
-
-  if (location.search.length < 2) {
-    html.rewrite(dom.cosmiclink_description, "No transaction")
-    dom.redirectionForm.onsubmit = () => false
-  }
-
-  if (localStorage.authenticator && authenticators[localStorage.authenticator]) {
-    dom.authenticators.value = localStorage.authenticator
-  } else {
-    dom.authenticators.value = "Stellar Authenticator"
-  }
-  dom.authenticators.onchange()
+  // Step 3: Signing
+  if (the.redirect) dom.redirectionCheckbox.checked = true
+  if (the.qrCode) qrCodeUI.enable()
 
   setTamper()
+
+  authenticatorUI.init()
 }
 
-dom.authenticators.onchange = function (event) {
-  if (authenticator && authenticator.onExit) authenticator.onExit()
-  authenticator = authenticators[dom.authenticators.value]
-  localStorage.authenticator = authenticator.name
 
-  clearMsgboxes()
+/**
+ * Computational path:
+ *
+ * authenticatorUI.init() => transactionUI.init() => redirectionUI.init() =>
+ * authenticatorUI.refresh() => transactionUI.refresh() => redirectionUI.refresh()
+ *
+ * transactionUI depends on authenticatorUI
+ * redirectionUI depends on both authenticatorUI & transactionUI
+ */
 
-  if (authenticator.accountId) {
-    setupAccountIdBox()
-    html.show(dom.accountIdBox, dom.accountDiv)
-    cosmicLib.config.source = dom.accountIdBox.value
-    cosmicLib.config.network = currentNetwork()
-  } else {
-    delete cosmicLib.config.source
-    cosmicLib.config.network = "public"
-    html.hide(dom.accountIdBox, dom.accountDiv)
-  }
+/*******************************************************************************
+ * Step 1: Transaction UI
+ */
 
-  if (authenticator.redirection) html.show(dom.redirectionForm)
-  else html.hide(dom.redirectionForm)
+const transactionUI = {}
 
-  if (authenticator.textarea) html.show(dom.textareaForm)
-  else html.hide(dom.textareaForm)
-
-  if (authenticator.refresh) authenticator.refresh(dom.authenticators.onchange)
-
-  if (event) {
-    localStorage.redirect = false
-    dom.redirectionCheckbox.checked = false
-  }
-
-  if (location.search.length < 2) {
-    if (authenticator.url) {
-      dom.gotoButton.value = authenticator.buttonText
-      dom.gotoButton.onclick = () => location.href = authenticator.url
-      dom.gotoButton.disabled = undefined
-    } else {
-      dom.gotoButton.value = "No transaction"
-      dom.gotoButton.disabled = true
-    }
-  } else {
-    if (authenticator.qrCode) html.show(dom.qrForm)
-    else html.hide(dom.qrForm)
-    computeTransaction()
-  }
-}
-
-function setupAccountIdBox () {
-  dom.accountIdBox.disabled = undefined
-  dom.accountIdBox.readOnly = false
-  dom.accountIdBox.onclick = undefined
-  dom.accountIdBox.style.cursor = undefined
-
-  if (localStorage.network === "public") dom.publicNetworkRadio.checked = true
-  else if (localStorage.network === "test") dom.testNetworkRadio.checked = true
-
-  if (authenticator.getAccountId) {
-    dom.accountIdBox.value = ""
-    dom.accountIdBox.placeholder = "Connecting..."
-    dom.accountIdBox.disabled = true
-
-    const saveName = authenticator.name
-    authenticator.getAccountId().then(accountId => {
-      if (authenticator.name !== saveName) return
-      setAccountIdBoxReadonly(accountId)
-      computeTransaction()
-    }).catch(error => {
-      if (authenticator.name !== saveName) return
-      html.hide(dom.accountDiv)
-      display(dom.accountMsgbox, "error", error.message + ".")
-    })
-  } else {
-    if (localStorage.accountId) dom.accountIdBox.value = localStorage.accountId
-    dom.accountIdBox.placeholder = "Your Account Address or ID"
-  }
-}
-
-async function computeTransaction () {
-  if (location.search.length < 2) return
-
-  clearMsgboxes()
-
-  if (authenticator.accountId) {
-    cosmicLib.config.network = currentNetwork()
-    cosmicLib.config.source = dom.accountIdBox.value
-  } else {
-    cosmicLib.config.network = "public"
-    delete cosmicLib.config.source
-  }
-
-  if (authenticator.redirection) {
-    dom.gotoButton.value = "…"
-    dom.gotoButton.disabled = true
-  }
-
-  if (authenticator.textarea) {
-    dom.xdrBox.placeholder = "Computing..."
-    dom.xdrBox.value = ""
-    dom.xdrBox.disabled = true
-  }
-
-  if (authenticator.qrCode) {
-    html.rewrite(dom.qrCode, html.create("canvas", ".cosmiclib_loadingAnim"))
-  }
+transactionUI.init = async function () {
+  redirectionUI.init()
+  if (!the.query) return
 
   await cosmicLib.load.css("cosmic-lib.css")
-  cosmicLink = new CosmicLink(location.search)
+  the.cosmicLink = new CosmicLink(location.search)
 
-  if (authenticator.accountId) refreshAccountIdForm(cosmicLink)
-
-  if (authenticator.accountId && !dom.accountIdBox.value) {
-    if (!authenticator.getAccountId) {
-      if (authenticator.redirection) dom.gotoButton.value = "No source defined"
-      if (authenticator.textarea) dom.xdrBox.placeholder = "No source defined"
-      if (authenticator.qrCode) html.clear(dom.qrCode)
-    }
-    return
+  if (the.authenticator.accountId) {
+    authenticatorUI.refresh()
+    if (!the.accountId) return
   }
 
-  const saveTransaction = transaction = authenticator.handle(cosmicLink)
-  transaction.then(function (value) {
-    if (transaction === saveTransaction) refreshTransaction(value)
+  transactionUI.refresh()
+}
+
+transactionUI.refresh = function () {
+  cosmicLib.config.source = the.accountId
+  cosmicLib.config.network = the.network
+  the.cosmicLink.selectNetwork()
+  const saveTransaction = the.transaction = the.authenticator.handle(the.cosmicLink)
+
+  the.transaction.then(function (value) {
+    if (the.transaction === saveTransaction) redirectionUI.refresh(value)
   }).catch(function (error) {
-    if (transaction === saveTransaction) transactionError(error)
+    if (the.transaction === saveTransaction) redirectionUI.error(error)
   })
 }
 
-function clearMsgboxes () {
-  display(dom.accountMsgbox, null)
-  display(dom.redirectionMsgbox, null)
+/*******************************************************************************
+ * Step 2: Authenticator UI
+ */
+
+const authenticatorUI = {}
+
+authenticatorUI.init = function () {
+  // TODO: Prevent next line to run on initialization (no big deal).
+  if (the.authenticator && the.authenticator.onExit) the.authenticator.onExit()
+  the.authenticator = authenticators[dom.authenticators.value]
+  localStorage.authenticator = the.authenticator.name
+
+  if (the.authenticator.accountId) authenticatorUI.enableAccountForm()
+  else authenticatorUI.disableAccountForm()
+
+  if (the.authenticator.refresh) the.authenticator.refresh(authenticatorUI.init)
+
+  transactionUI.init()
 }
 
-function currentNetwork () {
-  return dom.publicNetworkRadio.checked ? "public" : "test"
-}
+authenticatorUI.refresh = function () {
+  const tdesc = the.cosmicLink.tdesc
 
-function refreshTransaction (value) {
-  if (authenticator.redirection) {
-    dom.gotoButton.value = authenticator.buttonText
-    dom.gotoButton.disabled = undefined
-    dom.gotoButton.onclick = () => buttonOnClick(value)
+  if (tdesc.source && !the.authenticator.getAccountId) {
+    accountUI.setReadOnly(tdesc.source)
   }
 
-  if (localStorage.redirect === "true") buttonOnClick(value)
-
-  if (authenticator.textarea) {
-    dom.xdrBox.value = value
-    dom.xdrBox.disabled = undefined
-  }
-
-  if (authenticator.qrCode) refreshQR(value)
-}
-
-function refreshAccountIdForm (cosmicLink) {
-  if (cosmicLink.tdesc.source && !authenticator.getAccountId) {
-    display(dom.accountMsgbox)
-    setAccountIdBoxReadonly(cosmicLink.tdesc.source)
-  }
-  if (cosmicLink.tdesc.network) {
+  if (tdesc.network) {
     dom.publicNetworkRadio.disabled = true
     dom.testNetworkRadio.disabled = true
-    if (cosmicLink.tdesc.network === "public") dom.publicNetworkRadio.checked = true
-    else dom.testNetworkRadio.checked = true
+    if (tdesc.network === "public") dom.publicNetworkRadio.checked = true
+    else if (tdesc.network === "test") dom.testNetworkRadio.checked = true
   }
 }
 
-function setAccountIdBoxReadonly (value) {
+
+authenticatorUI.enableAccountForm = function () {
+  html.show(dom.accountIdBox, dom.accountDiv)
+  display(dom.accountMsgbox, "")
+  the.network = networkUI.get()
+  accountUI.init()
+}
+
+authenticatorUI.disableAccountForm = function () {
+  html.hide(dom.accountIdBox, dom.accountDiv)
+  the.network = "public"
+  the.accountId = undefined
+}
+
+/**
+ * AccountID box UI
+ */
+const accountUI = {}
+
+accountUI.init = async function () {
+  if (!the.authenticator.getAccountId) {
+    dom.accountIdBox.placeholder = "Your Account Address or ID"
+    accountUI.setReadWrite(localStorage.accountId)
+  } else {
+    dom.accountIdBox.placeholder = "Connecting..."
+    accountUI.setReadOnly(undefined)
+    dom.accountIdBox.disabled = true
+
+    const authenticator = the.authenticator
+    try {
+      const accountId = await the.authenticator.getAccountId()
+      if (the.authenticator !== authenticator) return
+      accountUI.setReadOnly(accountId)
+      transactionUI.refresh()
+    } catch (error) {
+      if (the.authenticator !== authenticator) return
+      dom.accountIdBox.placeholder = "Error"
+      display(dom.accountMsgbox, "error", error.message + ".")
+    }
+  }
+}
+
+accountUI.setReadWrite = function (address) {
+  accountUI.set(address)
   dom.accountIdBox.disabled = false
+  dom.accountIdBox.readOnly = false
+  dom.accountIdBox.onclick = undefined
+  dom.accountIdBox.style.cursor = undefined
+}
+
+accountUI.setReadOnly = function (address) {
+  accountUI.set(address)
+  dom.accountIdBox.disabled = !address
   dom.accountIdBox.readOnly = true
-  dom.accountIdBox.value = value
   dom.accountIdBox.style.cursor = "pointer"
   dom.accountIdBox.onclick = () => exports.copyContent(dom.accountIdBox)
 }
 
-async function buttonOnClick (value) {
-  if (typeof value === "string") location.replace(value)
-  else if (typeof value === "function") {
-    display(dom.redirectionMsgbox, "info", "Waiting for confirmation...")
-    dom.gotoButton.disabled = true
-    value().then(sendTransaction).catch(error => {
-      display(dom.redirectionMsgbox, "error", error.message + ".")
-      dom.gotoButton.disabled = false
-    })
+accountUI.set = function (address) {
+  dom.accountIdBox.value = address || ""
+  the.accountId = address
+}
+
+/**
+ * Network selection UI
+ */
+const networkUI = {}
+
+networkUI.get = function () {
+  return dom.publicNetworkRadio.checked ? "public" : "test"
+}
+
+networkUI.set = function (network) {
+  switch (network) {
+  case "public": dom.publicNetworkRadio.checked = true; break
+  case "test": dom.testNetworkRadio.checked = true; break
   }
 }
 
-async function sendTransaction () {
-  display(dom.redirectionMsgbox, "info", "Sending to the network...")
-  history.replaceState({}, "", cosmicLink.query)
-  refreshAccountIdForm(cosmicLink)
+/**
+ * HTML Elements Events
+ */
 
-  try {
-    await cosmicLink.send()
-    display(dom.redirectionMsgbox, "info", "Transaction validated")
-    if (document.referrer) {
-      dom.gotoButton.value = "Close"
-      dom.gotoButton.onclick = () => history.back()
-      dom.gotoButton.disabled = false
-    } else {
-      dom.gotoButton.value = "Done"
-    }
-  } catch (error) {
-    console.error(error.response)
-    display(dom.redirectionMsgbox, "error", error.message + ".")
-  }
+dom.authenticators.onchange = function () {
+  the.redirect = localStorage.redirect = false
+  dom.redirectionCheckbox.checked = false
+  authenticatorUI.init()
 }
 
-function display (element, type = "", message = "") {
-  const classname = type ? "." + type : null
-  html.rewrite(element, html.create("span", classname, message))
-}
-
-function transactionError () {
-  if (authenticator.url) dom.gotoButton.value = cosmicLink.status
-  if (authenticator.textarea) dom.xdrBox.placeholder = cosmicLink.status
-  html.clear(dom.qrCode)
-}
 dom.accountIdBox.onchange = function () {
-  localStorage.accountId = dom.accountIdBox.value
-  computeTransaction()
+  the.accountId = localStorage.accountId = dom.accountIdBox.value
+  transactionUI.init()
 }
 
 dom.publicNetworkRadio.onchange = dom.testNetworkRadio.onchange = function () {
-  localStorage.network = currentNetwork()
-  computeTransaction()
+  the.network = localStorage.network = networkUI.get()
+  transactionUI.init()
 }
 
-dom.redirectionCheckbox.onchange = function () {
-  if (dom.redirectionCheckbox.checked) localStorage.redirect = "true"
-  else localStorage.redirect = "false"
-}
+/*******************************************************************************
+ * Step 3: Signing/Redirection UI
+ */
 
-exports.switchPage = function (from, to) {
-  html.append(dom.body, from)
-  html.append(dom.main, to)
-}
+const redirectionUI = {}
 
-exports.switchQR = function () {
-  if (localStorage.QR === "true") {
-    html.hide(dom.qrCode)
-    localStorage.QR = false
-    dom.qrButton.className = undefined
+redirectionUI.init = function () {
+  redirectionUI.display("")
+  showIf(the.authenticator.redirection, dom.redirectionForm)
+  showIf(the.authenticator.textarea, dom.textareaForm)
+  showIf(the.query && the.authenticator.qrCode, dom.qrForm)
+
+  if (!the.query) {
+    if (the.authenticator.url) {
+      dom.redirectionButton.value = the.authenticator.buttonText
+      dom.redirectionButton.disabled = undefined
+      dom.redirectionButton.onclick = () => location.href = the.authenticator.url
+    } else {
+      dom.redirectionButton.value = "No transaction"
+      dom.redirectionButton.disabled = true
+    }
   } else {
-    html.show(dom.qrCode)
-    localStorage.QR = true
-    dom.qrButton.className = "enabled"
+    if (the.authenticator.redirection) {
+      dom.redirectionButton.value = "…"
+      dom.redirectionButton.disabled = true
+    }
+    if (the.authenticator.textarea) {
+      dom.xdrBox.placeholder = "Computing..."
+      dom.xdrBox.value = ""
+      dom.xdrBox.disabled = true
+    }
+    if (the.authenticator.qrCode) qrCodeUI.loadingAnim()
   }
 }
 
-function refreshQR (value) {
-  if (!authenticator.qrCode || !value) return
+redirectionUI.noSourceAccount = function () {
+  if (the.authenticator.redirection) dom.redirectionButton.value = "No source defined"
+  if (the.authenticator.textarea) dom.xdrBox.placeholder = "No source defined"
+  if (the.authenticator.qrCode) html.clear(dom.qrCode)
+}
+
+redirectionUI.refresh = function (value) {
+  if (the.authenticator.redirection) {
+    dom.redirectionButton.value = the.authenticator.buttonText
+    dom.redirectionButton.disabled = undefined
+    dom.redirectionButton.onclick = () => redirectionUI.click(value)
+  }
+
+  if (the.redirect) redirectionUI.click(value)
+
+  if (the.authenticator.textarea) {
+    dom.xdrBox.value = value
+    dom.xdrBox.disabled = undefined
+  }
+
+  if (the.authenticator.qrCode) qrCodeUI.refresh(value)
+}
+
+redirectionUI.error = function () {
+  if (the.authenticator.url) dom.redirectionButton.value = the.cosmicLink.status
+  if (the.authenticator.textarea) dom.xdrBox.placeholder = the.cosmicLink.status
+  html.clear(dom.qrCode)
+}
+
+redirectionUI.click = async function (value) {
+  if (typeof value === "string") {
+    location.replace(value)
+  } else if (typeof value === "function") {
+    display(dom.redirectionMsgbox, "info", "Waiting for confirmation...")
+    dom.redirectionButton.disabled = true
+
+    try {
+      const transaction = await value()
+      redirectionUI.sendTransaction(transaction)
+    } catch (error) {
+      console.error(error.response)
+      redirectionUI.display("error", error.message.replace(/\.$/, "") + ".")
+      dom.redirectionButton.disabled = false
+    }
+  }
+}
+
+redirectionUI.sendTransaction = async function () {
+  redirectionUI.display("info", "Sending to the network...")
+  history.replaceState({}, "", the.cosmicLink.query)
+  dom.query.textContent = the.cosmicLink.query
+
+  authenticatorUI.refresh()
+
+  await the.cosmicLink.send()
+  redirectionUI.display("info", "Transaction validated")
+  if (document.referrer) {
+    dom.redirectionButton.value = "Close"
+    dom.redirectionButton.onclick = () => history.back()
+    dom.redirectionButton.disabled = false
+  } else {
+    dom.redirectionButton.value = "Done"
+  }
+}
+
+redirectionUI.display = function (type, message) {
+  display(dom.redirectionMsgbox, type, message)
+}
+
+const qrCodeUI = {}
+
+qrCodeUI.loadingAnim = function () {
+  html.rewrite(dom.qrCode, html.create("canvas", ".cosmiclib_loadingAnim"))
+}
+
+qrCodeUI.refresh = function (value) {
+  if (!the.authenticator.qrCode || !value) return
 
   const canvas = html.create("canvas")
   QrCode.toCanvas(canvas, value, { margin: 0, scale: 4 })
@@ -298,7 +347,41 @@ function refreshQR (value) {
   html.rewrite(dom.qrCode, canvas)
 }
 
-/** * Experimental Robot Factory ***/
+qrCodeUI.switch = function () {
+  the.qrCode = localStorage.QR = !the.qrCode
+  if (the.qrCode) qrCodeUI.enable()
+  else qrCodeUI.disable()
+}
+
+qrCodeUI.enable = function () {
+  dom.qrButton.className = "enabled"
+  html.show(dom.qrCode)
+}
+
+qrCodeUI.disable = function () {
+  dom.qrButton.className = undefined
+  html.hide(dom.qrCode)
+}
+
+/**
+ * HTML Elements Events
+ */
+
+dom.redirectionButton.onclick = redirectionUI.click
+dom.qrButton.onclick = qrCodeUI.switch
+
+dom.redirectionCheckbox.onchange = function () {
+  the.redirect = localStorage.redirect = !the.redirect
+}
+
+
+/*******************************************************************************
+ * Robot Tamper
+ */
+
+function setTamper () {
+  dom.tamper.src = "https://robohash.org/" + myHash()
+}
 
 function myHash () {
   if (localStorage.myHash) return localStorage.myHash
@@ -315,11 +398,25 @@ function myHash () {
   return hash
 }
 
-function setTamper () {
-  dom.tamper.src = "https://robohash.org/" + myHash()
+
+/*******************************************************************************
+ * Helpers
+ */
+
+function display (element, type = "", message = "") {
+  const classname = type ? "." + type : null
+  const messageNode = classname ? html.create("span", classname, message) : message
+  html.rewrite(element, html.create("span", classname, messageNode))
 }
 
-/// Copy content helper
+function showIf (flag, element) {
+  flag ? html.show(element) : html.hide(element)
+}
+
+exports.switchPage = function (from, to) {
+  html.append(dom.body, from)
+  html.append(dom.main, to)
+}
 
 exports.copyContent = function (element) {
   if (html.copyContent(element) && document.activeElement.value) {

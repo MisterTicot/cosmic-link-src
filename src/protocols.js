@@ -29,7 +29,6 @@ protocols.ledgerwallet = {
   handler: async function (authenticator, cosmicLink) {
     await cosmicLink.lock()
     const ledger = await getLedgerModule()
-    cosmicLink.selectNetwork()
     return async () => ledger.sign(cosmicLink.transaction)
   },
   refresh: async function (refresher) {
@@ -44,7 +43,7 @@ protocols.ledgerwallet = {
 
 protocols.sep0007 = {
   handler: async function (authenticator, cosmicLink) {
-    await cosmicLink.lock().catch(console.error)
+    await cosmicLink.lock()
     return cosmicLink.sep7
   }
 }
