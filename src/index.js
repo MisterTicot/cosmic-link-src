@@ -37,7 +37,6 @@ exports.init = function () {
   // Step 2: Authenticator
   authenticators.nodes.forEach(entry => html.append(dom.authenticators, entry))
   dom.authenticators.value = the.authenticator.name
-  dom.accountIdBox.value = the.accountId
   networkUI.set(the.network)
 
   // Step 3: Signing
@@ -123,7 +122,7 @@ authenticatorUI.refresh = function () {
   const tdesc = the.cosmicLink.tdesc
 
   if (tdesc.source && !the.authenticator.getAccountId) {
-    accountUI.setReadOnly(tdesc.source)
+    readOnlyBox(dom.accountIdBox, tdesc.source)
   }
 
   if (tdesc.network) {
@@ -155,18 +154,18 @@ const accountUI = {}
 
 accountUI.init = async function () {
   if (!the.authenticator.getAccountId) {
-    dom.accountIdBox.placeholder = "Your Account Address or ID"
-    accountUI.setReadWrite(localStorage.accountId)
+    the.accountId = localStorage.accountId
+    readWriteBox(dom.accountIdBox, "Your Account Address or ID", the.accountId)
   } else {
-    dom.accountIdBox.placeholder = "Connecting..."
-    accountUI.setReadOnly(undefined)
-    dom.accountIdBox.disabled = true
+    the.accountId = undefined
+    disableBox(dom.accountIdBox, "Connecting...")
 
     const authenticator = the.authenticator
     try {
       const accountId = await the.authenticator.getAccountId()
       if (the.authenticator !== authenticator) return
-      accountUI.setReadOnly(accountId)
+      the.accountId = accountId
+      readOnlyBox(dom.accountIdBox, accountId)
       transactionUI.refresh()
     } catch (error) {
       if (the.authenticator !== authenticator) return
@@ -174,27 +173,6 @@ accountUI.init = async function () {
       display(dom.accountMsgbox, "error", error.message + ".")
     }
   }
-}
-
-accountUI.setReadWrite = function (address) {
-  accountUI.set(address)
-  dom.accountIdBox.disabled = false
-  dom.accountIdBox.readOnly = false
-  dom.accountIdBox.onclick = undefined
-  dom.accountIdBox.style.cursor = undefined
-}
-
-accountUI.setReadOnly = function (address) {
-  accountUI.set(address)
-  dom.accountIdBox.disabled = !address
-  dom.accountIdBox.readOnly = true
-  dom.accountIdBox.style.cursor = "pointer"
-  dom.accountIdBox.onclick = () => exports.copyContent(dom.accountIdBox)
-}
-
-accountUI.set = function (address) {
-  dom.accountIdBox.value = address || ""
-  the.accountId = address
 }
 
 /**
@@ -247,47 +225,33 @@ redirectionUI.init = function () {
 
   if (!the.query) {
     if (the.authenticator.url) {
-      dom.redirectionButton.value = the.authenticator.buttonText
-      dom.redirectionButton.disabled = undefined
-      dom.redirectionButton.onclick = () => location.href = the.authenticator.url
+      const onclick = () => location.href = the.authenticator.url
+      enableButton(dom.redirectionButton, the.authenticator.buttonText, onclick)
     } else {
-      dom.redirectionButton.value = "No transaction"
-      dom.redirectionButton.disabled = true
+      redirectionUI.error("No transaction")
     }
   } else {
-    if (the.authenticator.redirection) {
-      dom.redirectionButton.value = "…"
-      dom.redirectionButton.disabled = true
-    }
-    if (the.authenticator.textarea) {
-      dom.xdrBox.placeholder = "Computing..."
-      dom.xdrBox.value = ""
-      dom.xdrBox.disabled = true
-    }
+    if (the.authenticator.redirection) disableButton(dom.redirectionButton, "…")
+    if (the.authenticator.textarea) disableBox(dom.xdrBox, "Computing...")
     if (the.authenticator.qrCode) qrCodeUI.loadingAnim()
   }
 }
 
 redirectionUI.refresh = function (value) {
   if (the.authenticator.redirection) {
-    dom.redirectionButton.value = the.authenticator.buttonText
-    dom.redirectionButton.disabled = undefined
-    dom.redirectionButton.onclick = () => redirectionUI.click(value)
+    const onclick = () => redirectionUI.click(value)
+    enableButton(dom.redirectionButton, the.authenticator.buttonText, onclick)
   }
 
-  if (the.redirect) redirectionUI.click(value)
+  if (the.redirect) dom.redirectionButton.onclick()
 
-  if (the.authenticator.textarea) {
-    dom.xdrBox.value = value
-    dom.xdrBox.disabled = undefined
-  }
-
+  if (the.authenticator.textarea) readOnlyBox(dom.xdrBox, value)
   if (the.authenticator.qrCode) qrCodeUI.refresh(value)
 }
 
 redirectionUI.error = function (error) {
-  dom.redirectionButton.value = error
-  dom.xdrBox.placeholder = error
+  disableButton(dom.redirectionButton, error)
+  disableBox(dom.xdrBox, error)
   html.clear(dom.qrCode)
 }
 
@@ -319,9 +283,7 @@ redirectionUI.sendTransaction = async function () {
   await the.cosmicLink.send()
   redirectionUI.display("info", "Transaction validated")
   if (document.referrer) {
-    dom.redirectionButton.value = "Close"
-    dom.redirectionButton.onclick = () => history.back()
-    dom.redirectionButton.disabled = false
+    enableButton(dom.redirectionButton, "Close", () => history.back())
   } else {
     dom.redirectionButton.value = "Done"
   }
@@ -399,7 +361,55 @@ function myHash () {
 
 
 /*******************************************************************************
- * Helpers
+ * Form Elements Helpers
+ */
+
+function enableButton (button, value, onclick) {
+  button.value = value
+  button.onclick = onclick
+  button.disabled = false
+}
+
+function disableButton (button, value) {
+  button.value = value
+  button.disabled = true
+}
+
+function readWriteBox (box, placeholder = "", value = "") {
+  box.value = value
+  box.placeholder = placeholder
+  box.disabled = false
+  box.readOnly = false
+  box.onclick = undefined
+  box.style.cursor = "initial"
+}
+
+function readOnlyBox (box, value = "") {
+  box.value = value
+  box.disabled = false
+  box.readOnly = true
+  box.onclick = () => exports.copyContent(box)
+  box.style.cursor = "pointer"
+}
+
+function disableBox (box, placeholder = "") {
+  readWriteBox(box, placeholder)
+  box.disabled = true
+}
+
+exports.copyContent = function (element) {
+  if (html.copyContent(element) && document.activeElement.value) {
+    const prevNode = html.grab("#copied")
+    if (prevNode) html.destroy(prevNode)
+    const copiedNode = html.create("span", "#copied", "Copied")
+    element.parentNode.insertBefore(copiedNode, element)
+    setTimeout(() => { copiedNode.hidden = true }, 3000)
+  }
+}
+
+
+/*******************************************************************************
+ * Other Helpers
  */
 
 function display (element, type = "", message = "") {
@@ -415,14 +425,4 @@ function showIf (flag, element) {
 exports.switchPage = function (from, to) {
   html.append(dom.body, from)
   html.append(dom.main, to)
-}
-
-exports.copyContent = function (element) {
-  if (html.copyContent(element) && document.activeElement.value) {
-    const prevNode = html.grab("#copied")
-    if (prevNode) html.destroy(prevNode)
-    const copiedNode = html.create("span", "#copied", "Copied")
-    element.parentNode.insertBefore(copiedNode, element)
-    setTimeout(() => { copiedNode.hidden = true }, 3000)
-  }
 }
