@@ -75,7 +75,12 @@ transactionUI.init = async function () {
 
   if (the.authenticator.accountId) {
     authenticatorUI.refresh()
-    if (!the.accountId) return
+    if (!the.accountId) {
+      if (!the.authenticator.getAccountId) {
+        redirectionUI.error("Please set a source account")
+      }
+      return
+    }
   }
 
   transactionUI.refresh()
@@ -90,7 +95,7 @@ transactionUI.refresh = function () {
   the.transaction.then(function (value) {
     if (the.transaction === saveTransaction) redirectionUI.refresh(value)
   }).catch(function (error) {
-    if (the.transaction === saveTransaction) redirectionUI.error(error)
+    if (the.transaction === saveTransaction) redirectionUI.error(the.cosmicLink.status)
   })
 }
 
@@ -263,12 +268,6 @@ redirectionUI.init = function () {
   }
 }
 
-redirectionUI.noSourceAccount = function () {
-  if (the.authenticator.redirection) dom.redirectionButton.value = "No source defined"
-  if (the.authenticator.textarea) dom.xdrBox.placeholder = "No source defined"
-  if (the.authenticator.qrCode) html.clear(dom.qrCode)
-}
-
 redirectionUI.refresh = function (value) {
   if (the.authenticator.redirection) {
     dom.redirectionButton.value = the.authenticator.buttonText
@@ -286,9 +285,9 @@ redirectionUI.refresh = function (value) {
   if (the.authenticator.qrCode) qrCodeUI.refresh(value)
 }
 
-redirectionUI.error = function () {
-  if (the.authenticator.url) dom.redirectionButton.value = the.cosmicLink.status
-  if (the.authenticator.textarea) dom.xdrBox.placeholder = the.cosmicLink.status
+redirectionUI.error = function (error) {
+  dom.redirectionButton.value = error
+  dom.xdrBox.placeholder = error
   html.clear(dom.qrCode)
 }
 
