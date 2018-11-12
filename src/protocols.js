@@ -6,9 +6,10 @@
  */
 const protocols = exports
 
-function getLedgerModule () {
-  return import(/* webpackChunkName: "ledger" */ "@cosmic-plus/ledger-wallet")
-    .then(ledger => ledger.default)
+const defaults = {
+  redirection: true,
+  textarea: false,
+  qrCode: true
 }
 
 protocols.cosmiclink = {
@@ -18,7 +19,6 @@ protocols.cosmiclink = {
 }
 
 protocols.ledgerwallet = {
-  accountId: true,
   buttonText: "Sign with Ledger Wallet",
   qrCode: false,
   getAccountId: async function () {
@@ -49,7 +49,6 @@ protocols.sep0007 = {
 }
 
 protocols.stellarlab = {
-  accountId: true,
   handler: async function (authenticator, cosmicLink) {
     await cosmicLink.lock()
     const encodedXdr = encodeURIComponent(cosmicLink.xdr)
@@ -66,7 +65,6 @@ protocols.stellarlab = {
 }
 
 protocols.copy = {
-  accountId: true,
   redirection: false,
   textarea: true,
   handler: async function (authenticator, cosmicLink) {
@@ -75,15 +73,20 @@ protocols.copy = {
   }
 }
 
-/******************************************************************************/
-/// Apply defaults to each protocols.
 
-const defaults = {
-  accountId: false,
-  redirection: true,
-  textarea: false,
-  qrCode: true
+/**
+ * Module loading
+ */
+
+function getLedgerModule () {
+  return import(/* webpackChunkName: "ledger" */ "@cosmic-plus/ledger-wallet")
+    .then(ledger => ledger.default)
 }
+
+
+/**
+ * Apply defaults to each protocols.
+ */
 
 for (let entry in protocols) {
   protocols[entry] = Object.assign({}, defaults, protocols[entry])

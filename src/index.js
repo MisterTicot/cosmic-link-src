@@ -74,14 +74,17 @@ transactionUI.init = async function () {
   await cosmicLib.load.css("cosmic-lib.css")
   the.cosmicLink = new CosmicLink(location.search)
 
-  if (the.authenticator.accountId) {
-    authenticatorUI.refresh()
+  authenticatorUI.refresh()
+
+  if (the.authenticator.needSource && ! the.accountId) {
     if (!the.accountId) {
       if (!the.authenticator.getAccountId) {
         redirectionUI.error("Please set a source account")
       }
       return
     }
+  }
+  if (the.authenticator.needNetwork) {
     if (dom.customNetwork.checked && (!the.horizon || !the.network)) {
       redirectionUI.error("Please fill custom network fields")
       return
@@ -117,8 +120,10 @@ authenticatorUI.init = function () {
   the.authenticator = authenticators[dom.authenticators.value]
   localStorage.authenticator = the.authenticator.name
 
-  if (the.authenticator.accountId) authenticatorUI.enableAccountForm()
-  else authenticatorUI.disableAccountForm()
+  if (the.authenticator.needSource) accountUI.enable()
+  else accountUI.disable()
+  if (the.authenticator.needNetwork) networkUI.enable()
+  else networkUI.disable()
 
   if (the.authenticator.refresh) the.authenticator.refresh(authenticatorUI.init)
 
@@ -132,7 +137,7 @@ authenticatorUI.refresh = function () {
     readOnlyBox(dom.accountIdBox, tdesc.source)
   }
 
-  if (tdesc.network) {
+  if (the.authenticator.needNetwork && tdesc.network) {
     readOnlyBox(dom.customPassphrase)
     networkUI.init(tdesc.network, the.cosmicLink.horizon)
 
@@ -142,24 +147,21 @@ authenticatorUI.refresh = function () {
   }
 }
 
-
-authenticatorUI.enableAccountForm = function () {
-  html.show(dom.accountIdBox, dom.accountDiv)
-  display(dom.accountMsgbox, "")
-  networkUI.init()
-  accountUI.init()
-}
-
-authenticatorUI.disableAccountForm = function () {
-  html.hide(dom.accountIdBox, dom.accountDiv)
-  the.network = "public"
-  the.accountId = undefined
-}
-
 /**
  * AccountID box UI
  */
 const accountUI = {}
+
+accountUI.enable = function () {
+  html.show(dom.accountDiv)
+  display(dom.accountMsgbox, "")
+  accountUI.init()
+}
+
+accountUI.disable = function () {
+  html.hide(dom.accountDiv)
+  the.accountId = undefined
+}
 
 accountUI.init = async function () {
   if (!the.authenticator.getAccountId) {
@@ -188,6 +190,17 @@ accountUI.init = async function () {
  * Network selection UI
  */
 const networkUI = {}
+
+networkUI.enable = function () {
+  html.show(dom.networkDiv)
+  networkUI.init()
+}
+
+networkUI.disable = function () {
+  html.hide(dom.networkDiv)
+  the.network = "public"
+  the.horizon = undefined
+}
 
 networkUI.init = function (network = localStorage.networkSelector, horizon) {
   html.hide(dom.customNetworkSetup)
