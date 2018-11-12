@@ -53,7 +53,14 @@ protocols.stellarlab = {
   handler: async function (authenticator, cosmicLink) {
     await cosmicLink.lock()
     const encodedXdr = encodeURIComponent(cosmicLink.xdr)
-    const query = `?xdr=${encodedXdr}&network=${cosmicLink.network}`
+    let query = `?xdr=${encodedXdr}`
+    if (cosmicLink.network === "public" || cosmicLink.network === "test") {
+      query += `&network=${cosmicLink.network}`
+    } else {
+      const passphrase = encodeURIComponent(cosmicLink.network)
+      const horizon = encodeURIComponent(cosmicLink.horizon)
+      query += `&network=custom&horizonURL=${horizon}&networkPassphrase=${passphrase}`
+    }
     return authenticator.url + query
   }
 }

@@ -3,6 +3,7 @@ const CosmicLink = cosmicLib.CosmicLink
 const dom = require("@cosmic-plus/jsutils/dom")
 const html = require("@cosmic-plus/jsutils/html")
 const QrCode = require("qrcode")
+const { timeout } = require("@cosmic-plus/jsutils/misc")
 
 const authenticators = require("./authenticators")
 
@@ -12,20 +13,14 @@ if (navigator.serviceWorker) navigator.serviceWorker.register("worker.js")
 // Global variables
 const the = {}
 
-the.query = location.search.length > 1 && location.search
-the.cosmicLink = undefined
-the.transaction = undefined
-
-the.authenticator = authenticators[localStorage.authenticator || "Stellar Authenticator"]
-the.accountId = undefined
-the.network = localStorage.network
-
-the.redirect = localStorage.redirect === "true"
-the.qrCode = localStorage.QR === "true"
-
-
 // Run once page is fully loaded
 exports.init = function () {
+  // Variables
+  the.query = location.search.length > 1 && location.search
+  the.authenticator = authenticators[localStorage.authenticator || "Stellar Authenticator"]
+  the.redirect = localStorage.redirect === "true"
+  the.qrCode = localStorage.QR === "true"
+
   // Header
   if (location.origin === "null") dom.websiteUrl.textContent = location.pathname
   else dom.websiteUrl.textContent = location.origin + location.pathname
@@ -37,11 +32,18 @@ exports.init = function () {
   // Step 2: Authenticator
   authenticators.nodes.forEach(entry => html.append(dom.authenticators, entry))
   dom.authenticators.value = the.authenticator.name
-  networkUI.set(the.network)
 
   // Step 3: Signing
   if (the.redirect) dom.redirectionCheckbox.checked = true
   if (the.qrCode) qrCodeUI.enable()
+
+  // CosmicLib network setup
+  for (let key in localStorage) {
+    if (key.substr(0,8) === "network:") {
+      const passphrase = key.substr(8)
+      cosmicLib.config.setupNetwork(passphrase, localStorage[key], passphrase)
+    }
+  }
 
   setTamper()
 
@@ -80,6 +82,10 @@ transactionUI.init = async function () {
       }
       return
     }
+    if (dom.customNetwork.checked && (!the.horizon || !the.network)) {
+      redirectionUI.error("Please fill custom network fields")
+      return
+    }
   }
 
   transactionUI.refresh()
@@ -88,12 +94,13 @@ transactionUI.init = async function () {
 transactionUI.refresh = function () {
   cosmicLib.config.source = the.accountId
   cosmicLib.config.network = the.network
+
   the.cosmicLink.selectNetwork()
   const saveTransaction = the.transaction = the.authenticator.handle(the.cosmicLink)
 
   the.transaction.then(function (value) {
     if (the.transaction === saveTransaction) redirectionUI.refresh(value)
-  }).catch(function (error) {
+  }).catch(function () {
     if (the.transaction === saveTransaction) redirectionUI.error(the.cosmicLink.status)
   })
 }
@@ -126,10 +133,12 @@ authenticatorUI.refresh = function () {
   }
 
   if (tdesc.network) {
-    dom.publicNetworkRadio.disabled = true
-    dom.testNetworkRadio.disabled = true
-    if (tdesc.network === "public") dom.publicNetworkRadio.checked = true
-    else if (tdesc.network === "test") dom.testNetworkRadio.checked = true
+    readOnlyBox(dom.customPassphrase)
+    networkUI.init(tdesc.network, the.cosmicLink.horizon)
+
+    dom.publicNetwork.disabled = true
+    dom.testNetwork.disabled = true
+    dom.customNetwork.disabled = true
   }
 }
 
@@ -137,7 +146,7 @@ authenticatorUI.refresh = function () {
 authenticatorUI.enableAccountForm = function () {
   html.show(dom.accountIdBox, dom.accountDiv)
   display(dom.accountMsgbox, "")
-  the.network = networkUI.get()
+  networkUI.init()
   accountUI.init()
 }
 
@@ -180,15 +189,40 @@ accountUI.init = async function () {
  */
 const networkUI = {}
 
-networkUI.get = function () {
-  return dom.publicNetworkRadio.checked ? "public" : "test"
+networkUI.init = function (network = localStorage.networkSelector, horizon) {
+  html.hide(dom.customNetworkSetup)
+  the.network = network
+  the.horizon = undefined
+
+  switch (network) {
+  case undefined:
+  case "public":
+    dom.publicNetwork.checked = true
+    dom.networkSelector.scrollLeft = 0
+    break
+  case "test":
+    dom.testNetwork.checked = true
+    break
+  default:
+    if (dom.networkSelector.onscroll) dom.networkSelector.onscroll()
+    // Doesn't works when called synchronously.
+    timeout(1).then(() => dom.networkSelector.scrollLeft = 999)
+    dom.customNetwork.checked = true
+
+    html.show(dom.customNetworkSetup)
+    the.network = network || localStorage.customPassphrase
+    the.horizon = localStorage["network:" + the.network]
+      || cosmicLib.resolve.horizon(the.network) || horizon
+    dom.customPassphrase.value = the.network || ""
+    dom.customHorizon.value = the.horizon || ""
+    cosmicLib.config.setupNetwork(the.network, the.horizon, the.network)
+  }
 }
 
-networkUI.set = function (network) {
-  switch (network) {
-  case "public": dom.publicNetworkRadio.checked = true; break
-  case "test": dom.testNetworkRadio.checked = true; break
-  }
+networkUI.set = function (selector) {
+  localStorage.networkSelector = selector
+  networkUI.init(selector)
+  transactionUI.init()
 }
 
 /**
@@ -206,8 +240,25 @@ dom.accountIdBox.onchange = function () {
   transactionUI.init()
 }
 
-dom.publicNetworkRadio.onchange = dom.testNetworkRadio.onchange = function () {
-  the.network = localStorage.network = networkUI.get()
+dom.networkSelector.onscroll = function () {
+  dom.networkSelector.style.textOverflow = "initial"
+  dom.networkSelector.onscroll = undefined
+}
+
+dom.publicNetwork.onchange = () => networkUI.set("public")
+dom.testNetwork.onchange = () => networkUI.set("test")
+dom.customNetwork.onchange = () => networkUI.set("")
+
+dom.customPassphrase.onchange = function () {
+  localStorage.customPassphrase = dom.customPassphrase.value
+  networkUI.set("")
+}
+
+dom.customHorizon.onchange = function () {
+  if (dom.customHorizon.value && dom.customHorizon.value.substr(0,4) !== "http") {
+    dom.customHorizon.value = "https://" + dom.customHorizon.value
+  }
+  the.horizon = localStorage["network:" + the.network] = dom.customHorizon.value
   transactionUI.init()
 }
 

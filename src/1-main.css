@@ -230,11 +230,6 @@ select:hover
   color: dimgrey;
 }
 
-[type="radio"] + label
-{
-  width: 45%;
-}
-
 [type="checkbox"] + label::before,
 [type="radio"] + label::before
 {
@@ -296,6 +291,21 @@ main .page {
 
 /* Individual elements styling */
 
+#networkSelector
+{
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+#networkSelector [type="radio"] + label
+{
+  width: 45%;
+  max-width: 9.75em;
+}
+
+
 #cosmiclink_description
 {
   display: inline-block;
@@ -327,11 +337,11 @@ main .page {
 {
   position: absolute;
   right: 0;
-  transform: translate(-0.1em, 0.24em);
+  transform: translate(-0.1em, 0.3em);
   box-sizing: border-box;
   width: 4em;
   background-color: ghostwhite;
-  background-color: rgba(245, 245, 245, 0.8);
+  background-color: rgba(248, 248, 255, 0.8);
   padding: 0.05em 0.5em;
   font-weight: bold;
   color: mediumseagreen;

@@ -84,11 +84,19 @@
         <div id="accountDiv" style="display:none">
           <input id="accountIdBox" type="text">
           <div id="network">
-            <input id="publicNetworkRadio" type="radio" name="network" value="public"
-              checked>
-            <label for="publicNetworkRadio">Public network</label>
-            <input id="testNetworkRadio" type="radio" name="network" value="test">
-            <label for="testNetworkRadio">Test network</label>
+            <div id="networkSelector">
+              <input id="publicNetwork" type="radio" name="network" value="public"
+                checked>
+              <label for="publicNetwork">Public network</label>
+              <input id="testNetwork" type="radio" name="network" value="test">
+              <label for="testNetwork">Test network</label>
+              <input id="customNetwork" type="radio" name="network" value="custom">
+              <label for="customNetwork">Custom network</label>
+            </div>
+            <div id="customNetworkSetup" style="display:none">
+              <input id="customPassphrase" type="text" placeholder="Network Passphrase">
+              <input id="customHorizon" type="text" placeholder="Horizon URL">
+            </div>
           </div>
         </div>
         <div id="accountMsgbox"></div>
