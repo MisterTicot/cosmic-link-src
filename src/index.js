@@ -224,11 +224,13 @@ networkUI.init = function (network = localStorage.networkSelector, horizon) {
 
     html.show(dom.customNetworkSetup)
     the.network = network || localStorage.customPassphrase
-    the.horizon = localStorage["network:" + the.network]
-      || cosmicLib.resolve.horizon(the.network) || horizon
+    the.horizon = (the.network && localStorage["network:" + the.network])
+      || (the.network && cosmicLib.resolve.horizon(the.network))
+      || horizon
     dom.customPassphrase.value = the.network || ""
     dom.customHorizon.value = the.horizon || ""
-    cosmicLib.config.setupNetwork(the.network, the.horizon, the.network)
+    const passphrase = cosmicLib.resolve.networkPassphrase(the.network)
+    cosmicLib.config.setupNetwork(the.network, the.horizon, passphrase)
   }
 }
 
