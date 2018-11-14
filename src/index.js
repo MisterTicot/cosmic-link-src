@@ -1,3 +1,6 @@
+"use_strict"
+const main = exports
+
 const cosmicLib = require("cosmic-lib")
 const CosmicLink = cosmicLib.CosmicLink
 const dom = require("@cosmic-plus/jsutils/dom")
@@ -10,14 +13,18 @@ const authenticators = require("./authenticators")
 // Service worker
 if (navigator.serviceWorker) navigator.serviceWorker.register("worker.js")
 
+// cosmicLib stylesheet
+cosmicLib.load.css("cosmic-lib.css")
+
 // Global variables
 const the = {}
 
 // Run once page is fully loaded
-exports.init = function () {
-  // Variables
+main.init = function () {
+  // Global variables
   the.query = location.search.length > 1 && location.search
-  the.authenticator = authenticators[localStorage.authenticator || "Stellar Authenticator"]
+  the.authenticator = authenticators[localStorage.authenticator]
+    || authenticators["Stellar Authenticator"]
   the.redirect = localStorage.redirect === "true"
   the.qrCode = localStorage.QR === "true"
 
@@ -40,26 +47,39 @@ exports.init = function () {
   // CosmicLib network setup
   for (let key in localStorage) {
     if (key.substr(0,8) === "network:") {
-      const passphrase = key.substr(8)
-      cosmicLib.config.setupNetwork(passphrase, localStorage[key], passphrase)
+      const id = key.substr(8)
+      const passphrase = cosmicLib.resolve.networkPassphrase(id)
+      cosmicLib.config.setupNetwork(id, localStorage[key], passphrase)
     }
   }
 
   setTamper()
-
-  authenticatorUI.init()
+  main.refresh()
 }
 
+main.refresh = function () {
+  if (the.query) the.cosmicLink = new CosmicLink(the.query)
+  else the.cosmicLink = { tdesc: {} }
+  authenticatorUI.init()
+  redirectionUI.init()
+  if (the.cosmicLink) transactionUI.refresh()
+}
 
-/**
- * Computational path:
- *
- * authenticatorUI.init() => transactionUI.init() => redirectionUI.init() =>
- * authenticatorUI.refresh() => transactionUI.refresh() => redirectionUI.refresh()
- *
- * transactionUI depends on authenticatorUI
- * redirectionUI depends on both authenticatorUI & transactionUI
- */
+main.switchPage = function (from, to) {
+  html.append(dom.body, from)
+  html.append(dom.main, to)
+}
+
+main.copyContent = function (element) {
+  if (html.copyContent(element) && document.activeElement.value) {
+    const prevNode = html.grab("#copied")
+    if (prevNode) html.destroy(prevNode)
+    const copiedNode = html.create("span", "#copied", "Copied")
+    element.parentNode.insertBefore(copiedNode, element)
+    setTimeout(() => { copiedNode.hidden = true }, 3000)
+  }
+}
+
 
 /*******************************************************************************
  * Step 1: Transaction UI
@@ -67,22 +87,12 @@ exports.init = function () {
 
 const transactionUI = {}
 
-transactionUI.init = async function () {
-  redirectionUI.init()
-  if (!the.query) return
-
-  await cosmicLib.load.css("cosmic-lib.css")
-  the.cosmicLink = new CosmicLink(location.search)
-
-  authenticatorUI.refresh()
-
-  if (the.authenticator.needSource && ! the.accountId) {
-    if (!the.accountId) {
-      if (!the.authenticator.getAccountId) {
-        redirectionUI.error("Please set a source account")
-      }
-      return
+transactionUI.refresh = function () {
+  if (the.authenticator.needSource && !the.accountId) {
+    if (!the.authenticator.getAccountId) {
+      redirectionUI.error("Please set a source account")
     }
+    return
   }
   if (the.authenticator.needNetwork) {
     if (dom.customNetwork.checked && (!the.horizon || !the.network)) {
@@ -91,10 +101,6 @@ transactionUI.init = async function () {
     }
   }
 
-  transactionUI.refresh()
-}
-
-transactionUI.refresh = function () {
   cosmicLib.config.source = the.accountId
   cosmicLib.config.network = the.network
 
@@ -115,36 +121,16 @@ transactionUI.refresh = function () {
 const authenticatorUI = {}
 
 authenticatorUI.init = function () {
-  // TODO: Prevent next line to run on initialization (no big deal).
-  if (the.authenticator && the.authenticator.onExit) the.authenticator.onExit()
+  display(dom.accountMsgbox, "")
   the.authenticator = authenticators[dom.authenticators.value]
   localStorage.authenticator = the.authenticator.name
 
-  if (the.authenticator.needSource) accountUI.enable()
+  if (the.authenticator.needSource) accountUI.init()
   else accountUI.disable()
-  if (the.authenticator.needNetwork) networkUI.enable()
+  if (the.authenticator.needNetwork) networkUI.init()
   else networkUI.disable()
 
-  if (the.authenticator.refresh) the.authenticator.refresh(authenticatorUI.init)
-
-  transactionUI.init()
-}
-
-authenticatorUI.refresh = function () {
-  const tdesc = the.cosmicLink.tdesc
-
-  if (tdesc.source && !the.authenticator.getAccountId) {
-    readOnlyBox(dom.accountIdBox, tdesc.source)
-  }
-
-  if (the.authenticator.needNetwork && tdesc.network) {
-    readOnlyBox(dom.customPassphrase)
-    networkUI.init(tdesc.network, the.cosmicLink.horizon)
-
-    dom.publicNetwork.disabled = true
-    dom.testNetwork.disabled = true
-    dom.customNetwork.disabled = true
-  }
+  if (the.authenticator.refresh) the.authenticator.refresh(main.refresh)
 }
 
 /**
@@ -152,21 +138,26 @@ authenticatorUI.refresh = function () {
  */
 const accountUI = {}
 
-accountUI.enable = function () {
-  html.show(dom.accountDiv)
-  display(dom.accountMsgbox, "")
-  accountUI.init()
-}
-
 accountUI.disable = function () {
   html.hide(dom.accountDiv)
   the.accountId = undefined
 }
 
 accountUI.init = async function () {
+  html.show(dom.accountDiv)
+
   if (!the.authenticator.getAccountId) {
-    the.accountId = localStorage.accountId
-    readWriteBox(dom.accountIdBox, "Your Account Address or ID", the.accountId)
+    if (the.cosmicLink.tdesc.source) {
+      if (the.cosmicLink.tdesc.source.error) {
+        disableBox(dom.accountIdBox, the.cosmicLink.tdesc.source.error.message)
+      } else {
+        the.accountId = true
+        readOnlyBox(dom.accountIdBox, the.cosmicLink.tdesc.source)
+      }
+    } else {
+      the.accountId = localStorage.accountId
+      readWriteBox(dom.accountIdBox, "Your Account Address or ID", the.accountId)
+    }
   } else {
     the.accountId = undefined
     disableBox(dom.accountIdBox, "Connecting...")
@@ -191,23 +182,20 @@ accountUI.init = async function () {
  */
 const networkUI = {}
 
-networkUI.enable = function () {
-  html.show(dom.networkDiv)
-  networkUI.init()
-}
-
 networkUI.disable = function () {
   html.hide(dom.networkDiv)
   the.network = "public"
   the.horizon = undefined
 }
 
-networkUI.init = function (network = localStorage.networkSelector, horizon) {
+networkUI.init = function () {
+  html.show(dom.networkDiv)
   html.hide(dom.customNetworkSetup)
-  the.network = network
+  the.network = the.cosmicLink.tdesc.network || localStorage.networkSelector
   the.horizon = undefined
 
-  switch (network) {
+
+  switch (the.network) {
   case undefined:
   case "public":
     dom.publicNetwork.checked = true
@@ -223,21 +211,26 @@ networkUI.init = function (network = localStorage.networkSelector, horizon) {
     dom.customNetwork.checked = true
 
     html.show(dom.customNetworkSetup)
-    the.network = network || localStorage.customPassphrase
-    the.horizon = (the.network && localStorage["network:" + the.network])
-      || (the.network && cosmicLib.resolve.horizon(the.network))
-      || horizon
+    if (!the.network) the.network = localStorage.customPassphrase
+    the.horizon = cosmicLib.resolve.horizon(the.network || "")
+      || the.cosmicLink.tdesc.horizon
     dom.customPassphrase.value = the.network || ""
     dom.customHorizon.value = the.horizon || ""
-    const passphrase = cosmicLib.resolve.networkPassphrase(the.network)
-    cosmicLib.config.setupNetwork(the.network, the.horizon, passphrase)
   }
+
+  if (the.cosmicLink.tdesc.network) networkUI.lock()
 }
 
-networkUI.set = function (selector) {
+networkUI.lock = function () {
+  readOnlyBox(dom.customPassphrase)
+  dom.publicNetwork.disabled = true
+  dom.testNetwork.disabled = true
+  dom.customNetwork.disabled = true
+}
+
+networkUI.switch = function (selector) {
   localStorage.networkSelector = selector
-  networkUI.init(selector)
-  transactionUI.init()
+  main.refresh()
 }
 
 /**
@@ -245,14 +238,15 @@ networkUI.set = function (selector) {
  */
 
 dom.authenticators.onchange = function () {
+  if (the.authenticator && the.authenticator.onExit) the.authenticator.onExit()
   the.redirect = localStorage.redirect = false
   dom.redirectionCheckbox.checked = false
-  authenticatorUI.init()
+  main.refresh()
 }
 
 dom.accountIdBox.onchange = function () {
   the.accountId = localStorage.accountId = dom.accountIdBox.value
-  transactionUI.init()
+  main.refresh()
 }
 
 dom.networkSelector.onscroll = function () {
@@ -260,21 +254,27 @@ dom.networkSelector.onscroll = function () {
   dom.networkSelector.onscroll = undefined
 }
 
-dom.publicNetwork.onchange = () => networkUI.set("public")
-dom.testNetwork.onchange = () => networkUI.set("test")
-dom.customNetwork.onchange = () => networkUI.set("")
+dom.publicNetwork.onchange = () => networkUI.switch("public")
+dom.testNetwork.onchange = () => networkUI.switch("test")
+dom.customNetwork.onchange = () => networkUI.switch("")
 
 dom.customPassphrase.onchange = function () {
-  localStorage.customPassphrase = dom.customPassphrase.value
-  networkUI.set("")
+  const networkName = cosmicLib.resolve.networkName(dom.customPassphrase.value)
+  localStorage.customPassphrase = networkName
+  networkUI.switch("")
 }
 
 dom.customHorizon.onchange = function () {
-  if (dom.customHorizon.value && dom.customHorizon.value.substr(0,4) !== "http") {
-    dom.customHorizon.value = "https://" + dom.customHorizon.value
+  the.horizon = dom.customHorizon.value
+  if (the.horizon && the.horizon.substr(0,4) !== "http") {
+    the.horizon = "https://" + the.horizon
   }
-  the.horizon = localStorage["network:" + the.network] = dom.customHorizon.value
-  transactionUI.init()
+  if (the.network && the.horizon) {
+    const passphrase = cosmicLib.resolve.networkPassphrase(the.network)
+    cosmicLib.config.setupNetwork(the.network, the.horizon, passphrase)
+    localStorage["network:" + passphrase] = the.horizon
+  }
+  if (the.network) main.refresh()
 }
 
 /*******************************************************************************
@@ -330,10 +330,10 @@ redirectionUI.click = async function (value) {
 
     try {
       const transaction = await value()
-      redirectionUI.sendTransaction(transaction)
+      await redirectionUI.sendTransaction(transaction)
     } catch (error) {
-      console.error(error.response)
-      redirectionUI.display("error", error.message.replace(/\.$/, "") + ".")
+      console.error(error.response || error)
+      redirectionUI.display("error", error.message.replace(/\.$/, ""))
       dom.redirectionButton.disabled = false
     }
   }
@@ -343,8 +343,7 @@ redirectionUI.sendTransaction = async function () {
   redirectionUI.display("info", "Sending to the network...")
   history.replaceState({}, "", the.cosmicLink.query)
   dom.query.textContent = the.cosmicLink.query
-
-  authenticatorUI.refresh()
+  networkUI.lock()
 
   await the.cosmicLink.send()
   redirectionUI.display("info", "Transaction validated")
@@ -431,46 +430,36 @@ function myHash () {
  */
 
 function enableButton (button, value, onclick) {
-  button.value = value
+  if (typeof value === "string") button.value = value
   button.onclick = onclick
   button.disabled = false
 }
 
 function disableButton (button, value) {
-  button.value = value
+  if (typeof value === "string") button.value = value
   button.disabled = true
 }
 
-function readWriteBox (box, placeholder = "", value = "") {
-  box.value = value
-  box.placeholder = placeholder
+function readWriteBox (box, placeholder, value) {
+  if (typeof value === "string") box.value = value
+  if (typeof placeholder === "string") box.placeholder = placeholder
   box.disabled = false
   box.readOnly = false
   box.onclick = undefined
   box.style.cursor = "initial"
 }
 
-function readOnlyBox (box, value = "") {
-  box.value = value
+function readOnlyBox (box, value) {
+  if (typeof value === "string") box.value = value
   box.disabled = false
   box.readOnly = true
-  box.onclick = () => exports.copyContent(box)
+  box.onclick = () => main.copyContent(box)
   box.style.cursor = "pointer"
 }
 
-function disableBox (box, placeholder = "") {
-  readWriteBox(box, placeholder)
+function disableBox (box, placeholder) {
+  readWriteBox(box, placeholder, "")
   box.disabled = true
-}
-
-exports.copyContent = function (element) {
-  if (html.copyContent(element) && document.activeElement.value) {
-    const prevNode = html.grab("#copied")
-    if (prevNode) html.destroy(prevNode)
-    const copiedNode = html.create("span", "#copied", "Copied")
-    element.parentNode.insertBefore(copiedNode, element)
-    setTimeout(() => { copiedNode.hidden = true }, 3000)
-  }
 }
 
 
@@ -486,9 +475,4 @@ function display (element, type = "", message = "") {
 
 function showIf (flag, element) {
   flag ? html.show(element) : html.hide(element)
-}
-
-exports.switchPage = function (from, to) {
-  html.append(dom.body, from)
-  html.append(dom.main, to)
 }
