@@ -41,6 +41,29 @@ protocols.ledgerwallet = {
   }
 }
 
+protocols.trezorwallet = {
+  buttonText: "Sign with Trezor Wallet",
+  qrCode: false,
+  getAccountId: async function () {
+    const trezor = await getTrezorModule()
+    await trezor.connect()
+    return trezor.publicKey
+  },
+  handler: async function (authenticator, cosmicLink) {
+    await cosmicLink.lock()
+    const trezor = await getTrezorModule()
+    return async () => trezor.sign(cosmicLink.transaction)
+  },
+  refresh: async function (refresher) {
+    const trezor = await getTrezorModule()
+    trezor.onDisconnect = () => refresher()
+  },
+  onExit: async function () {
+    const trezor = await getTrezorModule()
+    trezor.disconnect()
+  }
+}
+
 protocols.sep0007 = {
   handler: async function (authenticator, cosmicLink) {
     await cosmicLink.lock()
@@ -81,6 +104,15 @@ function getLedgerModule () {
   return import(
     /* webpackChunkName: "ledger" */ "@cosmic-plus/ledger-wallet"
   ).then(ledger => ledger.default)
+}
+
+function getTrezorModule () {
+  return import(
+    /* webpackChunkName: "trezor" */ "@cosmic-plus/trezor-wallet"
+  ).then(trezor => {
+    trezor.register("https://cosmic.link", "mister.ticot@cosmic.plus")
+    return trezor.default
+  })
 }
 
 /**
