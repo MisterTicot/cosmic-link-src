@@ -119,12 +119,12 @@ aside
   text-align: right;
 }
 
-aside a:link
+aside a
 {
   font-stretch: condensed;
 }
 
-a:link
+a
 {
   text-decoration: none;
   color: grey;

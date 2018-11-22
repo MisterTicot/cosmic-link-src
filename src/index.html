@@ -6,37 +6,12 @@
   <meta name="viewport" content="width=device-width">
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'none';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval';
+    script-src 'self' unsafe-eval';
     style-src 'self' 'unsafe-inline';
     img-src 'self' https://robohash.org;
     manifest-src 'self';
     connect-src *;
   ">
-
-  <script>
-    /*** Immediate redirection when possible ***/
-    var authenticators = {
-      'Stellar Authenticator': 'https://stellar-authenticator.org/',
-
-      /** Backward compatibility **/
-      'stellarAuthenticator': 'https://stellar-authenticator.org'
-    }
-
-    function getAuthenticatorUrl(){
-      return authenticators[localStorage.authenticator]
-    }
-
-    if (
-      localStorage.redirect === 'true' &&
-      location.search.length > 1 &&
-      getAuthenticatorUrl()
-    ) {
-      location.replace(getAuthenticatorUrl() + location.search)
-    } else {
-      history.replaceState({}, '',
-        location.pathname.replace(/[^\/]*$/,'') + location.search)
-    }
-  </script>
 
   <title>Cosmic.Link ~ Stellar transactions over URL</title>
   <meta property="og:title" content="Cosmic.Link ~ Stellar transactions over URL">
@@ -59,12 +34,14 @@
   <link rel="mask-icon" href="icons/safari.svg" color="#5bbad5">
 
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 
-<body id="body" onload="lib.init()">
+<body>
+  <!-- main.js may need to address document.body -->
+  <script src="main.js"></script>
+  <link rel="stylesheet" type="text/css" href="main.css">
 
-  <header onclick="lib.copyContent(this)">
+  <header>
     <h1 id="websiteUrl">=(G_G)=</h1><span id="query"></span>
   </header>
 
@@ -73,7 +50,7 @@
   <main>
     <div id="sign" class="page">
       <h2>You're being offered to sign a Stellar transaction</h2>
-      <aside><a href="javascript:lib.switchPage(sign, explanation)">What does that mean?</a></aside>
+      <aside><a id="aboutLink">What does that mean?</a></aside>
 
       <hr>
 
@@ -186,14 +163,12 @@
 
     <hr>
     <form>
-      <input type="button" onclick="lib.switchPage(explanation, sign)"
-        value="Back">
+      <input id="backButton" type="button" value="Back">
     </form>
   </div>
 
   <img id="tamper">
 
   <script src="stellar-sdk.js"></script>
-  <script src="main.js"></script>
 </body>
 </html>
