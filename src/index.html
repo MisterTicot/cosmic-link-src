@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width">
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'none';
-    script-src 'self' unsafe-eval';
+    script-src 'self' 'unsafe-eval';
     style-src 'self' 'unsafe-inline';
     img-src 'self' https://robohash.org;
     manifest-src 'self';
@@ -48,10 +48,11 @@
   <img id="logo" src="icons/512x512.png" alt="">
 
   <main>
-    <div id="sign" class="page">
-      <h2>You're being offered to sign a Stellar transaction</h2>
-      <aside><a id="aboutLink">What does that mean?</a></aside>
+    <nav> </nav>
+    <hr>
 
+    <section class="page" id="sign">
+      <h2>Stellar Transaction Request</h2>
       <hr>
 
       <h3>Step 1: Check the transaction</h3>
@@ -105,10 +106,10 @@
           <input id="qrButton" type="button" value="QR Code">
           <div id="qrCode" style="display:none"></div>
       </form>
-    </div>
+    </section>
   </main>
 
-  <div id="explanation" class="page">
+  <section class="page" id="help">
     <h2>Warm welcome to the Stellar network!</h2>
     <hr>
 
@@ -160,12 +161,7 @@
     <p>
       We wish you a happy discovery :)
     </p>
-
-    <hr>
-    <form>
-      <input id="backButton" type="button" value="Back">
-    </form>
-  </div>
+  </section>
 
   <img id="tamper">
 

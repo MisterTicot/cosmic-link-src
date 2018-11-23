@@ -37,8 +37,6 @@ main.init = function () {
       cosmicLib.config.setupNetwork(id, localStorage[key], passphrase)
     }
   }
-
-  main.refresh()
 }
 
 main.refresh = function () {

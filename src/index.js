@@ -21,7 +21,7 @@ if (the.query && the.redirect && the.authenticator.protocol === "cosmiclink") {
   location.replace(the.authenticator.url + location.search)
 } else {
   history.replaceState({}, "",
-    location.pathname.replace(/index.html$/,"") + location.search)
+    location.pathname.replace(/index.html$/,"") + location.search + location.hash)
 }
 
 // GUI loading

@@ -4,8 +4,9 @@
  */
 const dom = require("@cosmic-plus/jsutils/dom")
 const cosmicLib = require("cosmic-lib")
+const Page = require("@cosmic-plus/jsutils/page")
 
-const { copyContent, switchPage } = require("./helpers")
+const { copyContent } = require("./helpers")
 
 // cosmicLib stylesheet
 cosmicLib.load.css("cosmic-lib.css")
@@ -16,12 +17,22 @@ else dom.websiteUrl.textContent = location.origin + location.pathname
 dom.query.textContent = location.search
 dom.header.onclick = () => copyContent(dom.header)
 
-// About page browsing
-dom.aboutLink.onclick = () => switchPage(dom.sign, dom.explanation)
-dom.backButton.onclick = () => switchPage(dom.explanation, dom.sign)
-
 // Robot tamper
 require("./tamper")
 
-// signing interface
-require("./signing-ui").init()
+// Signing interface
+const signingUI = require("./signing-ui")
+const signingPage = Page.add("Sign", dom.sign)
+signingPage.onSelect = function () {
+  history.replaceState("", null, location.pathname + location.search)
+  signingUI.refresh()
+}
+
+signingUI.init()
+
+// About page
+Page.add("Help", dom.help)
+
+// Default page
+if (!Page.current) Page.select("#sign")
+if (Page.current === signingPage) signingPage.onSelect()
