@@ -7,7 +7,7 @@
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'none';
     script-src 'self' 'unsafe-eval';
-    style-src 'self' 'unsafe-inline';
+    style-src 'self';
     img-src 'self' https://robohash.org;
     manifest-src 'self';
     connect-src *;
@@ -51,7 +51,7 @@
     <nav> </nav>
     <hr>
 
-    <section class="page" id="sign">
+    <section id="sign">
       <h2>Stellar Transaction Request</h2>
       <hr>
 
@@ -67,7 +67,7 @@
         <select id="authenticators">
           <option value="" disabled selected hidden>Loading...</option>
         </select>
-        <div id="accountDiv" style="display:none">
+        <div id="accountDiv" hidden>
           <input id="accountIdBox" type="text">
         </div>
         <div id="networkDiv">
@@ -79,7 +79,7 @@
             <input id="customNetwork" type="radio" name="network" value="custom">
             <label for="customNetwork">Custom network</label>
           </div>
-          <div id="customNetworkSetup" style="display:none">
+          <div id="customNetworkSetup" hidden>
             <input id="customPassphrase" type="text" placeholder="Network Passphrase or Name">
             <input id="customHorizon" type="text" placeholder="Horizon URL">
           </div>
@@ -98,70 +98,68 @@
         <div id="redirectionMsgbox"></div>
       </form>
 
-      <form id="textareaForm" style="display:none">
+      <form id="textareaForm" hidden>
         <textarea id="xdrBox" rows="3"></textarea>
       </form>
 
-      <form id="qrForm" style="display:none">
+      <form id="qrForm" hidden>
           <input id="qrButton" type="button" value="QR Code">
-          <div id="qrCode" style="display:none"></div>
+          <div id="qrCode" hidden></div>
       </form>
+    </section>
+
+    <section id="help" hidden>
+      <h2>Warm welcome to the Stellar network!</h2>
+      <hr>
+
+      <p>
+        The Stellar network is a cryptocurrency platform on which we can create
+        accounts and perform transactions. It's a bit like a bank, except it's
+        public and decentralized.
+      </p>
+      <p>
+        Because it's public, each of us can contribute to the network by various
+        means, like programing services such as this one. We can also emit our
+        own currencies or tokens, build secure voting systems and other things
+        to be invented. :)
+      </p>
+      <p>
+        Because it's properly decentralized, it's protected from anybody that
+        could want to disrupt or hijack the network for its own benefit. Our
+        funds are secured by cryptographic algorithms and resilience. Resilience
+        means that several nodes on the network have a full copy of the data,
+        and that the various independent nodes have to agree together for the
+        transactions to be performed.
+      </p>
+      <p>
+        In order to sign a Stellar transaction, you need to have an account with
+        a minimum amount of the native currency, called lumen (XLM). At this
+        time, the minimum amount is 1 lumen, valued between $.20 and $.50. Once
+        in, you'll be able to close your account and get your money back at any
+        time, if you wish to do so.
+      </p>
+      <p>
+        Cosmic links are normal web links that describe a Stellar transaction.
+        When you click on them and own a Stellar account, you're given the
+        possibility to sign and send the transaction to the network. Those
+        transactions are for payment but also for currency conversion, change in
+        account settings or sending short messages. Cosmic links may looks like:
+        https://cosmic.link/?setOption&...
+      </p>
+      <p>
+        The Stellar network and core programs are maintained by the Stellar
+        Foundation. Their <a href="https://stellar.org"
+        title="https://stellar.org" target="_blank" rel="noopener">website</a>
+        is a good place to start if you want to learn more. <br> We also have a
+        <a href="https://galactictalk.org" title="https://galactictalk.org"
+        target="_blank" rel="noopener">community forum</a>.
+      </p>
+      <p>
+        We wish you a happy discovery :)
+      </p>
     </section>
   </main>
 
-  <section class="page" id="help">
-    <h2>Warm welcome to the Stellar network!</h2>
-    <hr>
-
-    <p>
-      The Stellar network is a cryptocurrency platform on which we can
-      create accounts and perform transactions. It's a bit like a bank,
-      except it's public and decentralized.
-    </p>
-    <p>
-      Because it's public, each of us can contribute to the network by
-      various means, like programing services such as this one. We can
-      also emit our own currencies or tokens, build secure voting systems
-      and other things to be invented. :)
-    </p>
-    <p>
-      Because it's properly decentralized, it's protected from anybody
-      that could want to disrupt or hijack the network for its own
-      benefit. Our funds are secured by cryptographic algorithms and
-      resilience. Resilience means that several nodes on the network
-      have a full copy of the data, and that the various independent
-      nodes have to agree together for the transactions to be performed.
-    </p>
-    <p>
-      In order to sign a Stellar transaction, you need to have an
-      account with a minimum amount of the native currency, called
-      lumen (XLM). At this time, the minimum amount is 1 lumen, valued
-      between $.20 and $.50. Once in, you'll be able to close your
-      account and get your money back at any time, if you wish to do so.
-    </p>
-    <p>
-      Cosmic links are normal web links that describe a Stellar
-      transaction. When you click on them and own a Stellar account,
-      you're given the possibility to sign and send the transaction to
-      the network. Those transactions are for payment but also for
-      currency conversion, change in account settings or sending short
-      messages. Cosmic links may looks like:
-      https://cosmic.link/?setOption&...
-    </p>
-    <p>
-      The Stellar network and core programs are maintained by the Stellar
-      Foundation. Their
-      <a href="https://stellar.org" title="https://stellar.org"
-        target="_blank" rel="noopener">website</a>
-      is a good place to start if you want to learn more. <br>
-      We also have a
-      <a href="https://galactictalk.org" title="https://galactictalk.org"
-        target="_blank" rel="noopener">community forum</a>.
-    </p>
-    <p>
-      We wish you a happy discovery :)
-    </p>
-  </section>
 
   <img id="tamper">
 

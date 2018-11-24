@@ -279,14 +279,6 @@ select:hover
 
 /* Classes styling */
 
-main .page {
-  display: block;
-}
-
-.page {
-  display: none;
-}
-
 .error
 {
   font-weight: bold;
