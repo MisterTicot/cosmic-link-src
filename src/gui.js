@@ -9,7 +9,7 @@ const Page = require("@cosmic-plus/jsutils/page")
 const { copyContent } = require("./helpers")
 
 // cosmicLib stylesheet
-cosmicLib.load.css("cosmic-lib.css")
+cosmicLib.load.styles("cosmic-lib.css")
 
 // Header
 if (location.origin === "null") dom.websiteUrl.textContent = location.pathname
