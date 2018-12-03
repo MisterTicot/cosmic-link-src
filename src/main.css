@@ -25,6 +25,12 @@
   html { font-size: 2.4em; }
 }
 
+/* Universal rules */
+
+[hidden] {
+  display: none!important;
+}
+
 /* Page layout */
 
 html
@@ -76,7 +82,6 @@ header span
 
 main
 {
-  display: block;
   max-width: 40em;
   margin: 0.5em auto;
   border: 3px solid lightgrey;
