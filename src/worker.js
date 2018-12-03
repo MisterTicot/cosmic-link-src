@@ -7,10 +7,10 @@ new ServiceWorker(pkg.name, pkg.version, "verbose")
   .fromCache([
     "/",
     "cosmic-lib.css",
+    "index.css",
     "index.html",
+    "index.js",
     "ledger.js",
-    "main.css",
-    "main.js",
     "stellar-sdk.js",
     "icons/512x512.png",
   ])

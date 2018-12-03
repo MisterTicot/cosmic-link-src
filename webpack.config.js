@@ -16,7 +16,7 @@ const main = Object.assign({}, config, {
   entry: './src/index.js',
   output: {
     path: __dirname + '/web',
-    filename: 'main.js',
+    filename: 'index.js',
     chunkFilename: '[name].js',
     library: 'lib',
     libraryTarget: 'var'
