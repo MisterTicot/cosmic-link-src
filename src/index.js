@@ -3,6 +3,7 @@
  * Entry point of Cosmic.Link application. We redirect without showing the
  * interface when possible. Else, we load the GUI.
  */
+require("@cosmic-plus/jsutils/polyfill")
 const authenticators = require("./authenticators")
 const the = require("./shared")
 
