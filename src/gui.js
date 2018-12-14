@@ -34,5 +34,5 @@ signingUI.init()
 Page.add("Help", dom.help)
 
 // Default page
-if (!Page.current) Page.select("#sign")
 if (Page.current === signingPage) signingPage.onSelect()
+else if (!Page.current) Page.select("#sign")
