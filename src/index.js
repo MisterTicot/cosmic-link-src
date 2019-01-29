@@ -28,4 +28,4 @@ if (the.query && the.redirect && the.authenticator.protocol === "cosmiclink") {
 }
 
 // GUI loading
-document.body.onload = () => import(/* webpackChunkName: "gui" */ "./gui")
+window.onload = () => import(/* webpackChunkName: "gui" */ "./gui")
