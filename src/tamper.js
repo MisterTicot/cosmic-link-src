@@ -7,7 +7,8 @@ const dom = require("@cosmic-plus/jsutils/dom")
 function myHash () {
   if (localStorage.myHash) return localStorage.myHash
 
-  var alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  var alphabet =
+    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
   var size = 32
 
   var hash = ""

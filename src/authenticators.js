@@ -11,7 +11,8 @@ authenticators.nodes = []
 class Authenticator {
   constructor (wallet) {
     Object.assign(this, wallet, protocols[wallet.protocol])
-    if (!this.buttonText && this.redirection) this.buttonText = "Go to " + this.name
+    if (!this.buttonText && this.redirection)
+      this.buttonText = "Go to " + this.name
   }
 
   async handle (cosmicLink) {

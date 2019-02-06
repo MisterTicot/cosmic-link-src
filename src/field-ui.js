@@ -13,14 +13,20 @@ module.exports = class FieldUI {
     this.inputs = new FieldInputs(field)
     this.inputs.onchange = () => this.onchange && this.onchange()
 
-    this.domNode = html.create("div", null,
+    this.domNode = html.create(
+      "div",
+      null,
       html.create("label", null, `${fieldDesc[field]}: `),
       ...this.inputs
     )
 
     this.isOptional = options.optional
     if (this.isOptional) {
-      this.addLink = html.create("a", { onclick: () => this.add() }, `+${field}`)
+      this.addLink = html.create(
+        "a",
+        { onclick: () => this.add() },
+        `+${field}`
+      )
     }
 
     this.value = options.value
@@ -74,9 +80,12 @@ class FieldInputs extends Array {
     this.field = field
     Object.assign(this, FieldInputs.getTemplate(field))
     this.make()
-    this.forEach(field => field.onchange = () => {
-      if (this.check()) this.onchange && this.onchange()
-    })
+    this.forEach(
+      field =>
+        field.onchange = () => {
+          if (this.check()) this.onchange && this.onchange()
+        }
+    )
   }
 }
 
@@ -120,7 +129,7 @@ FieldInputs.setTemplate("asset", {
     this[1].value = asset.value || ""
   },
   get: function () {
-    return { code: this[0].value, issuer: this[1].value }
+    return { code: this[0].value, issuer: this[1].value }
   }
 })
 
@@ -151,7 +160,6 @@ FieldInputs.setTemplate("memo", {
 const fieldDesc = Object.assign(specs.fieldDesc, {
   buying: "Buy Asset",
   selling: "Sell Asset"
-
 })
 Object.keys(specs.fieldType).forEach(field => {
   if (!fieldDesc[field]) {

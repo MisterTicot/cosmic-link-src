@@ -12,8 +12,13 @@ const authenticators = require("./authenticators")
 const the = require("./shared")
 
 const {
-  enableButton, disableButton, readWriteBox, readOnlyBox, disableBox,
-  display, showIf
+  enableButton,
+  disableButton,
+  readWriteBox,
+  readOnlyBox,
+  disableBox,
+  display,
+  showIf
 } = require("./helpers")
 
 // Run once page is fully loaded
@@ -31,7 +36,7 @@ main.init = function () {
 
   // CosmicLib network setup
   for (let key in localStorage) {
-    if (key.substr(0,8) === "network:") {
+    if (key.substr(0, 8) === "network:") {
       const id = key.substr(8)
       const passphrase = cosmicLib.resolve.networkPassphrase(id)
       cosmicLib.config.setupNetwork(id, localStorage[key], passphrase)
@@ -74,13 +79,18 @@ transactionUI.refresh = function () {
   cosmicLib.config.network = the.network
 
   the.cosmicLink.selectNetwork()
-  const saveTransaction = the.transaction = the.authenticator.handle(the.cosmicLink)
+  const saveTransaction = the.transaction = the.authenticator.handle(
+    the.cosmicLink
+  )
 
-  the.transaction.then(function (value) {
-    if (the.transaction === saveTransaction) redirectionUI.refresh(value)
-  }).catch(function () {
-    if (the.transaction === saveTransaction) redirectionUI.error(the.cosmicLink.status)
-  })
+  the.transaction
+    .then(function (value) {
+      if (the.transaction === saveTransaction) redirectionUI.refresh(value)
+    })
+    .catch(function () {
+      if (the.transaction === saveTransaction)
+        redirectionUI.error(the.cosmicLink.status)
+    })
 }
 
 /*******************************************************************************
@@ -125,7 +135,11 @@ accountUI.init = async function () {
       }
     } else {
       the.accountId = localStorage.accountId
-      readWriteBox(dom.accountIdBox, "Your Account Address or ID", the.accountId)
+      readWriteBox(
+        dom.accountIdBox,
+        "Your Account Address or ID",
+        the.accountId
+      )
     }
   } else {
     the.accountId = undefined
@@ -163,7 +177,6 @@ networkUI.init = function () {
   the.network = the.cosmicLink.tdesc.network || localStorage.networkSelector
   the.horizon = undefined
 
-
   switch (the.network) {
   case undefined:
   case "public":
@@ -181,8 +194,9 @@ networkUI.init = function () {
 
     html.show(dom.customNetworkSetup)
     if (!the.network) the.network = localStorage.customPassphrase
-    the.horizon = cosmicLib.resolve.horizon(the.network || "")
-      || the.cosmicLink.tdesc.horizon
+    the.horizon =
+        cosmicLib.resolve.horizon(the.network || "")
+        || the.cosmicLink.tdesc.horizon
     dom.customPassphrase.value = the.network || ""
     dom.customHorizon.value = the.horizon || ""
   }
@@ -235,7 +249,7 @@ dom.customPassphrase.onchange = function () {
 
 dom.customHorizon.onchange = function () {
   the.horizon = dom.customHorizon.value
-  if (the.horizon && the.horizon.substr(0,4) !== "http") {
+  if (the.horizon && the.horizon.substr(0, 4) !== "http") {
     the.horizon = "https://" + the.horizon
   }
   if (the.network && the.horizon) {

@@ -9,7 +9,9 @@
   "browserslist": "last 4 versions, > 0.1%",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --fix src/*.js",
+    "prettier": "prettier --write --no-semi '**.js' 'src/**.js' '**.json' '**.md'",
+    "eslint": "eslint --fix '**.js' 'src/**.js'",
+    "lint": "npm run prettier && npm run eslint",
     "get": "git submodule update --init --recursive",
     "build-css": "npm run build-css:1 && npm run build-css:2",
     "build-css:1": "cat node_modules/normalize.css/normalize.css src/*.css | autoprefixer-cli -o web/index.css",
@@ -18,7 +20,8 @@
     "build-js": "webpack -p && cp -f node_modules/stellar-sdk/dist/stellar-sdk.min.js web/stellar-sdk.js",
     "build-misc": "cp -f AUTHORS LICENSE README.md package-lock.json web",
     "build": "sh setenv.sh -p && for i in js css html misc; do npm run build-$i || return; done",
-    "check": "npm run get && cp web/package-lock.json . && npm ci && npm run build && cd web && git status",
+    "rebuild": "npm run get && cp -f web/package-lock.json . && npm ci && npm run build",
+    "check": "npm run rebuild && cd web && git status",
     "watch": "sh setenv.sh -d && npm run build-html && webpack -d --watch",
     "serve": "npm run watch & cd web && live-server --https=../node_modules/live-server-https --no-browser"
   },
@@ -34,6 +37,7 @@
     "eslint": "^5.12.1",
     "live-server": "^1.2.1",
     "live-server-https": "0.0.2",
+    "prettier": "^1.16.4",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1"
   },

@@ -14,7 +14,8 @@ const the = require("./shared")
 
 // Variables initialization
 the.query = location.search.length > 1 && location.search
-the.authenticator = authenticators[localStorage.authenticator]
+the.authenticator =
+  authenticators[localStorage.authenticator]
   || authenticators["Stellar Authenticator"]
 the.redirect = localStorage.redirect === "true"
 the.qrCode = localStorage.QR === "true"
@@ -23,8 +24,13 @@ the.qrCode = localStorage.QR === "true"
 if (the.query && the.redirect && the.authenticator.protocol === "cosmiclink") {
   location.replace(the.authenticator.url + location.search)
 } else {
-  history.replaceState({}, "",
-    location.pathname.replace(/index.html$/,"") + location.search + location.hash)
+  history.replaceState(
+    {},
+    "",
+    location.pathname.replace(/index.html$/, "")
+      + location.search
+      + location.hash
+  )
 }
 
 // GUI loading

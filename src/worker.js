@@ -13,7 +13,7 @@ new ServiceWorker(pkg.name, pkg.version, "verbose")
     "index.js",
     "ledger.js",
     "stellar-sdk.js",
-    "icons/512x512.png",
+    "icons/512x512.png"
   ])
   .precache()
   .register()

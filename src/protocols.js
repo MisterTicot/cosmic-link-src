@@ -73,16 +73,15 @@ protocols.copy = {
   }
 }
 
-
 /**
  * Module loading
  */
 
 function getLedgerModule () {
-  return import(/* webpackChunkName: "ledger" */ "@cosmic-plus/ledger-wallet")
-    .then(ledger => ledger.default)
+  return import(/* webpackChunkName: "ledger" */ "@cosmic-plus/ledger-wallet").then(
+    ledger => ledger.default
+  )
 }
-
 
 /**
  * Apply defaults to each protocols.

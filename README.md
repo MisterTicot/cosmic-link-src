@@ -1,9 +1,9 @@
 # Cosmic.Link website
 
-* Website: https://cosmic.link
-* Sources: https://github.com/cosmic-plus/webapp-cosmic-link
-* Build: https://github.com/cosmic-plus/https-cosmic-link
-* Roadmap: https://github.com/cosmic-plus/webapp-cosmic-link/TODO.md
+- Website: https://cosmic.link
+- Sources: https://github.com/cosmic-plus/webapp-cosmic-link
+- Build: https://github.com/cosmic-plus/https-cosmic-link
+- Roadmap: https://github.com/cosmic-plus/webapp-cosmic-link/TODO.md
 
 The website is served directly from the GitHub repository, thanks to CloudFlare
 CDN. More precisely, what is served is the HEAD of the master branch of the
@@ -27,7 +27,6 @@ and this means that what is served is not what it is supposed to be. If nothing
 differ, then the integrity check pass and you'll see the following message:
 
 > nothing to commit, working directory clean
-
 
 ## Run a copy of the Cosmic.Link website
 
@@ -107,7 +106,6 @@ npm build-css
 Remember that the source repository contains the build repository as a submodule
 at `web/`. All you'll have to do to publish your modified version of the website
 is to push this submodule to your own GitHub repository.
-
 
 ### Build it
 

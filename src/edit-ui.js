@@ -20,7 +20,7 @@ editUI.init = function () {
   dom.ingest(dom.edit)
 }
 
-editUI.refresh= function () {
+editUI.refresh = function () {
   the.cosmicLink = new CosmicLink(the.query)
   paramsUI.refresh()
   opsUI.refresh()
@@ -69,13 +69,9 @@ opsUI.refresh = function () {
   // New operation UI
   const operationUI = UIs.op[UIs.op.length] = new OperationUI()
   html.append(dom.operationsForms, operationUI.domNode)
-
-
 }
 
-opsUI.add = function () {
-
-}
+opsUI.add = function () {}
 
 /**
  * Operation UI
@@ -86,19 +82,27 @@ class OperationUI {
     this.odesc = odesc
 
     // Operation Selector
-    this.opSelector = html.create("select", null,
-      html.create("option", { selected: true, hidden: true }, "New Operation"))
+    this.opSelector = html.create(
+      "select",
+      null,
+      html.create("option", { selected: true, hidden: true }, "New Operation")
+    )
     operations.forEach(type => {
-      html.append(this.opSelector,
+      html.append(
+        this.opSelector,
         html.create("option", { value: type }, operationName[type])
-      )})
+      )
+    })
     this.opSelector.onchange = this.refreshOpParams.bind(this)
 
     this.opParams = html.create("div", null)
-    this.domNode = html.create("form", null,
+    this.domNode = html.create(
+      "form",
+      null,
       html.create("label", { for: this.opSelector }, "Operation: "),
       this.opSelector,
-      this.opParams)
+      this.opParams
+    )
 
     if (odesc.type) {
       this.opSelector.value = odesc.type
@@ -117,8 +121,10 @@ class OperationUI {
     })
 
     specs.operationOptionalFields[type].forEach(field => {
-      const fieldUI = new FieldUI(field,
-        { value: this.odesc[field], optional: true})
+      const fieldUI = new FieldUI(field, {
+        value: this.odesc[field],
+        optional: true
+      })
       fieldUI.onchange = "TODO"
       html.append(this.opParams, fieldUI.domNode)
     })

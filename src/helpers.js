@@ -44,14 +44,15 @@ helpers.disableBox = function (box, placeholder) {
   box.disabled = true
 }
 
-
 /*******************************************************************************
  * Other Helpers
  */
 
 helpers.display = function (element, type = "", message = "") {
   const classname = type ? "." + type : null
-  const messageNode = classname ? html.create("span", classname, message) : message
+  const messageNode = classname
+    ? html.create("span", classname, message)
+    : message
   html.rewrite(element, html.create("span", classname, messageNode))
 }
 
@@ -70,6 +71,8 @@ helpers.copyContent = function (element) {
     if (prevNode) html.destroy(prevNode)
     const copiedNode = html.create("span", "#copied", "Copied")
     element.parentNode.insertBefore(copiedNode, element)
-    setTimeout(() => { copiedNode.hidden = true }, 3000)
+    setTimeout(() => {
+      copiedNode.hidden = true
+    }, 3000)
   }
 }
