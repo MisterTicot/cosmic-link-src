@@ -34,16 +34,16 @@
     "autoprefixer-cli": "^1.0.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
-    "eslint": "^5.12.1",
+    "eslint": "^5.13.0",
     "live-server": "^1.2.1",
     "live-server-https": "0.0.2",
     "prettier": "^1.16.4",
-    "webpack": "^4.29.0",
-    "webpack-cli": "^3.2.1"
+    "webpack": "^4.29.1",
+    "webpack-cli": "^3.2.3"
   },
   "dependencies": {
     "@cosmic-plus/base": "^1.3.3",
-    "@cosmic-plus/jsutils": "^1.13.0",
+    "@cosmic-plus/jsutils": "^1.14.0",
     "@cosmic-plus/ledger-wallet": "^0.2.10",
     "cosmic-lib": "^1.2.7",
     "normalize.css": "^8.0.1",
