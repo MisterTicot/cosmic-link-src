@@ -6,14 +6,15 @@ const pkg = require("../package.json")
 new ServiceWorker(pkg.name, pkg.version, "verbose")
   .fromCache([
     "/",
-    "cosmic-lib.css",
-    "gui.js",
+    "app.js",
     "index.css",
     "index.html",
     "index.js",
     "ledger.js",
     "stellar-sdk.js",
-    "icons/512x512.png"
+    "icons/512x512.png",
+    "vendors~app.js",
+    "vendors~ledger.js"
   ])
   .precache()
   .register()
