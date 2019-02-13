@@ -3,13 +3,9 @@
  * Cosmic.Link Graphical User Interface
  */
 const dom = require("@cosmic-plus/jsutils/dom")
-const cosmicLib = require("cosmic-lib")
 const Page = require("@cosmic-plus/jsutils/page")
 
 const { copyContent } = require("./helpers")
-
-// cosmicLib stylesheet
-cosmicLib.load.styles("cosmic-lib.css")
 
 // Header
 if (location.origin === "null") dom.websiteUrl.textContent = location.pathname

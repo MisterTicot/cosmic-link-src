@@ -45,9 +45,6 @@ main.init = function () {
 }
 
 main.refresh = async function () {
-  // Make use asynchronous loading is done.
-  await cosmicLib.load.styles()
-
   if (the.query) the.cosmicLink = new CosmicLink(the.query)
   else the.cosmicLink = { tdesc: {} }
   authenticatorUI.init()

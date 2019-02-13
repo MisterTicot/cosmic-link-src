@@ -1,43 +1,17 @@
-/* Screen-size handling */
+@import "../node_modules/normalize.css/normalize";
+@import "../node_modules/cosmic-lib/web/cosmic-lib";
+@import "./scss/screen";
+@import "./scss/universal";
+@import "./scss/form";
 
-@media screen and (min-width: 46em), screen and (min-height: 36.5em)
-{
-  html { font-size: 1.1em; }
-}
-
-@media screen and (min-width: 62em), screen and (min-height: 48em)
-{
-  html { font-size: 1.2em; }
-}
-
-@media screen and (min-width: 83em), screen and (min-height: 64em)
-{
-  html { font-size: 1.3em; }
-}
-
-@media (min-width: 118em), screen and (min-height: 85em)
-{
-  html { font-size: 1.7em; }
-}
-
-@media (min-width: 158em)
-{
-  html { font-size: 2.4em; }
-}
-
-/* Universal rules */
-
-[hidden] {
-  display: none!important;
-}
 
 /* Page layout */
 
 html
 {
-  min-height: 100%;
-  box-sizing: border-box;
   position: relative;
+  box-sizing: border-box;
+  min-height: 100%;
   overflow-y: scroll;
 }
 
@@ -149,7 +123,7 @@ nav
 
 nav a
 {
-  display: inline-block;
+  display: inline-block;
   margin: 0 1.5em;
 }
 
@@ -157,136 +131,6 @@ nav a.selected
 {
   text-decoration: underline;
 }
-
-/* Form styling */
-
-form
-{
-  clear: both;
-  position: relative;
-  max-width: 30em;
-  margin: 0.75em auto;
-  text-align: center;
-}
-
-textarea,
-select,
-button,
-input,
-label
-{
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 30em;
-  margin: 0.2em 0;
-  padding: 0.2em;
-  border: solid 2px lightgrey;
-  border-radius: 0.2em;
-  overflow: hidden;
-  background-color: ghostwhite;
-
-  transition: all 0.2s ease;
-}
-
-textarea[readonly],
-input[readonly]
-{
-  color: #505050;
-}
-
-textarea:hover:enabled,
-select:hover:enabled,
-button:hover:enabled,
-input:hover:enabled
-{
-  border: solid 2px #909090;
-}
-
-textarea:focus:enabled,
-select:focus:enabled,
-button:focus:enabled,
-input:focus:enabled
-{
-  outline: 0;
-  box-shadow: 0 0 0px 2px lightsteelblue;
-}
-
-textarea[readonly]:hover,
-[type="text"][readonly]:hover,
-select:hover
-{
-  cursor: pointer;
-}
-
-[type="button"],
-[type="submit"]
-{
-  background-color: #f0f0f0;
-}
-
-
-[type="button"]:hover:enabled,
-[type="submit"]:hover:enabled,
-[type="button"].enabled
-{
-  background-color: lightgrey;
-  cursor: pointer;
-}
-
-[type="checkbox"],
-[type="radio"]
-{
-  display: none;
-}
-
-[type="checkbox"] + label,
-[type="radio"] + label
-{
-  margin: 0.1em 0;
-  border: none;
-  background-color: white;
-  padding: 0.1em;
-  font-style: italic;
-  color: dimgrey;
-}
-
-[type="checkbox"] + label::before,
-[type="radio"] + label::before
-{
-  content: "✘ ";
-}
-
-[type="checkbox"]:checked:disabled + label,
-[type="radio"]:checked:disabled + label
-{
-  box-shadow: inset 0 0 3px 1px darkgrey;
-  color: black;
-  font-style: normal;
-}
-
-[type="checkbox"]:checked:enabled + label,
-[type="radio"]:checked:enabled + label
-{
-  background-color: lightgreen;
-  color: black;
-  font-style: normal;
-}
-
-[type="checkbox"]:checked + label::before,
-[type="radio"]:checked + label::before
-{
-  content: "✔ ";
-}
-
-[type="checkbox"]:enabled + label:hover,
-[type="radio"]:enabled + label:hover
-{
-  background-color: mediumseagreen;
-  color: black;
-  cursor: pointer;
-}
-
 
 /* Classes styling */
 
