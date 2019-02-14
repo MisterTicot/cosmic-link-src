@@ -4,6 +4,7 @@ const main = exports
 const cosmicLib = require("cosmic-lib")
 const CosmicLink = cosmicLib.CosmicLink
 const dom = require("@cosmic-plus/jsutils/dom")
+const env = require("@cosmic-plus/jsutils/env")
 const html = require("@cosmic-plus/jsutils/html")
 const QrCode = require("qrcode")
 const { timeout } = require("@cosmic-plus/jsutils/misc")
@@ -304,7 +305,15 @@ redirectionUI.error = function (error) {
 
 redirectionUI.click = async function (value) {
   if (typeof value === "string") {
-    location.replace(value)
+    if (env.isEmbedded && the.authenticator.target === "new") {
+      open(value, "_blank")
+      window.parent.postMessage("close", "*")
+    } else {
+      location.replace(value)
+      if (env.isEmbedded && the.authenticator.target === "external") {
+        window.parent.postMessage("close", "*")
+      }
+    }
   } else if (typeof value === "function") {
     display(dom.redirectionMsgbox, "info", "Waiting for confirmation...")
     dom.redirectionButton.disabled = true
@@ -328,6 +337,7 @@ redirectionUI.sendTransaction = async function () {
 
   await the.cosmicLink.send()
   redirectionUI.display("info", "Transaction validated")
+  if (env.isEmbedded) parent.postMessage("close", "*")
   if (document.referrer) {
     enableButton(dom.redirectionButton, "Close", () => history.back())
   } else {
