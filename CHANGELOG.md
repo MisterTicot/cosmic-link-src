@@ -61,7 +61,7 @@ All notable changes to this project will be documented in this file.
 ## Older Releases
 
 There is no changelog for older releases. Please look take a look at the [commit
-history](https://github.com/cosmic-plus/webapp-stellar-authenticator/commits/master).
+history](https://github.com/cosmic-plus/webapp-cosmic-link/commits/master).
 
 [cosmic-lib]: https://github.com/cosmic-plus/node-cosmic-lib/blob/master/CHANGELOG.md
 [stellar-sdk]: https://github.com/stellar/js-stellar-sdk/blob/master/CHANGELOG.md
