@@ -8,7 +8,7 @@
 if (navigator.serviceWorker) navigator.serviceWorker.register("worker.js")
 
 // Requires
-require("@cosmic-plus/jsutils/polyfill")
+require("@cosmic-plus/domutils/es5/polyfill")
 const authenticators = require("./authenticators")
 const the = require("./shared")
 

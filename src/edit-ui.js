@@ -5,10 +5,10 @@
 const editUI = exports
 
 const cosmicLib = require("cosmic-lib")
-const dom = require("@cosmic-plus/jsutils/dom")
-const html = require("@cosmic-plus/jsutils/html")
+const dom = require("@cosmic-plus/domutils/es5/dom")
+const html = require("@cosmic-plus/domutils/es5/html")
 const { CosmicLink, resolve, specs } = cosmicLib
-const { capitalize } = require("@cosmic-plus/jsutils/misc")
+const { capitalize } = require("@cosmic-plus/jsutils/es5/misc")
 
 const FieldUI = require("./field-ui")
 const the = require("./shared")

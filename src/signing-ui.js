@@ -3,11 +3,11 @@ const main = exports
 
 const cosmicLib = require("cosmic-lib")
 const CosmicLink = cosmicLib.CosmicLink
-const dom = require("@cosmic-plus/jsutils/dom")
-const env = require("@cosmic-plus/jsutils/env")
-const html = require("@cosmic-plus/jsutils/html")
+const dom = require("@cosmic-plus/domutils/es5/dom")
+const env = require("@cosmic-plus/jsutils/es5/env")
+const html = require("@cosmic-plus/domutils/es5/html")
 const QrCode = require("qrcode")
-const { timeout } = require("@cosmic-plus/jsutils/misc")
+const { timeout } = require("@cosmic-plus/jsutils/es5/misc")
 
 const authenticators = require("./authenticators")
 const the = require("./shared")

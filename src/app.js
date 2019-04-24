@@ -2,8 +2,8 @@
 /**
  * Cosmic.Link Graphical User Interface
  */
-const dom = require("@cosmic-plus/jsutils/dom")
-const Page = require("@cosmic-plus/jsutils/page")
+const dom = require("@cosmic-plus/domutils/es5/dom")
+const Page = require("@cosmic-plus/domutils/es5/page")
 
 const { copyContent } = require("./helpers")
 

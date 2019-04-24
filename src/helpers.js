@@ -4,8 +4,8 @@
  */
 const helpers = exports
 
-const dom = require("@cosmic-plus/jsutils/dom")
-const html = require("@cosmic-plus/jsutils/html")
+const dom = require("@cosmic-plus/domutils/es5/dom")
+const html = require("@cosmic-plus/domutils/es5/html")
 
 /*******************************************************************************
  * Form Elements Helpers

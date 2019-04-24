@@ -1,7 +1,7 @@
 const authenticators = exports
 
-const html = require("@cosmic-plus/jsutils/html")
-const wallets = require("@cosmic-plus/base/wallets")
+const html = require("@cosmic-plus/domutils/es5/html")
+const wallets = require("@cosmic-plus/base/es5/wallets")
 
 const protocols = require("./protocols")
 

@@ -2,7 +2,7 @@
 /**
  * Robot tamper.
  */
-const dom = require("@cosmic-plus/jsutils/dom")
+const dom = require("@cosmic-plus/domutils/es5/dom")
 
 function myHash () {
   if (localStorage.myHash) return localStorage.myHash

@@ -2,9 +2,9 @@
 /**
  * Field UI
  */
-const html = require("@cosmic-plus/jsutils/html")
+const html = require("@cosmic-plus/domutils/es5/html")
 const { check, specs } = require("cosmic-lib")
-const { capitalize } = require("@cosmic-plus/jsutils/misc")
+const { capitalize } = require("@cosmic-plus/jsutils/es5/misc")
 
 module.exports = class FieldUI {
   constructor (field, options = {}) {
