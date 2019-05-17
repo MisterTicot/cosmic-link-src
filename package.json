@@ -1,6 +1,6 @@
 {
   "name": "cosmic-link",
-  "version": "0.16.13",
+  "version": "0.16.14",
   "description": "The cosmic.link website",
   "author": "MisterTicot",
   "repository": "github:cosmic-plus/webapp-cosmic-link",
@@ -26,21 +26,21 @@
     "serve": "npm run watch & cd web && live-server --https=../node_modules/live-server-https --no-browser"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.3",
+    "@babel/core": "^7.4.4",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/plugin-transform-runtime": "^7.4.3",
-    "@babel/preset-env": "^7.4.3",
-    "@babel/runtime": "^7.4.3",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/runtime": "^7.4.4",
     "autoprefixer-cli": "^1.0.0",
     "babel-eslint": "^10.0.1",
-    "babel-loader": "^8.0.5",
+    "babel-loader": "^8.0.6",
     "eslint": "^5.16.0",
     "live-server": "^1.2.1",
     "live-server-https": "0.0.2",
     "node-sass": "^4.11.0",
     "prettier": "^1.17.0",
-    "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.0"
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2"
   },
   "dependencies": {
     "@cosmic-plus/base": "^2.0.0",
