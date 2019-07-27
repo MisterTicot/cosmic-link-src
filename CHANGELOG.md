@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.17.2 - 2019-07-27
+
+### Changed
+
+- Improve display on smallest and biggest screens.
+
 ## 0.17.1 - 2019-06-18
 
 ### Changed

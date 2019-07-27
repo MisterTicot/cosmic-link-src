@@ -13,6 +13,9 @@ html
   box-sizing: border-box;
   min-height: 100%;
   overflow-y: scroll;
+
+  // Prevent Android Chrome font boost.
+  * { max-height: 100%; }
 }
 
 body
