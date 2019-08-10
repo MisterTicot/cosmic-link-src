@@ -1,6 +1,6 @@
 {
   "name": "cosmic-link",
-  "version": "0.17.2",
+  "version": "1.0.0",
   "description": "The Cosmic.link website",
   "author": "MisterTicot <mister.ticot@cosmic.plus>",
   "homepage": "https://cosmic.link",
@@ -56,7 +56,7 @@
     "live-server-https": "0.0.2",
     "node-sass": "^4.11.0",
     "prettier": "^1.18.2",
-    "webpack": "^4.38.0",
+    "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6"
   },
   "dependencies": {
