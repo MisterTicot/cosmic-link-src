@@ -1,8 +1,9 @@
 {
   "name": "cosmic-link",
   "version": "0.17.2",
-  "description": "The cosmic.link website",
-  "author": "MisterTicot",
+  "description": "The Cosmic.link website",
+  "author": "MisterTicot <mister.ticot@cosmic.plus>",
+  "homepage": "https://cosmic.link",
   "repository": "github:cosmic-plus/webapp-cosmic-link",
   "license": "MIT",
   "keywords": [],
