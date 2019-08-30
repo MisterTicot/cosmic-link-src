@@ -64,7 +64,7 @@
     "@cosmic-plus/domutils": "^2.0.0",
     "@cosmic-plus/jsutils": "^2.0.2",
     "@cosmic-plus/ledger-wallet": "^1.0.0",
-    "cosmic-lib": "^1.6.0",
+    "cosmic-lib": "^1.8.0",
     "normalize.css": "^8.0.1",
     "qrcode": "^1.4.1"
   }
