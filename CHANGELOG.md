@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- Security: strengthen Content-Security-Policy. `form-action 'none'` has been
+  added.
+
 ## 1.0.0 - 2019-08-10
 
 **Note:** This major release doesn't contain any breaking change. The version
