@@ -1,6 +1,6 @@
 {
   "name": "cosmic-link",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "The Cosmic.link website",
   "author": "MisterTicot <mister.ticot@cosmic.plus>",
   "homepage": "https://cosmic.link",
@@ -49,21 +49,21 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/runtime": "^7.5.5",
     "autoprefixer-cli": "^1.0.0",
-    "babel-eslint": "^10.0.2",
+    "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
     "eslint": "^5.16.0",
     "live-server": "^1.2.1",
     "live-server-https": "0.0.2",
     "node-sass": "^4.11.0",
     "prettier": "^1.18.2",
-    "webpack": "^4.39.1",
-    "webpack-cli": "^3.3.6"
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7"
   },
   "dependencies": {
-    "@cosmic-plus/base": "^2.0.5",
+    "@cosmic-plus/base": "^2.1.0",
     "@cosmic-plus/domutils": "^2.0.0",
     "@cosmic-plus/jsutils": "^2.0.2",
-    "@cosmic-plus/ledger-wallet": "^1.0.0",
+    "@cosmic-plus/ledger-wallet": "^1.1.1",
     "cosmic-lib": "^1.8.0",
     "normalize.css": "^8.0.1",
     "qrcode": "^1.4.1"
