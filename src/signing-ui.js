@@ -50,7 +50,7 @@ main.refresh = async function () {
   else the.cosmicLink = { tdesc: {} }
   authenticatorUI.init()
   redirectionUI.init()
-  if (the.cosmicLink) transactionUI.refresh()
+  if (the.cosmicLink.query) transactionUI.refresh()
 }
 
 /*******************************************************************************
