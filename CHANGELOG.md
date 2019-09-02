@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.2 - 2019-09-02
+
+- UI: Fix 'Go to Stellar Authenticator' button. This fixes a regression
+  introduced with 1.1.1.
+
 ## 1.1.1 - 2019-09-02
 
 ### Fixed
