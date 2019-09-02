@@ -76,7 +76,6 @@ transactionUI.refresh = function () {
   cosmicLib.config.source = the.accountId
   cosmicLib.config.network = the.network
 
-  the.cosmicLink.selectNetwork()
   const saveTransaction = the.transaction = the.authenticator.handle(
     the.cosmicLink
   )

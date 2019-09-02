@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file.
 
 - Api: Update [cosmic-lib] to 1.8.1. (fix regression)
 - UI: Fix opening SEP-0007 from iframe.
+- UI: Remove a meaningless error message. It was appearing when selecting Ledger
+  Wallet signing method while there was no transaction.
+
 
 ## 1.1.0 - 2019-08-31
 
