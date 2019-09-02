@@ -171,8 +171,7 @@ networkUI.disable = function () {
 networkUI.init = function () {
   html.show(dom.networkDiv)
   html.hide(dom.customNetworkSetup)
-  the.network =
-    the.cosmicLink.tdesc.network || localStorage.networkSelector || "public"
+  the.network = the.cosmicLink.tdesc.network || localStorage.networkSelector
   the.horizon = undefined
 
   switch (the.network) {
