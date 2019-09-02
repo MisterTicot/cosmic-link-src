@@ -308,11 +308,9 @@ redirectionUI.click = async function (value) {
     if (env.isEmbedded && the.authenticator.target === "new") {
       open(value, "_blank")
       window.parent.postMessage("close", "*")
-    } else {
-      location.replace(value)
-      if (env.isEmbedded && the.authenticator.target === "external") {
-        window.parent.postMessage("close", "*")
-      }
+    } else if (env.isEmbedded && the.authenticator.target === "external") {
+      open(value)
+      window.parent.postMessage("close", "*")
     }
   } else if (typeof value === "function") {
     display(dom.redirectionMsgbox, "info", "Waiting for confirmation...")

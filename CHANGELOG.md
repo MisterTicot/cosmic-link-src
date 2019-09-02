@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- Api: update [cosmic-lib] to 1.8.1 (fix regression).
+- Api: Update [cosmic-lib] to 1.8.1. (fix regression)
+- UI: Fix opening SEP-0007 from iframe.
 
 ## 1.1.0 - 2019-08-31
 
