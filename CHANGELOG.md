@@ -9,6 +9,11 @@ All notable changes to this project will be documented in this file.
 - UI: SEP-0007 wallets now require a source account. Support for sourceless
   transaction have been removed from SEP-0007.
 
+### Fixed
+
+- Meta: Fix a rare application upgrade bug. Bypass browser cache when fetching
+  latest release to prevent possible unconsistent upgrade.
+
 ## 1.1.2 - 2019-09-02
 
 ### Fixed
