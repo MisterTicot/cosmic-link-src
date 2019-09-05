@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- UI: SEP-0007 wallets now require a source account. Support for sourceless
+  transaction have been removed from SEP-0007.
+
 ## 1.1.2 - 2019-09-02
 
 ### Fixed

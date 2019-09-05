@@ -60,7 +60,7 @@
     "webpack-cli": "^3.3.7"
   },
   "dependencies": {
-    "@cosmic-plus/base": "^2.1.0",
+    "@cosmic-plus/base": "^2.2.0",
     "@cosmic-plus/domutils": "^2.0.0",
     "@cosmic-plus/jsutils": "^2.0.2",
     "@cosmic-plus/ledger-wallet": "^1.1.1",
