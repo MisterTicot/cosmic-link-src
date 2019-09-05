@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## 1.1.2 - 2019-09-02
 
+### Fixed
+
 - UI: Fix 'Go to ...' buttons. This fixes two regressions introduced with 1.1.1.
 
 ## 1.1.1 - 2019-09-02
