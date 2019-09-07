@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.2.1 - 2019-09-07
+
+### Fixed
+
+- Logic: Fix a regression in worker installation. (Introduced with 1.2.0)
+
 ## 1.2.0 - 2019-09-07
 
 ### Changed
