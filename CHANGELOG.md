@@ -2,12 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 1.2.0 - 2019-09-07
 
 ### Changed
 
-- UI: SEP-0007 wallets now require a source account. Support for sourceless
-  transaction have been removed from SEP-0007.
+- API: Upgrade [cosmic-lib] to 2.x. (protocol changes)
 
 ### Fixed
 
