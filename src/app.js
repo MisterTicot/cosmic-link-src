@@ -2,7 +2,9 @@
 /**
  * Cosmic.Link Graphical User Interface
  */
+const cosmicLib = require("cosmic-lib")
 const dom = require("@cosmic-plus/domutils/es5/dom")
+const html = require("@cosmic-plus/domutils/es5/html")
 const Page = require("@cosmic-plus/domutils/es5/page")
 
 const { copyContent } = require("./helpers")
@@ -15,6 +17,17 @@ dom.header.onclick = () => copyContent(dom.header)
 
 // Robot tamper
 require("./tamper")
+
+// SEP-0007
+if (cosmicLib.sep7Utils.isWebHandlerSupported()) {
+  html.show(dom.registerSep7Handler)
+  dom.registerSep7Handler.onclick = () => {
+    cosmicLib.sep7Utils.registerWebHandler(
+      location.href.split(/[?#]/, 1)[0],
+      "Cosmic.link"
+    )
+  }
+}
 
 // Signing interface
 const signingUI = require("./signing-ui")
