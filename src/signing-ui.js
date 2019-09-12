@@ -153,6 +153,7 @@ accountUI.init = async function () {
       if (the.authenticator !== authenticator) return
       dom.accountIdBox.placeholder = "Error"
       display(dom.accountMsgbox, "error", error.message + ".")
+      console.error(error)
     }
   }
 }
