@@ -14,6 +14,12 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.3.0 - 2019-09-14
+
+### Added
+
+- UI: Add a link to register as a SEP-0007 handler.
+
 ## 1.2.1 - 2019-09-07
 
 ### Fixed
