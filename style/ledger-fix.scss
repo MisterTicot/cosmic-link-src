@@ -1,0 +1,5 @@
+/* Hide Ledger U2F iframe */
+iframe[src$="/u2f-comms.html"]
+{
+  display: none;
+}

@@ -1,0 +1,39 @@
+/* Generic tags definition */
+
+h2
+{
+  font-size: 1.2em;
+  font-weight: normal;
+  text-align: center;
+}
+
+h3
+{
+  margin: 0;
+  padding: 0.2em 0 0.2em 0;
+  font-weight: bolder;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  font-stretch: condensed;
+}
+
+hr
+{
+  border: 0;
+  height: 2px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), lightgrey, rgba(0, 0, 0, 0));
+}
+
+a
+{
+  text-decoration: none;
+  color: grey;
+  transition: 0.2s all ease;
+
+  &:hover:not(.selected)
+  {
+    color: burlywood;
+    cursor: pointer;
+  }
+}
+

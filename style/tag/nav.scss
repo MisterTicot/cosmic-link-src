@@ -1,0 +1,16 @@
+/* Navigation bar */
+
+nav
+{
+  display: table;
+  margin: auto;
+  padding: 0.5em 1em 0 1em;
+  font-size: 1.1em;
+
+  a
+  {
+    display: inline-block;
+    margin: 0 1.5em;
+    &.selected { text-decoration: underline; }
+  }
+}

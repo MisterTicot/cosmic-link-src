@@ -1,0 +1,29 @@
+/* Cosmic.link header */
+
+header
+{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-style: italic;
+  color: dimgrey;
+
+  transition: 0.2s all ease;
+
+  &:hover {
+    color: black;
+  }
+
+  h1
+  {
+    display: inline;
+    margin: 0.2em 0;
+    font-size: 1.25em;
+  }
+
+  span
+  {
+    font-size: 0.9em;
+    white-space: nowrap;
+  }
+}

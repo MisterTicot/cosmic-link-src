@@ -1,232 +1,35 @@
 @import "../node_modules/@cosmic-plus/assets/scss/base";
 @import "../node_modules/cosmic-lib/web/cosmic-lib";
-@import "./form";
 
+@import "./colors";
+@import "./layout";
+@import "./generic";
 
-/* Page layout */
+@import "./tag/header";
+@import "./tag/nav";
+@import "./tag/form";
 
-html
-{
-  position: relative;
-  min-height: 100%;
+@import "./components";
+@import "./ledger-fix";
+
+/* Layout style */
+
+html {
   overflow-y: scroll;
 }
 
 body
 {
-  height: 100%;
   background-color: aliceblue;
   font-family: Arial, sans-serif;
 }
 
-header
-{
-  top: 0;
-  max-width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-style: italic;
-  color: dimgrey;
-
-  transition: 0.2s all ease;
-}
-
-header:hover {
-  color: black;
-}
-
-h1
-{
-  display: inline;
-  margin: 0.2em 0;
-  vertical-align: middle;
-  font-size: 1.25em;
-}
-
-header span
-{
-  vertical-align: middle;
-  font-size: 0.9em;
-  white-space: nowrap;
-}
-
 main
 {
-  max-width: 40em;
-  margin: 0.5em auto;
   border: 3px solid lightgrey;
   border-radius: 1em;
   box-shadow: 0.1em 0.1em 0.3em darkgrey;
   padding: 0 0.5em;
   overflow: hidden;
   background-color: white;
-}
-
-/* Content styling */
-
-h2
-{
-  font-size: 1.2em;
-  font-weight: normal;
-  text-align: center;
-}
-
-h3
-{
-  margin: 0;
-  padding: 0.2em 0 0.2em 0;
-  font-weight: bolder;
-  font-size: 0.8em;
-  text-transform: uppercase;
-  font-stretch: condensed;
-}
-
-hr
-{
-  border: 0;
-  height: 2px;
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), lightgrey, rgba(0, 0, 0, 0));
-}
-
-a
-{
-  text-decoration: none;
-  color: grey;
-
-  transition: 0.2s all ease;
-}
-
-a:hover:not(.selected)
-{
-  color: burlywood;
-  cursor: pointer;
-}
-
-/* Hide Ledger U2F iframe */
-iframe[src$="/u2f-comms.html"]
-{
-  display: none;
-}
-
-/* Navigation bar */
-nav
-{
-  display: table;
-  margin: auto;
-  padding: 0.5em 1em 0 1em;
-  font-size: 1.1em;
-}
-
-nav a
-{
-  display: inline-block;
-  margin: 0 1.5em;
-}
-
-nav a.selected
-{
-  text-decoration: underline;
-}
-
-/* Classes styling */
-
-.error
-{
-  font-weight: bold;
-  color: tomato;
-}
-
-.info
-{
-  font-weight: bold;
-  color: mediumseagreen;
-}
-
-/* Individual elements styling */
-
-#networkSelector
-{
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-#networkSelector [type="radio"] + label
-{
-  width: 45%;
-  max-width: 9.75em;
-}
-
-
-#cosmiclink_description
-{
-  display: inline-block;
-  margin-top: 0.5em;
-}
-
-#qrCode
-{
-  background-color: ghostwhite;
-}
-
-#qrCode input {
-  margin: 0;
-}
-
-#qrCode .cosmiclib_loadingAnim {
-  width: 3em;
-  height: 3em;
-  margin: 1em auto;
-  border-width: 0.75em;
-}
-
-#qrCode canvas {
-  margin: auto;
-  padding: 0.3em;
-}
-
-#copied
-{
-  position: absolute;
-  right: 0;
-  transform: translate(-0.1em, 0.3em);
-  box-sizing: border-box;
-  width: 4em;
-  background-color: ghostwhite;
-  background-color: rgba(248, 248, 255, 0.8);
-  padding: 0.05em 0.5em;
-  font-weight: bold;
-  color: mediumseagreen;
-}
-
-#logo {
-  z-index: -1;
-  position: absolute;
-  top: 0;
-  max-height: 50%;
-  max-width: 40%;
-  opacity: 0.7;
-  filter: grayscale(30%);
-  transform: translate(-20%, -20%);
-}
-
-#tamper
-{
-  position: fixed;
-  pointer-events: none;
-  max-height: 50%;
-  max-width: 40%;
-  bottom: 0;
-  right: 0;
-  opacity: 0.3;
-  filter: grayscale(50%);
-}
-
-#registerSep7Handler {
-  display: block;
-  margin: 1em auto;
-  text-align: center;
-  font-style: italic;
 }

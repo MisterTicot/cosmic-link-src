@@ -1,0 +1,23 @@
+/* Page layout */
+
+html
+{
+  position: relative;
+  min-height: 100%;
+}
+
+body
+{
+  height: 100%;
+}
+
+header {
+  top: 0;
+  max-width: 100%;
+}
+
+main
+{
+  max-width: 40em;
+  margin: 0.5em auto;
+}
