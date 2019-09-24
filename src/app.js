@@ -7,25 +7,28 @@ const dom = require("@cosmic-plus/domutils/es5/dom")
 const html = require("@cosmic-plus/domutils/es5/html")
 const Page = require("@cosmic-plus/domutils/es5/page")
 
+const the = require("./shared")
 const { copyContent } = require("./helpers")
 
-// Header
-if (location.origin === "null") dom.websiteUrl.textContent = location.pathname
-else dom.websiteUrl.textContent = location.origin + location.pathname
-dom.query.textContent = location.search
-dom.header.onclick = () => copyContent(dom.header)
+if (!the.contextIsWidget) {
+  // Header
+  if (location.origin === "null") dom.websiteUrl.textContent = location.pathname
+  else dom.websiteUrl.textContent = location.origin + location.pathname
+  dom.query.textContent = location.search
+  dom.header.onclick = () => copyContent(dom.header)
 
-// Robot tamper
-require("./tamper")
+  // Robot tamper
+  require("./tamper")
 
-// SEP-0007
-if (cosmicLib.sep7Utils.isWebHandlerSupported()) {
-  html.show(dom.registerSep7Handler)
-  dom.registerSep7Handler.onclick = () => {
-    cosmicLib.sep7Utils.registerWebHandler(
-      location.href.split(/[?#]/, 1)[0],
-      "Cosmic.link"
-    )
+  // SEP-0007
+  if (cosmicLib.sep7Utils.isWebHandlerSupported()) {
+    html.show(dom.registerSep7Handler)
+    dom.registerSep7Handler.onclick = () => {
+      cosmicLib.sep7Utils.registerWebHandler(
+        location.href.split(/[?#]/, 1)[0],
+        "Cosmic.link"
+      )
+    }
   }
 }
 
@@ -40,7 +43,7 @@ signingPage.onSelect = function () {
 signingUI.init()
 
 // About page
-Page.add("Help", dom.help)
+if (!the.contextIsWidget) Page.add("Help", dom.help)
 
 // Default page
 if (Page.current === signingPage) signingPage.onSelect()

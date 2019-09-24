@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="
+    form-action 'none';
+    default-src 'none';
+    script-src 'self';
+    style-src 'self';
+    frame-src https://connect.trezor.io;
+    img-src 'self' https://robohash.org;
+    manifest-src 'self';
+    connect-src *;
+  ">
+
+  <script src="index.js"></script>
+
+  <title>Cosmic.Link ~ Stellar transactions over URL</title>
+  <meta property="og:title"
+    content="Cosmic.Link ~ Stellar transactions over URL">
+  <meta property="og:description" name="description"
+    content="Cosmic.Link provides a convenient way to share Stellar transactions as URLs.">
+
+  <meta property="og:image" content="https://cosmic.link/icons/512x512.png">
+  <meta property="og:image:height" content="512">
+  <meta property="og:image:width" content="512">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="msapplication-config" content="browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch.png">
+  <link rel="mask-icon" href="icons/safari.svg" color="#5bbad5">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" type="text/css" href="widget.css">
+</head>
+
+<body>
+
+  <main>
+    <section id="sign">
+      <h3>Step 1: Check the transaction</h3>
+      <div id="cosmiclink_description">
+        Loading... <span class="cosmiclib_loadingAnim"></span>
+      </div>
+
+      <hr>
+
+      <h3>Step 2: Select a Signing Method</h3>
+      <form onsubmit="return false">
+        <select id="authenticators">
+          <option value="" disabled selected hidden>Loading...</option>
+        </select>
+        <div id="accountDiv" hidden>
+          <input id="accountIdBox" type="text">
+        </div>
+        <div id="networkDiv">
+          <div id="networkSelector">
+            <input id="publicNetwork" type="radio" name="network" value="public">
+            <label for="publicNetwork">Public network</label>
+            <input id="testNetwork" type="radio" name="network" value="test">
+            <label for="testNetwork">Test network</label>
+            <input id="customNetwork" type="radio" name="network" value="custom">
+            <label for="customNetwork">Custom network</label>
+          </div>
+          <div id="customNetworkSetup" hidden>
+            <input id="customPassphrase" type="text" placeholder="Network Passphrase or Name">
+            <input id="customHorizon" type="text" placeholder="Horizon URL">
+          </div>
+        </div>
+        <div id="accountMsgbox"></div>
+      </form>
+
+      <hr>
+
+      <h3>Step 3: Sign the Transaction</h3>
+
+      <form id="redirectionForm">
+        <input id="redirectionButton" type="button" value="…" disabled>
+        <input id="redirectionCheckbox" type="checkbox">
+        <label for="redirectionCheckbox">Automatic redirection</label>
+        <div id="redirectionMsgbox"></div>
+      </form>
+
+      <form id="textareaForm" hidden>
+        <textarea id="xdrBox" rows="3"></textarea>
+      </form>
+
+      <form id="qrForm" hidden>
+          <input id="qrButton" type="button" value="QR Code">
+          <div id="qrCode" hidden></div>
+      </form>
+    </section>
+
+  <script src="stellar-sdk.js"></script>
+</body>
+</html>

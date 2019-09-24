@@ -290,7 +290,9 @@ redirectionUI.refresh = function (value) {
     enableButton(dom.redirectionButton, the.authenticator.buttonText, onclick)
   }
 
-  if (the.redirect) dom.redirectionButton.onclick()
+  if (the.redirect && !the.contextIsWidget) {
+    dom.redirectionButton.onclick()
+  }
 
   if (the.authenticator.textarea) readOnlyBox(dom.xdrBox, value)
   if (the.authenticator.qrCode) qrCodeUI.refresh(value)
@@ -304,7 +306,10 @@ redirectionUI.error = function (error) {
 
 redirectionUI.click = async function (value) {
   if (typeof value === "string") {
-    if (env.isEmbedded && the.authenticator.target === "new") {
+    if (
+      the.contextIsWidget
+      || env.isEmbedded && the.authenticator.target === "new"
+    ) {
       open(value, "_blank")
       window.parent.postMessage("close", "*")
     } else if (env.isEmbedded && the.authenticator.target === "external") {
