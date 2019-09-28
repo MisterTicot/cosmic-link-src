@@ -12,8 +12,8 @@ new ServiceWorker(pkg.name, pkg.version, "verbose")
     "index.js",
     "ledger.js",
     "stellar-sdk.js",
-    "trezor.js",
     "vendors~app.js",
+    "vendors~app~trezor.js",
     "vendors~ledger.js",
     "vendors~trezor.js",
 
