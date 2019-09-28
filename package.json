@@ -1,6 +1,6 @@
 {
   "name": "cosmic-link",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "The Cosmic.link website",
   "author": "MisterTicot <mister.ticot@cosmic.plus>",
   "homepage": "https://cosmic.link",
@@ -47,11 +47,11 @@
     "publish-release": "npm run check && npm run tag-release && npm run push-release"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.0",
+    "@babel/core": "^7.6.2",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/plugin-transform-runtime": "^7.6.0",
-    "@babel/preset-env": "^7.6.0",
-    "@babel/runtime": "^7.6.0",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
     "autoprefixer-cli": "^1.0.0",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
@@ -60,17 +60,17 @@
     "live-server-https": "0.0.2",
     "node-sass": "^4.11.0",
     "prettier": "^1.18.2",
-    "webpack": "^4.40.2",
-    "webpack-cli": "^3.3.8"
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9"
   },
   "dependencies": {
     "@cosmic-plus/assets": "^1.0.1",
-    "@cosmic-plus/base": "^2.2.0",
+    "@cosmic-plus/base": "^2.3.0",
     "@cosmic-plus/domutils": "^2.0.4",
     "@cosmic-plus/jsutils": "^2.0.2",
     "@cosmic-plus/ledger-wallet": "^1.1.2",
     "@cosmic-plus/trezor-wallet": "^0.1.0",
-    "cosmic-lib": "^2.1.0",
-    "qrcode": "^1.4.1"
+    "cosmic-lib": "^2.1.1",
+    "qrcode": "^1.4.2"
   }
 }

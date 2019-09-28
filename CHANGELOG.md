@@ -14,6 +14,18 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.4.0 - 2019-09-28
+
+### Added
+
+- UI: Add the Cosmic.link widget. This is a neutral transaction signing
+  interface that is meant to be embedded into other applications. This can be
+  done using `<iframe src="https://cosmic.link/widget.html?{cosmic_query}">`.
+  Applications can host the widget on their domain by forking
+  [https-cosmic-link].
+  [https-cosmic-link](https://git.cosmic.plus/https-cosmic-link)
+- UI: Add Trezor Wallet support (beta).
+
 ## 1.3.0 - 2019-09-14
 
 ### Added
