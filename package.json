@@ -1,6 +1,6 @@
 {
   "name": "cosmic-link",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "The Cosmic.link website",
   "author": "MisterTicot <mister.ticot@cosmic.plus>",
   "homepage": "https://cosmic.link",
@@ -65,7 +65,7 @@
   },
   "dependencies": {
     "@cosmic-plus/assets": "^1.0.1",
-    "@cosmic-plus/base": "^2.3.0",
+    "@cosmic-plus/base": "^2.3.1",
     "@cosmic-plus/domutils": "^2.0.4",
     "@cosmic-plus/jsutils": "^2.0.2",
     "@cosmic-plus/ledger-wallet": "^1.1.2",

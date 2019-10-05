@@ -14,6 +14,13 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.4.2 - 2019-10-05
+
+### Fixed
+
+- UI: Allow TrezorConnect to style its modal box. TrezorConnect displays this
+  box when the browser blocks the connection/signing pop-up.
+
 ## 1.4.1 - 2019-09-30
 
 ### Fixed
