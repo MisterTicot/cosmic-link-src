@@ -14,6 +14,12 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.5.0 - 2019-10-05
+
+### Changed
+
+- Logic: Upgrade [@cosmic-plus/trezor-wallet] to 0.2.x.
+
 ## 1.4.2 - 2019-10-05
 
 ### Fixed
@@ -193,3 +199,4 @@ history](https://github.com/cosmic-plus/webapp-cosmic-link/commits/master).
 [cosmic-lib]: https://github.com/cosmic-plus/node-cosmic-lib/blob/master/CHANGELOG.md
 [stellar-sdk]: https://github.com/stellar/js-stellar-sdk/blob/master/CHANGELOG.md
 [pwa]: https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Introduction
+[@cosmic-plus/trezor-wallet]: https://cosmic.plus/#view:js-trezor-wallet/CHANGELOG
