@@ -1,4 +1,4 @@
-"use_strict"
+"use strict"
 const main = exports
 
 const cosmicLib = require("cosmic-lib")

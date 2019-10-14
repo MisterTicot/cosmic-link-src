@@ -1,4 +1,4 @@
-"use_strict"
+"use strict"
 /**
  * Entry point of Cosmic.Link application. We redirect without showing the
  * interface when possible. Else, we load the GUI.

@@ -1,4 +1,4 @@
-"use_strict"
+"use strict"
 /**
  * Transaction Editing User Interface
  */
