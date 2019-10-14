@@ -33,7 +33,7 @@
     "watch-js": "webpack -d --watch",
     "watch-static": "cp -fl static/*.* web",
     "watch": "npm run watch-static && npm run watch-css & npm run watch-js",
-    "serve": "npm run set-dev && npm run watch & cd web && live-server --https=../node_modules/live-server-https --no-browser",
+    "serve": "npm run set-dev && npm run watch & cd web && live-server --https=../node_modules/live-server-https",
     "commit-web": "cd web && git ci -am \"$message\"",
     "commit-main": "git ci -am \"$message\"",
     "commit-all": "[ \"$version\" ] && npm run commit-web && npm run commit-main",
