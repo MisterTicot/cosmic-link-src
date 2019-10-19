@@ -14,6 +14,12 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.6.0 - 2019-10-19
+
+### Changed
+
+- Logic: Upgrade [@cosmic-plus/trezor-wallet] to 0.3.x. (Better support)
+
 ## 1.5.0 - 2019-10-05
 
 ### Changed

@@ -1,6 +1,6 @@
 {
   "name": "cosmic-link",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "The Cosmic.link website",
   "author": "MisterTicot <mister.ticot@cosmic.plus>",
   "homepage": "https://cosmic.link",
@@ -47,11 +47,11 @@
     "publish-release": "npm run check && npm run tag-release && npm run push-release"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.2",
+    "@babel/core": "^7.6.4",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-transform-runtime": "^7.6.2",
-    "@babel/preset-env": "^7.6.2",
-    "@babel/runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/runtime": "^7.6.3",
     "autoprefixer-cli": "^1.0.0",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
@@ -60,7 +60,7 @@
     "live-server-https": "0.0.2",
     "node-sass": "^4.11.0",
     "prettier": "^1.18.2",
-    "webpack": "^4.41.0",
+    "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9"
   },
   "dependencies": {
