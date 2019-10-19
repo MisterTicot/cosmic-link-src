@@ -69,7 +69,7 @@
     "@cosmic-plus/domutils": "^2.0.4",
     "@cosmic-plus/jsutils": "^2.0.2",
     "@cosmic-plus/ledger-wallet": "^1.1.2",
-    "@cosmic-plus/trezor-wallet": "^0.2.0",
+    "@cosmic-plus/trezor-wallet": "^0.3.0",
     "cosmic-lib": "^2.1.1",
     "qrcode": "^1.4.2"
   }
