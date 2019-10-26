@@ -1,6 +1,6 @@
 {
   "name": "cosmic-link",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "The Cosmic.link website",
   "author": "MisterTicot <mister.ticot@cosmic.plus>",
   "homepage": "https://cosmic.link",
@@ -58,17 +58,17 @@
     "eslint": "^5.16.0",
     "live-server": "^1.2.1",
     "live-server-https": "0.0.2",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.13.0",
     "prettier": "^1.18.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9"
   },
   "dependencies": {
     "@cosmic-plus/assets": "^1.0.1",
-    "@cosmic-plus/base": "^2.3.1",
+    "@cosmic-plus/base": "^2.4.0",
     "@cosmic-plus/domutils": "^2.0.4",
     "@cosmic-plus/jsutils": "^2.0.2",
-    "@cosmic-plus/ledger-wallet": "^1.1.2",
+    "@cosmic-plus/ledger-wallet": "^1.2.0",
     "@cosmic-plus/trezor-wallet": "^0.3.0",
     "cosmic-lib": "^2.2.0",
     "qrcode": "^1.4.2"
