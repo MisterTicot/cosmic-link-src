@@ -25,7 +25,7 @@ the.query = location.search.length > 1 && location.search
 the.authenticator =
   authenticators[localStorage.authenticator]
   || authenticators["Stellar Authenticator"]
-the.redirect = the.contextIsWidget && localStorage.redirect === "true"
+the.redirect = !the.contextIsWidget && localStorage.redirect === "true"
 the.qrCode = localStorage.QR === "true"
 
 // Immediate redirection when possible
