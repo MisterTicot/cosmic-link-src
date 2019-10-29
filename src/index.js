@@ -18,7 +18,7 @@ const the = require("./shared")
 
 // Context awarness
 const pageName = location.pathname.replace(/.*\//, "")
-the.contextIsWidget = pageName === "widget.html" ? true : false
+the.contextIsWidget = !!pageName.match(/^widget(.html)?$/)
 
 // Variables initialization
 the.query = location.search.length > 1 && location.search
