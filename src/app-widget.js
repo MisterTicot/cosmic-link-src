@@ -2,14 +2,29 @@
 /**
  * Widget interface initialization.
  */
+const html = require("@cosmic-plus/domutils/es5/html")
+const load = require("@cosmic-plus/domutils/es5/load")
+
 const authenticators = require("./authenticators")
 const the = require("./shared")
 
 /* Functions */
 
 async function initWidget () {
+  const referrer = document.referrer.split("/", 3).join("/")
   const hash = location.hash
   const params = parseQuery(hash)
+
+  // Strengthen Content-Security-Policy.
+  const csp = html.grab("meta[http-equiv='Content-Security-Policy']")
+  csp.content = csp.content.replace(
+    "style-src *  ;",
+    `
+    style-src 'self'
+      'sha256-UpnKee22eAiBMULu1lvaV7de7xOzTjdN7K/WZDBil10='
+      ${referrer};
+  `
+  )
 
   // Interface control.
   if (params.handler) {
@@ -18,13 +33,21 @@ async function initWidget () {
       the.authenticator = handler
     } else {
       console.error(`Unknown handler: ${params.handler}`)
-      // eslint-disable-next-line no-console
-      console.log("Valid handlers: ", Object.keys(authenticators.byId))
     }
   }
   if (params.qrcode) {
     the.qrCode = params.qrcode !== "false"
   }
+  // eslint-disable-next-line no-console
+  console.log("Valid handlers: ", Object.keys(authenticators.byId))
+
+  // Style control.
+  if (params.css) {
+    await load.css(`${referrer}/${params.css}`).catch(console.error)
+  } else {
+    await load.css("widget.css").catch(console.error)
+  }
+  html.show(document.body)
 
   // Interface initialization.
   require("./app-interface")

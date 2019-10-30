@@ -8,9 +8,7 @@
     form-action 'none';
     default-src 'none';
     script-src 'self';
-    style-src 'self'
-      'sha256-UpnKee22eAiBMULu1lvaV7de7xOzTjdN7K/WZDBil10='
-    ;
+    style-src 'unsafe-inline' *;
     frame-src https://connect.trezor.io;
     img-src 'self' https://robohash.org;
     manifest-src 'self';
@@ -39,10 +37,9 @@
   <link rel="mask-icon" href="icons/safari.svg" color="#5bbad5">
 
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" type="text/css" href="widget.css">
 </head>
 
-<body>
+<body hidden>
 
   <main>
     <section id="sign">
@@ -84,8 +81,7 @@
 
       <form id="redirectionForm">
         <input id="redirectionButton" type="button" value="…" disabled>
-        <input id="redirectionCheckbox" type="checkbox">
-        <label for="redirectionCheckbox">Automatic redirection</label>
+        <input id="redirectionCheckbox" type="checkbox" hidden>
         <div id="redirectionMsgbox"></div>
       </form>
 

@@ -13,7 +13,7 @@ if [ "$1" = "-d" ]; then
       -e "s/style-src 'self'/style-src 'unsafe-inline' 'self'/" \
       -i "static/index.html" "static/widget.html"
 elif [ "$1" = "-p" ]; then
-  sed -e "s/ 'unsafe-inline'//g" -e "s/ 'unsafe-eval'//g" \
+  sed -e "s/ 'unsafe-eval'//g" -e "s/'unsafe-inline' 'self'/'self'/g" \
       -i "static/index.html" "static/widget.html"
 else
   echo "Usage: $(basename $0) [-p|-d]" >&2
