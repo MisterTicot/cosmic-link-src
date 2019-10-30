@@ -46,6 +46,9 @@ async function initWidget () {
     await load.css(`${referrer}/${params.css}`).catch(console.error)
   } else {
     await load.css("widget.css").catch(console.error)
+    if (params["css+"]) {
+      await load.css(`${referrer}/${params["css+"]}`).catch(console.error)
+    }
   }
   html.show(document.body)
 
