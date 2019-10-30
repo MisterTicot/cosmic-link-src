@@ -2,4 +2,10 @@
 /**
  * Cosmic.Link Graphical User Interface
  */
-require("./app-interface")
+const the = require("./shared")
+
+if (the.contextIsWidget) {
+  require("./app-widget")
+} else {
+  require("./app-interface")
+}
