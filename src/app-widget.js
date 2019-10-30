@@ -2,6 +2,7 @@
 /**
  * Widget interface initialization.
  */
+const authenticators = require("./authenticators")
 const the = require("./shared")
 
 /* Functions */
@@ -11,6 +12,16 @@ async function initWidget () {
   const params = parseQuery(hash)
 
   // Interface control.
+  if (params.handler) {
+    const handler = authenticators.byId[params.handler]
+    if (handler) {
+      the.authenticator = handler
+    } else {
+      console.error(`Unknown handler: ${params.handler}`)
+      // eslint-disable-next-line no-console
+      console.log("Valid handlers: ", Object.keys(authenticators.byId))
+    }
+  }
   if (params.qrcode) {
     the.qrCode = params.qrcode !== "false"
   }

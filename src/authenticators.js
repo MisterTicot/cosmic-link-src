@@ -7,6 +7,7 @@ const protocols = require("./protocols")
 
 authenticators.array = []
 authenticators.nodes = []
+authenticators.byId = {}
 
 class Authenticator {
   constructor (wallet) {
@@ -30,4 +31,5 @@ for (let entry in wallets) {
   exports.array.push(authenticator)
   exports.nodes.push(authenticator.node)
   exports[authenticator.name] = authenticator
+  exports.byId[entry] = authenticator
 }
