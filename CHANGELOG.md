@@ -14,6 +14,49 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.8.0 - 2019-11-02
+
+### Added
+
+_Note:_ The following options can be combined tother like normal query
+parameters. For example:
+<https://cosmic.link/widget?setOptions#qrcode=true&handler=Sep7Wallet>.
+
+- API: Add widget option `#qrcode=true|false`. This option accepts a _Boolean_.
+  It controls the QRCode div display. When missing, the user last choice apply.
+
+  Example: <https://cosmic.link/widget?setOptions#qrcode=true>
+
+- API: Add widget option `#handler={handler}`. This option accepts a transaction
+  handler name. It controls the default signing method. When missing, the user
+  last choice is applied.
+
+  <https://cosmic.link/widget> displays the list of valid handlers in the dev
+  console.
+
+  At this time, valid handlers are: `StellarAuthenticator`, `LedgerWallet`,
+  `TrezorWallet`, `Sep7Wallet`, `StellarLaboratory` and `CopyPasteXdr`.
+
+  Example: <https://cosmic.link/widget?setOptions#handler=LedgerWallet>
+
+- API: Add widget option `#css={path}`. This option accepts a CSS file that is
+  hosted on the widget parent. In other words, the file must lives at
+  `${parent.domain}/${path}`. This CSS file is then used **instead** of the
+  default [widget.css].
+
+- API: Add widget option `#css+={path}`. This option accepts a CSS file that is
+  hosted on the widget parent. In other words, the file must lives at
+  `${parent.domain}/${path}`. This CSS file is then used **on top** of the
+  default [widget.css].
+
+### Fixed
+
+- API: Fix support of <https://cosmic.link/widget>.
+  <https://cosmic.link/widget.html> was working correctly, but the shorten URL
+  wasn't.
+
+- UI: Fix widget styles. (center the interface; use transparent background)
+
 ## 1.7.1 - 2019-10-28
 
 ### Fixed
@@ -219,4 +262,5 @@ history](https://github.com/cosmic-plus/webapp-cosmic-link/commits/master).
 [cosmic-lib]: https://github.com/cosmic-plus/node-cosmic-lib/blob/master/CHANGELOG.md
 [stellar-sdk]: https://github.com/stellar/js-stellar-sdk/blob/master/CHANGELOG.md
 [pwa]: https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Introduction
+[widget.css]: https://github.com/cosmic-plus/https-cosmic-link/blob/master/widget.css
 [@cosmic-plus/trezor-wallet]: https://cosmic.plus/#view:js-trezor-wallet/CHANGELOG
