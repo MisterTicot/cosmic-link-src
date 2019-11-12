@@ -6,6 +6,7 @@
   top: 0;
   max-height: 50%;
   max-width: 40%;
+
   opacity: 0.7;
   filter: grayscale(30%);
   transform: translate(-20%, -20%);
@@ -14,8 +15,8 @@
 #cosmiclink_description
 {
   display: inline-block;
-  vertical-align: baseline;
   margin-top: 0.5em;
+  vertical-align: baseline;
 }
 
 #networkSelector {
@@ -34,10 +35,12 @@
 {
   position: absolute;
   right: 0;
-  transform: translate(-0.1em, 0.3em);
   width: 4em;
+  transform: translate(-0.1em, 0.3em);
+
   background-color: ghostwhite;
   background-color: rgba(248, 248, 255, 0.8);
+
   padding: 0.05em 0.5em;
   font-weight: bold;
   color: mediumseagreen;
@@ -56,6 +59,7 @@
     width: 3em;
     height: 3em;
     margin: 1em auto;
+
     border-width: 0.75em;
   }
 
@@ -68,6 +72,7 @@
 #registerSep7Handler {
   display: block;
   margin: 1em auto;
+
   text-align: center;
   font-style: italic;
 }
@@ -75,11 +80,12 @@
 #tamper
 {
   position: fixed;
-  pointer-events: none;
   max-height: 50%;
   max-width: 40%;
   bottom: 0;
   right: 0;
+
+  pointer-events: none;
   opacity: 0.3;
   filter: grayscale(50%);
 }

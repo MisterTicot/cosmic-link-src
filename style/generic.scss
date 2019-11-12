@@ -10,17 +10,18 @@ h2
 h3
 {
   margin: 0;
+
   padding: 0.2em 0 0.2em 0;
   font-weight: bolder;
   font-size: 0.8em;
-  text-transform: uppercase;
   font-stretch: condensed;
+  text-transform: uppercase;
 }
 
 hr
 {
-  border: 0;
   height: 2px;
+  border: 0;
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0), $lightgray, rgba(0, 0, 0, 0));
 }
 
@@ -28,12 +29,13 @@ a
 {
   text-decoration: none;
   color: $gray;
+
   transition: 0.2s all ease;
 
   &:hover:not(.selected)
   {
-    color: burlywood;
     cursor: pointer;
+    color: burlywood;
   }
 }
 

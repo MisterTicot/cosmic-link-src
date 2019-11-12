@@ -22,6 +22,7 @@ html {
 body
 {
   background-color: aliceblue;
+
   font-family: Arial, sans-serif;
   color: $black;
 }
@@ -31,7 +32,8 @@ main
   border: 3px solid $lightgray;
   border-radius: 1em;
   box-shadow: 0.1em 0.1em 0.3em $shadow;
+
   padding: 0 0.5em;
-  overflow: hidden;
   background-color: $white;
+  overflow: hidden;
 }

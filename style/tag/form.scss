@@ -24,6 +24,7 @@ form
   position: relative;
   max-width: 30em;
   margin: 0.75em auto;
+  
   text-align: center;
 }
 
@@ -34,15 +35,16 @@ input,
 label
 {
   display: inline-block;
-  box-sizing: border-box;
   width: 100%;
   max-width: 30em;
   margin: 0.2em 0;
-  padding: 0.2em;
+
   border: solid 2px $border;
   border-radius: 0.2em;
-  overflow: hidden;
   background-color: $bg-inset;
+
+  padding: 0.2em;
+  overflow: hidden;
 
   transition: all 0.2s ease;
 }
@@ -88,8 +90,8 @@ select:hover
 [type="submit"]:hover:enabled,
 [type="button"].enabled
 {
-  background-color: $bg-hover;
   cursor: pointer;
+  background-color: $bg-hover;
 }
 
 [type="checkbox"],
@@ -102,8 +104,10 @@ select:hover
 [type="radio"] + label
 {
   margin: 0.1em 0;
+
   border: none;
   background-color: $white;
+
   padding: 0.1em;
   font-style: italic;
   color: $disabled;
@@ -119,16 +123,18 @@ select:hover
 [type="radio"]:checked:disabled + label
 {
   box-shadow: inset 0 0 3px 1px $disabled;
-  color: black;
+
   font-style: normal;
+  color: black;
 }
 
 [type="checkbox"]:checked:enabled + label,
 [type="radio"]:checked:enabled + label
 {
   background-color: $bg-info;
-  color: black;
+
   font-style: normal;
+  color: black;
 }
 
 [type="checkbox"]:checked + label::before,
@@ -140,7 +146,8 @@ select:hover
 [type="checkbox"]:enabled + label:hover,
 [type="radio"]:enabled + label:hover
 {
-  background-color: $fg-info;
-  color: black;
   cursor: pointer;
+  background-color: $fg-info;
+
+  color: black;
 }
