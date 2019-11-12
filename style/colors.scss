@@ -1,14 +1,33 @@
-/* Classes styling */
+/* Colors Theme */
+
+$white: #ffffff;
+$lightgray: lightgray;
+$gray: darkgray;
+$darkgray: dimgray;
+$black: #292929;
+
+$shadow: $gray;
+
+$bg-dark: #001738;
+$fg-dark: #b7c0d1;
+
+$bg-light: #f6f9ff;
+$fg-light: #607492;
+
+$bg-info: lightgreen;
+$fg-info: mediumseagreen;
+$bg-error: salmon;
+$fg-error: tomato;
 
 .error
 {
   font-weight: bold;
-  color: tomato;
+  color: $fg-error;
 }
 
 .info
 {
   font-weight: bold;
-  color: mediumseagreen;
+  color: $fg-info;
 }
 

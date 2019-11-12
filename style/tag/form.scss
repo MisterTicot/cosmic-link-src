@@ -1,5 +1,23 @@
 /* Form styling */
 
+/* Configuration */
+
+// Backgrounds
+$bg-inset: ghostwhite;
+$bg-outset: #f0f0f0;
+$bg-hover: $lightgray;
+
+// Borders
+$border: $lightgray;
+$hover: #909090;
+$focus: lightsteelblue;
+
+// States
+$disabled: $darkgray;
+$readonly: $darkgray;
+
+/* Styles */
+
 form
 {
   clear: both;
@@ -21,10 +39,10 @@ label
   max-width: 30em;
   margin: 0.2em 0;
   padding: 0.2em;
-  border: solid 2px lightgrey;
+  border: solid 2px $border;
   border-radius: 0.2em;
   overflow: hidden;
-  background-color: ghostwhite;
+  background-color: $bg-inset;
 
   transition: all 0.2s ease;
 }
@@ -32,7 +50,7 @@ label
 textarea[readonly],
 input[readonly]
 {
-  color: #505050;
+  color: $readonly;
 }
 
 textarea:hover:enabled,
@@ -40,7 +58,7 @@ select:hover:enabled,
 button:hover:enabled,
 input:hover:enabled
 {
-  border: solid 2px #909090;
+  border: solid 2px $hover;
 }
 
 textarea:focus:enabled,
@@ -49,7 +67,7 @@ button:focus:enabled,
 input:focus:enabled
 {
   outline: 0;
-  box-shadow: 0 0 0px 2px lightsteelblue;
+  box-shadow: 0 0 0px 2px $focus;
 }
 
 textarea[readonly]:hover,
@@ -62,7 +80,7 @@ select:hover
 [type="button"],
 [type="submit"]
 {
-  background-color: #f0f0f0;
+  background-color: $bg-outset;
 }
 
 
@@ -70,7 +88,7 @@ select:hover
 [type="submit"]:hover:enabled,
 [type="button"].enabled
 {
-  background-color: lightgrey;
+  background-color: $bg-hover;
   cursor: pointer;
 }
 
@@ -85,10 +103,10 @@ select:hover
 {
   margin: 0.1em 0;
   border: none;
-  background-color: white;
+  background-color: $white;
   padding: 0.1em;
   font-style: italic;
-  color: dimgrey;
+  color: $disabled;
 }
 
 [type="checkbox"] + label::before,
@@ -100,7 +118,7 @@ select:hover
 [type="checkbox"]:checked:disabled + label,
 [type="radio"]:checked:disabled + label
 {
-  box-shadow: inset 0 0 3px 1px darkgrey;
+  box-shadow: inset 0 0 3px 1px $disabled;
   color: black;
   font-style: normal;
 }
@@ -108,7 +126,7 @@ select:hover
 [type="checkbox"]:checked:enabled + label,
 [type="radio"]:checked:enabled + label
 {
-  background-color: lightgreen;
+  background-color: $bg-info;
   color: black;
   font-style: normal;
 }
@@ -122,7 +140,7 @@ select:hover
 [type="checkbox"]:enabled + label:hover,
 [type="radio"]:enabled + label:hover
 {
-  background-color: mediumseagreen;
+  background-color: $fg-info;
   color: black;
   cursor: pointer;
 }

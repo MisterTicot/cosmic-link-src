@@ -21,13 +21,13 @@ hr
 {
   border: 0;
   height: 2px;
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), lightgrey, rgba(0, 0, 0, 0));
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), $lightgray, rgba(0, 0, 0, 0));
 }
 
 a
 {
   text-decoration: none;
-  color: grey;
+  color: $gray;
   transition: 0.2s all ease;
 
   &:hover:not(.selected)

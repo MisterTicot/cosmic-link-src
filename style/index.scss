@@ -2,6 +2,7 @@
 @import "../node_modules/cosmic-lib/web/cosmic-lib";
 
 @import "./colors";
+
 @import "./layout";
 @import "./generic";
 
@@ -22,14 +23,15 @@ body
 {
   background-color: aliceblue;
   font-family: Arial, sans-serif;
+  color: $black;
 }
 
 main
 {
-  border: 3px solid lightgrey;
+  border: 3px solid $lightgray;
   border-radius: 1em;
-  box-shadow: 0.1em 0.1em 0.3em darkgrey;
+  box-shadow: 0.1em 0.1em 0.3em $shadow;
   padding: 0 0.5em;
   overflow: hidden;
-  background-color: white;
+  background-color: $white;
 }
