@@ -13,6 +13,8 @@
 body
 {
   font-family: Arial, sans-serif;
+  color: $black;
+  line-height: 1.4em;
 }
 
 main
@@ -22,11 +24,4 @@ main
 
   padding: 0.5em;
   overflow: hidden;
-}
-
-/* Overwrites */
- 
-hr {
-  height: 1.25em;
-  background: none;
 }

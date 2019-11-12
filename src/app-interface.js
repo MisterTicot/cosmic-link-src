@@ -47,14 +47,17 @@ function initNonWidgetInterface () {
 
   // SEP-0007
   if (cosmicLib.sep7Utils.isWebHandlerSupported()) {
-    html.show(dom.registerSep7Handler)
     dom.registerSep7Handler.onclick = () => {
       cosmicLib.sep7Utils.registerWebHandler(
         location.href.split(/[?#]/, 1)[0],
         "Cosmic.link"
       )
     }
+  } else {
+    // (hack) Keep the collapsed bottom margin.
+    dom.registerSep7Handler.textContent = ""
   }
+  html.show(dom.registerSep7Handler)
 
   // Robot tamper
   require("./tamper")

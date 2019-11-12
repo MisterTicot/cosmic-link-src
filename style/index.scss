@@ -1,6 +1,8 @@
 @import "../node_modules/@cosmic-plus/assets/scss/base";
 @import "../node_modules/cosmic-lib/web/cosmic-lib";
 
+
+@import "./fonts";
 @import "./colors";
 
 @import "./layout";
@@ -15,6 +17,11 @@
 
 /* Layout style */
 
+::selection {
+  background-color: $fg-light;
+  color: $white;
+}
+
 html {
   overflow-y: scroll;
 }
@@ -23,17 +30,23 @@ body
 {
   background-color: aliceblue;
 
-  font-family: Arial, sans-serif;
+  padding: 0 2%;
+  font-family: "Rubik", Arial, sans-serif;
   color: $black;
+  line-height: 1.4em;
 }
 
 main
 {
-  border: 3px solid $lightgray;
   border-radius: 1em;
-  box-shadow: 0.1em 0.1em 0.3em $shadow;
-
-  padding: 0 0.5em;
+  box-shadow:  0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14);
   background-color: $white;
+
+  padding: 0 7%;
   overflow: hidden;
+}
+
+// Full interface only 
+h3 {
+  font-family: "Cousine", Arial, sans-serif;
 }

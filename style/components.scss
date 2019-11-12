@@ -4,18 +4,14 @@
   z-index: -1;
   position: absolute;
   top: 0;
-  max-height: 50%;
-  max-width: 40%;
+  width: 40vw;
 
   opacity: 0.7;
-  filter: grayscale(30%);
+  filter: grayscale(15%);
   transform: translate(-20%, -20%);
 }
 
-#cosmiclink_description
-{
-  display: inline-block;
-  margin-top: 0.5em;
+#cosmiclink_description {
   vertical-align: baseline;
 }
 
@@ -31,24 +27,30 @@
   }
 }
 
-#copied
-{
+#accountMsgbox,
+#redirectionMsgbox {
+  margin: 0.7em 0;
+}
+
+#copied {
   position: absolute;
   right: 0;
-  width: 4em;
-  transform: translate(-0.1em, 0.3em);
+  width: 4.5em;
+  transform: translate(-0.1em,0.45em);
+  line-height: 1.8em;
 
-  background-color: ghostwhite;
-  background-color: rgba(248, 248, 255, 0.8);
+  background: ghostwhite;
+  background: rgba(248, 248, 255, 0.8);
 
-  padding: 0.05em 0.5em;
   font-weight: bold;
   color: mediumseagreen;
+
+  // (hack) fix textarea moving because of margin collapse shortcut.
+  + textarea { margin-top: 0; }
 }
 
 
-#qrCode
-{
+#qrCode {
   background-color: ghostwhite;
 
   input {
@@ -70,15 +72,14 @@
 }
 
 #registerSep7Handler {
-  display: block;
-  margin: 1em auto;
+  display: table;
+  margin: 1.4em auto;
 
   text-align: center;
   font-style: italic;
 }
 
-#tamper
-{
+#tamper {
   position: fixed;
   max-height: 50%;
   max-width: 40%;
@@ -89,4 +90,3 @@
   opacity: 0.3;
   filter: grayscale(50%);
 }
-

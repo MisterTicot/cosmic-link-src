@@ -3,14 +3,14 @@
 nav
 {
   display: table;
-  margin: auto;
-  padding: 0.5em 1em 0 1em;
-  font-size: 1.1em;
+  margin: 1.4rem auto;
+  font-size: 1.1rem;
 
   a
   {
     display: inline-block;
-    margin: 0 1.5em;
+    margin: 0 1.4rem;
+
     &.selected { text-decoration: underline; }
   }
 }

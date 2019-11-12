@@ -1,6 +1,6 @@
-/* Form styling */
+/* Forms styling */
 
-/* Configuration */
+// Configuration //
 
 // Backgrounds
 $bg-inset: ghostwhite;
@@ -16,138 +16,119 @@ $focus: lightsteelblue;
 $disabled: $darkgray;
 $readonly: $darkgray;
 
-/* Styles */
+// Styles //
 
-form
-{
+form {
   clear: both;
   position: relative;
   max-width: 30em;
-  margin: 0.75em auto;
+  margin: 1.05em auto;
   
   text-align: center;
+
+  & > :first-child { margin-top: 0!important; }
+  & > :last-child { margin-bottom: 0!important; }
+}
+
+// Cross-browser select //
+$select-arrow: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50" fill="%23292929"><polygon points="0,0 60,0 30,50"/></svg>';
+select {
+  appearance: none;
+  background: url($select-arrow) right/1em no-repeat;
 }
 
 textarea,
 select,
-button,
 input,
-label
-{
+label {
   display: inline-block;
   width: 100%;
+  height: 2em;
+  line-height: 2em;
   max-width: 30em;
-  margin: 0.2em 0;
+  margin: 0.35em 0;
 
-  border: solid 2px $border;
-  border-radius: 0.2em;
+  border: solid thin $border;
+  border-radius: 0.1em;
+  outline: 0;
   background-color: $bg-inset;
 
-  padding: 0.2em;
+  padding: 0 0.5em;
   overflow: hidden;
 
   transition: all 0.2s ease;
 }
 
-textarea[readonly],
-input[readonly]
-{
-  color: $readonly;
+textarea {
+  height: unset;
+  line-height: 1.4em;
+  padding: 0.5em;
+  resize: none;
 }
 
-textarea:hover:enabled,
-select:hover:enabled,
-button:hover:enabled,
-input:hover:enabled
-{
-  border: solid 2px $hover;
+// Input elements //
+textarea,
+select,
+input {
+  &[readonly] {
+    color: $readonly;
+  }
+
+  &:hover:enabled {
+    cursor: pointer;
+    border: solid thin $hover;
+  }
+
+  &:focus:enabled {
+    // box-shadow: 0 0 0px 2px $focus;
+  }
 }
 
-textarea:focus:enabled,
-select:focus:enabled,
-button:focus:enabled,
-input:focus:enabled
-{
-  outline: 0;
-  box-shadow: 0 0 0px 2px $focus;
-}
-
-textarea[readonly]:hover,
-[type="text"][readonly]:hover,
-select:hover
-{
-  cursor: pointer;
-}
-
+// Outset elements //
 [type="button"],
-[type="submit"]
-{
-  background-color: $bg-outset;
+[type="submit"] {
+  background: $bg-outset;
+
+  &:hover:enabled, &.enabled {
+    cursor: pointer;
+    background: $bg-hover;
+  }
 }
 
-
-[type="button"]:hover:enabled,
-[type="submit"]:hover:enabled,
-[type="button"].enabled
-{
-  cursor: pointer;
-  background-color: $bg-hover;
-}
-
+// Checkable elements //
 [type="checkbox"],
-[type="radio"]
-{
+[type="radio"] {
   display: none;
-}
 
-[type="checkbox"] + label,
-[type="radio"] + label
-{
-  margin: 0.1em 0;
+  // Label styling //
+  & + label::before { content: "✘ "; }
+  &:checked + label::before { content: "✔ "; }
 
-  border: none;
-  background-color: $white;
+  & + label {
+    line-height: 2em;
+    border: none;
+    background: $white;
+  }
 
-  padding: 0.1em;
-  font-style: italic;
-  color: $disabled;
-}
+  &:enabled + label:hover {
+    cursor: pointer;
+    background: $fg-info;
+    font-style: normal;
+    color: $black;
+  }
 
-[type="checkbox"] + label::before,
-[type="radio"] + label::before
-{
-  content: "✘ ";
-}
+  &:disabled + label,
+  &:not(:checked) + label {
+    font-style: italic;
+    color: $disabled;
+  }
 
-[type="checkbox"]:checked:disabled + label,
-[type="radio"]:checked:disabled + label
-{
-  box-shadow: inset 0 0 3px 1px $disabled;
+  &:checked:enabled + label {
+    background: $bg-info;
+  }
 
-  font-style: normal;
-  color: black;
-}
-
-[type="checkbox"]:checked:enabled + label,
-[type="radio"]:checked:enabled + label
-{
-  background-color: $bg-info;
-
-  font-style: normal;
-  color: black;
-}
-
-[type="checkbox"]:checked + label::before,
-[type="radio"]:checked + label::before
-{
-  content: "✔ ";
-}
-
-[type="checkbox"]:enabled + label:hover,
-[type="radio"]:enabled + label:hover
-{
-  cursor: pointer;
-  background-color: $fg-info;
-
-  color: black;
+  &:checked:disabled + label {
+    box-shadow: inset 0 0 3px 1px $disabled;
+    color: $black;
+  }
 }
