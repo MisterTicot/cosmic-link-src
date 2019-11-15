@@ -14,6 +14,19 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.9.0 - 2019-11-15
+
+### Changed
+
+- Style: Upgrade graphic design.
+
+### Fixed
+
+- API: Update [cosmic-lib] to 2.2.1.
+- Meta: Add missing file to installation bundle. The recently
+  `vendors~app~ledger.js` was not part of cache-installed files.
+- Meta: Remove unused CSP from `widget.html`.
+
 ## 1.8.1 - 2019-11-09
 
 ### Fixed
