@@ -43,7 +43,7 @@ function initNonWidgetInterface () {
   dom.header.onclick = () => copyContent(dom.header)
 
   // About page
-  Page.add("Help", dom.help)
+  Page.add("About", dom.about)
 
   // SEP-0007
   if (cosmicLib.sep7Utils.isWebHandlerSupported()) {

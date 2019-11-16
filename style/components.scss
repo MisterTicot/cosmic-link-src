@@ -1,5 +1,32 @@
 /* Individual elements styling */
 
+#about {
+  h3 {
+    margin-top: 4.2rem;
+  }
+
+  pre {
+    background: $bg-light;
+    color: $fg-light;
+    padding: 0 1.4em;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0 2.4em;
+
+    li {
+      margin: 0.7em 0;
+
+      &::before {
+        content: "− ";
+        position: absolute;
+        margin-left: -1em;
+      }
+    }
+  }
+}
+
 #logo {
   z-index: -1;
   position: absolute;
