@@ -22,14 +22,14 @@ function initInterface () {
   }
   signingUI.init()
 
-  // Default page
-  if (Page.current === signingPage) signingPage.onSelect()
-  else if (!Page.current) Page.select("#sign")
-
   // Non-widget components
   if (!the.contextIsWidget) {
     initNonWidgetInterface()
   }
+
+  // Default page
+  if (Page.current === signingPage) signingPage.onSelect()
+  else if (!Page.current) Page.select("#sign")
 }
 
 function initNonWidgetInterface () {
