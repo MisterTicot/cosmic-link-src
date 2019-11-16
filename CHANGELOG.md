@@ -14,6 +14,16 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.10.0 - 2019-11-16
+
+### Changed
+
+- UI: Rewrite the "About" tab.
+
+### Fixed
+
+- Logic: Fix the direct link toward the help tab.
+
 ## 1.9.0 - 2019-11-15
 
 ### Changed
