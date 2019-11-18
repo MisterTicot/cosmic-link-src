@@ -18,6 +18,10 @@ new ServiceWorker(pkg.name, pkg.version, "verbose")
     "vendors~ledger.js",
     "vendors~trezor.js",
 
+    // Fonts
+    "fonts/rubik.ttf",
+    "fonts/cousine.ttf",
+
     // Vendor configuration
     "browserconfig.xml",
     "manifest.json",
