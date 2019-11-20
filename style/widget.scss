@@ -10,18 +10,24 @@
 
 /* Layout style */
 
-body
-{
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  min-height: 100%;
+
   font-family: Arial, sans-serif;
   color: $black;
   line-height: 1.4em;
 }
 
-main
-{
+main {
+  width: 100%;
   max-width: 40em;
   margin: auto;
 
   padding: 0.5em;
-  overflow: hidden;
+  overflow-x: hidden;
 }
