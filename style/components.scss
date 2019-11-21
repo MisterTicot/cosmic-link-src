@@ -93,8 +93,13 @@
   }
 
   canvas {
+    min-width: 50%;
+    max-width: 100%;
+    height: auto!important;
     margin: auto;
-    padding: 0.3em;
+
+    padding: 1em;
+    image-rendering: pixelated;
   }
 }
 
