@@ -359,7 +359,10 @@ qrCodeUI.loadingAnim = function () {
   html.rewrite(dom.qrCode, html.create("canvas", ".cosmiclib_loadingAnim"))
 }
 
-qrCodeUI.refresh = function (value) {
+qrCodeUI.refresh = async function (value) {
+  // Makes that fuction non-blocking.
+  await timeout(0)
+
   if (!the.authenticator.qrCode || !value) return
 
   const canvas = html.create("canvas")
