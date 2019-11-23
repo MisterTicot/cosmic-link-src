@@ -41,16 +41,19 @@ async function initWidget () {
   // eslint-disable-next-line no-console
   console.log("Valid handlers: ", Object.keys(authenticators.byId))
 
-  // Style control.
+  // Style control (asynchronous).
+  let loading = []
   if (params.css) {
-    await load.css(`${referrer}/${params.css}`).catch(console.error)
+    loading.push(load.css(`${referrer}/${params.css}`).catch(console.error))
   } else {
-    await load.css("widget.css").catch(console.error)
+    loading.push(load.css("widget.css").catch(console.error))
     if (params["css+"]) {
-      await load.css(`${referrer}/${params["css+"]}`).catch(console.error)
+      loading.push(
+        load.css(`${referrer}/${params["css+"]}`).catch(console.error)
+      )
     }
   }
-  html.show(document.body)
+  Promise.all(loading).then(() => html.show(document.body))
 
   // Interface initialization.
   require("./app-interface")

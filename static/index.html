@@ -18,7 +18,15 @@
     connect-src *;
   ">
 
+  <!-- Possible immediate redirection (blocking on purpose) -->
   <script src="index.js"></script>
+
+  <script src="stellar-sdk.js" defer></script>
+  <link rel="preload" href="index.css" as="style">
+  <link rel="preload" href="fonts/cousine.woff2" as="font" type="font/woff2"
+        crossorigin>
+  <link rel="preload" href="fonts/rubik.woff2" as="font" type="font/woff2"
+        crossorigin>
 
   <title>Cosmic.Link ~ Stellar transactions over URL</title>
   <meta property="og:title"
@@ -283,6 +291,5 @@ ${handler}${tx_request}
     </a>
   </footer>
 
-  <script src="stellar-sdk.js"></script>
 </body>
 </html>
