@@ -24,8 +24,10 @@ new ServiceWorker(pkg.name, pkg.version, "verbose")
     "widget.html",
 
     // Fonts
-    "fonts/rubik.ttf",
-    "fonts/cousine.ttf",
+    "fonts/rubik.woff",
+    "fonts/rubik.woff2",
+    "fonts/cousine.woff",
+    "fonts/cousine.woff2",
 
     // Vendor configuration
     "browserconfig.xml",
