@@ -14,6 +14,27 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.11.0 - 2019-11-23
+
+### Added
+
+- Logic: Add asynchronous loading of style resources. This speeds up page
+  display.
+- UI: Add dynamic QR code scaling.
+
+### Changed
+
+- Logic: Make QR code generation asynchronous. This speeds up page loading.
+- UI: Vertically center Cosmic.link main UI.
+- UI: Vertically center `widget.html`.
+
+### Fixed
+
+- Logic: Prevent loading of unused resources. Some GUI-related resources were
+  loaded even when immediately redirecting to wallet.
+- Logic: Install `widget` into browser cache.
+- UI: Use compressed fonts. This speeds-up text display.
+
 ## 1.10.1 - 2019-11-18
 
 ### Fixed
