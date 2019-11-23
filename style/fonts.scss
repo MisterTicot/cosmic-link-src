@@ -1,11 +1,15 @@
 // Fonts
 
-@font-face {
-  font-family: "Rubik";
-  src: url("./fonts/rubik.ttf")
+@font-face { //v9
+  font-family: 'Rubik';
+  src: local('Rubik'), local('Rubik-Regular'),
+       url('./fonts/rubik.woff2') format('woff2'),
+       url('./fonts/rubik.woff') format('woff');
 }
 
-@font-face {
-  font-family: "Cousine";
-  src: url("./fonts/cousine.ttf")
+@font-face { //v14
+  font-family: 'Cousine';
+  src: local('Cousine Regular'), local('Cousine-Regular'),
+       url('./fonts/cousine.woff2') format('woff2'),
+       url('./fonts/cousine.woff') format('woff');
 }
