@@ -78,7 +78,9 @@
 
 
 #qrForm {
-  background-color: ghostwhite;
+  > div {
+    background-color: ghostwhite;
+  }
 
   input {
     margin-bottom: 0;
