@@ -14,6 +14,16 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.12.0 - 2019-11-26
+
+### Changed
+
+- Logic: Update [@cosmic-plus/ledger-wallet] to 1.5.0. (bugfixes)
+
+### Fixed
+
+- Logic: Widget doesn't need to preload fonts.
+
 ## 1.11.2 - 2019-11-23
 
 ### Fixed
@@ -331,4 +341,5 @@ history](https://github.com/cosmic-plus/webapp-cosmic-link/commits/master).
 [stellar-sdk]: https://github.com/stellar/js-stellar-sdk/blob/master/CHANGELOG.md
 [pwa]: https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Introduction
 [widget.css]: https://github.com/cosmic-plus/https-cosmic-link/blob/master/widget.css
+[@cosmic-plus/ledger-wallet]: https://cosmic.plus/#view:js-ledger-wallet/CHANGELOG
 [@cosmic-plus/trezor-wallet]: https://cosmic.plus/#view:js-trezor-wallet/CHANGELOG
