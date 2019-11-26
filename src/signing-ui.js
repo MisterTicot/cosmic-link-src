@@ -9,6 +9,8 @@ const html = require("@cosmic-plus/domutils/es5/html")
 const QrCode = require("qrcode")
 const { timeout } = require("@cosmic-plus/jsutils/es5/misc")
 
+const TxResultView = require("./view/tx-result-view")
+
 const authenticators = require("./authenticators")
 const the = require("./shared")
 
@@ -339,9 +341,14 @@ redirectionUI.sendTransaction = async function () {
   dom.query.textContent = the.cosmicLink.query
   networkUI.lock()
 
-  await the.cosmicLink.send()
-  redirectionUI.display("info", "Transaction validated")
-  if (env.isEmbedded) parent.postMessage("close", "*")
+  window.scrollTo(0, document.body.scrollHeight)
+  const response = await the.cosmicLink.send().catch(error => error)
+  const result = TxResultView.fromResponse(response)
+  redirectionUI.display("", result)
+
+  if (result.validated && env.isEmbedded) {
+    parent.postMessage("close", "*")
+  }
   if (document.referrer) {
     enableButton(dom.redirectionButton, "Close", () => history.back())
   } else {
