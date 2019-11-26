@@ -304,26 +304,26 @@ redirectionUI.error = function (error) {
   html.clear(dom.qrCode)
 }
 
-redirectionUI.click = async function (value) {
-  if (typeof value === "string") {
+redirectionUI.click = async function (action) {
+  if (typeof action === "string") {
     if (
       the.contextIsWidget
       || env.isEmbedded && the.authenticator.target === "new"
     ) {
-      open(value, "_blank")
+      open(action, "_blank")
       window.parent.postMessage("close", "*")
     } else if (env.isEmbedded && the.authenticator.target === "external") {
-      open(value)
+      open(action)
       window.parent.postMessage("close", "*")
     } else {
-      location.replace(value)
+      location.replace(action)
     }
-  } else if (typeof value === "function") {
+  } else if (typeof action === "function") {
     display(dom.redirectionMsgbox, "info", "Waiting for confirmation...")
     dom.redirectionButton.disabled = true
 
     try {
-      const transaction = await value()
+      const transaction = await action()
       await redirectionUI.sendTransaction(transaction)
     } catch (error) {
       console.error(error.response || error)
