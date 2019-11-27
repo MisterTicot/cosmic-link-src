@@ -12,6 +12,9 @@ authenticators.byId = {}
 class Authenticator {
   constructor (wallet) {
     Object.assign(this, wallet, protocols[wallet.protocol])
+    this.name = wallet.name.replace(/ \(.*\)/, "")
+    this.fullName = wallet.name
+
     if (!this.buttonText && this.redirection)
       this.buttonText = "Go to " + this.name
   }
@@ -21,7 +24,7 @@ class Authenticator {
   }
 
   get node () {
-    return html.create("option", { value: this.name }, this.name)
+    return html.create("option", { value: this.name }, this.fullName)
   }
 }
 

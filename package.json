@@ -65,7 +65,7 @@
   },
   "dependencies": {
     "@cosmic-plus/assets": "^1.0.2",
-    "@cosmic-plus/base": "^2.4.0",
+    "@cosmic-plus/base": "^2.5.0",
     "@cosmic-plus/domutils": "^2.0.4",
     "@cosmic-plus/jsutils": "^2.0.2",
     "@cosmic-plus/ledger-wallet": "^1.5.0",
