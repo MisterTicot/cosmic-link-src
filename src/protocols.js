@@ -67,7 +67,15 @@ protocols.trezorwallet = {
 protocols.sep0007 = {
   handler: async function (authenticator, cosmicLink) {
     await cosmicLink.lock()
-    return cosmicLink.sep7
+
+    const url = cosmicLink.sep7
+    const handler = "web+stellar:"
+    if (authenticator.url !== handler) {
+      const sep7 = encodeURIComponent(url)
+      return `${authenticator.url}${sep7}`
+    } else {
+      return url
+    }
   }
 }
 
