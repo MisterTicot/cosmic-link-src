@@ -14,6 +14,15 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.13.0 - 2019-11-27
+
+### Added
+
+- UI: Add transaction validation report. This includes explanations of what went
+  wrong in case of error.
+- UI: Add wallets: `Lobstr Web`, `StellarTerm`. At this time, those wallets only
+  support `payment` and `changeTrust` operations, on the public network.
+
 ## 1.12.0 - 2019-11-26
 
 ### Changed
