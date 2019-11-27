@@ -14,6 +14,12 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.13.1 - 2019-11-27
+
+### Fixed
+
+- Logic: Fix Lobstr/StellarTerm redirections.
+
 ## 1.13.0 - 2019-11-27
 
 ### Added
