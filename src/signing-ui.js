@@ -136,7 +136,7 @@ accountUI.init = async function () {
       the.accountId = localStorage.accountId
       readWriteBox(
         dom.accountIdBox,
-        "Your Account Address or ID",
+        "Federated Address or Public Key",
         the.accountId
       )
     }
