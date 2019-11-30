@@ -1,6 +1,6 @@
 {
   "name": "cosmic-link",
-  "version": "1.13.1",
+  "version": "1.13.2",
   "description": "The Cosmic.link website",
   "author": "MisterTicot <mister.ticot@cosmic.plus>",
   "homepage": "https://cosmic.link",
@@ -66,11 +66,11 @@
   "dependencies": {
     "@cosmic-plus/assets": "^1.0.2",
     "@cosmic-plus/base": "^2.5.1",
-    "@cosmic-plus/domutils": "^2.0.4",
+    "@cosmic-plus/domutils": "^2.1.0",
     "@cosmic-plus/jsutils": "^2.0.2",
     "@cosmic-plus/ledger-wallet": "^1.5.0",
     "@cosmic-plus/trezor-wallet": "^0.5.0",
-    "@cosmic-plus/tx-result": "^1.0.0",
+    "@cosmic-plus/tx-result": "^1.0.1",
     "cosmic-lib": "^2.5.0",
     "qrcode": "^1.4.4"
   }

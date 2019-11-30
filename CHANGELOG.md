@@ -14,6 +14,12 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.13.2 - 2019-11-30
+
+### Fixed
+
+- UI: Improve pubkey account box description. (Thanks [@b1ttc])
+
 ## 1.13.1 - 2019-11-27
 
 ### Fixed
@@ -356,5 +362,6 @@ history](https://github.com/cosmic-plus/webapp-cosmic-link/commits/master).
 [stellar-sdk]: https://github.com/stellar/js-stellar-sdk/blob/master/CHANGELOG.md
 [pwa]: https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Introduction
 [widget.css]: https://github.com/cosmic-plus/https-cosmic-link/blob/master/widget.css
+[@b1ttc]: https://keybase.io/b1tcc
 [@cosmic-plus/ledger-wallet]: https://cosmic.plus/#view:js-ledger-wallet/CHANGELOG
 [@cosmic-plus/trezor-wallet]: https://cosmic.plus/#view:js-trezor-wallet/CHANGELOG
