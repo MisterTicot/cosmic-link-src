@@ -346,8 +346,7 @@ redirectionUI.sendTransaction = async function () {
   }
 
   window.scrollTo(0, document.body.scrollHeight)
-  const response = await the.cosmicLink.send().catch(error => error)
-  const result = TxResultView.fromResponse(response)
+  const result = await TxResultView.forCosmicLink(the.cosmicLink)
   redirectionUI.display("", result)
 
   if (result.validated && env.isEmbedded) {
