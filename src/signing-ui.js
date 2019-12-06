@@ -338,8 +338,12 @@ redirectionUI.click = async function (action) {
 redirectionUI.sendTransaction = async function () {
   redirectionUI.display("info", "Sending to the network...")
   history.replaceState({}, "", the.cosmicLink.query)
-  dom.query.textContent = the.cosmicLink.query
   networkUI.lock()
+
+  // Non-widget interface
+  if (dom.query) {
+    dom.query.textContent = the.cosmicLink.query
+  }
 
   window.scrollTo(0, document.body.scrollHeight)
   const response = await the.cosmicLink.send().catch(error => error)
