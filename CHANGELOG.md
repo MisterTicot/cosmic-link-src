@@ -14,6 +14,19 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.14.0 - 2019-12-07
+
+### Changed
+
+- UI: Improve transaction submission report. Callbacks & StellarGuard errors are
+  now properly handled. (Thanks [@dexter0x8](https://keybase.io/dexter0x8))
+
+### Fixed
+
+- Logic: Fix a bug that could prevent tx submission. It was happening when
+  submitting from the widget using hardware wallets. (Thanks
+  [@dexter0x8](https://keybase.io/dexter0x8)
+
 ## 1.13.3 - 2019-12-02
 
 ### Fixed
