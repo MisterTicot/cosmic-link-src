@@ -5,8 +5,8 @@
 const html = require("@cosmic-plus/domutils/es5/html")
 const load = require("@cosmic-plus/domutils/es5/load")
 
-const authenticators = require("./authenticators")
-const the = require("./shared")
+const authenticators = require("./data/authenticators")
+const the = require("./app.state")
 
 /* Functions */
 
@@ -56,7 +56,7 @@ async function initWidget () {
   Promise.all(loading).then(() => html.show(document.body))
 
   // Interface initialization.
-  require("./app-interface")
+  require("./app.interface")
 
   // Consistent reload (app-interface mess with location.hash)
   location.hash = hash

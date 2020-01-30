@@ -1,18 +1,21 @@
 "use strict"
 const main = exports
 
+const QrCode = require("qrcode")
+
 const cosmicLib = require("cosmic-lib")
 const CosmicLink = cosmicLib.CosmicLink
+
 const dom = require("@cosmic-plus/domutils/es5/dom")
 const env = require("@cosmic-plus/jsutils/es5/env")
 const html = require("@cosmic-plus/domutils/es5/html")
-const QrCode = require("qrcode")
+
 const { timeout } = require("@cosmic-plus/jsutils/es5/misc")
 
-const TxResultView = require("./view/tx-result-view")
+const TxResultView = require("./tx-result-view")
 
-const authenticators = require("./authenticators")
-const the = require("./shared")
+const authenticators = require("../data/authenticators")
+const the = require("../app.state")
 
 const {
   enableButton,
@@ -22,7 +25,7 @@ const {
   disableBox,
   display,
   showIf
-} = require("./helpers")
+} = require("../helpers")
 
 // Run once page is fully loaded
 main.init = function () {

@@ -3,11 +3,10 @@
  * Entry point of Cosmic.Link application. We redirect without showing the
  * interface when possible. Else, we load the GUI.
  */
-
-// Requires
 require("@cosmic-plus/domutils/es5/polyfill")
-const authenticators = require("./authenticators")
-const the = require("./shared")
+
+const authenticators = require("./data/authenticators")
+const the = require("./app.state")
 
 function init () {
   // Context awareness

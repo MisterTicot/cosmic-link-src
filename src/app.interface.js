@@ -3,18 +3,19 @@
  * App interface initialization.
  */
 const cosmicLib = require("cosmic-lib")
+
 const dom = require("@cosmic-plus/domutils/es5/dom")
 const html = require("@cosmic-plus/domutils/es5/html")
 const Page = require("@cosmic-plus/domutils/es5/page")
 
-const the = require("./shared")
+const the = require("./app.state")
 const { copyContent } = require("./helpers")
 
 /* Functions */
 
 function initInterface () {
   // Signing interface
-  const signingUI = require("./signing-ui")
+  const signingUI = require("./view/signing-ui")
   const signingPage = Page.add("Sign", dom.sign)
   signingPage.onSelect = function () {
     history.replaceState("", null, location.pathname + location.search)
@@ -60,7 +61,7 @@ function initNonWidgetInterface () {
   html.show(dom.registerSep7Handler)
 
   // Robot tamper
-  require("./tamper")
+  require("./view/tamper")
 }
 
 /* Init */
