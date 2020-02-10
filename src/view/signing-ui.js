@@ -1,8 +1,6 @@
 "use strict"
 const main = exports
 
-const QrCode = require("qrcode")
-
 const cosmicLib = require("cosmic-lib")
 const CosmicLink = cosmicLib.CosmicLink
 
@@ -13,6 +11,7 @@ const html = require("@cosmic-plus/domutils/es5/html")
 const { timeout } = require("@cosmic-plus/jsutils/es5/misc")
 
 const TxResultView = require("./tx-result-view")
+const qrCodeUI = require("./qr-code-ui")
 
 const authenticators = require("../data/authenticators")
 const the = require("../app.state")
@@ -366,47 +365,11 @@ redirectionUI.display = function (type, message) {
   display(dom.redirectionMsgbox, type, message)
 }
 
-const qrCodeUI = {}
-
-qrCodeUI.loadingAnim = function () {
-  html.rewrite(dom.qrCode, html.create("span", ".cosmiclib_loadingAnim"))
-}
-
-qrCodeUI.refresh = async function (value) {
-  // Makes that fuction non-blocking.
-  await timeout(0)
-
-  if (!the.authenticator.qrCode || !value) return
-
-  const canvas = html.create("canvas", { title: value })
-  const scale = Math.max(3, 6 - Math.floor(Math.sqrt(value) / 10))
-  QrCode.toCanvas(canvas, value, { margin: 0, scale })
-
-  html.rewrite(dom.qrCode, canvas)
-}
-
-qrCodeUI.switch = function () {
-  the.qrCode = localStorage.QR = !the.qrCode
-  if (the.qrCode) qrCodeUI.enable()
-  else qrCodeUI.disable()
-}
-
-qrCodeUI.enable = function () {
-  dom.qrButton.className = "enabled"
-  html.show(dom.qrCode)
-}
-
-qrCodeUI.disable = function () {
-  dom.qrButton.className = undefined
-  html.hide(dom.qrCode)
-}
-
 /**
  * HTML Elements Events
  */
 
 dom.redirectionButton.onclick = redirectionUI.click
-dom.qrButton.onclick = qrCodeUI.switch
 
 dom.redirectionCheckbox.onchange = function () {
   the.redirect = localStorage.redirect = !the.redirect
