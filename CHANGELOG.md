@@ -14,6 +14,13 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 1.15.1 - 2020-02-24
+
+### Fixed
+
+- Logic: Fix a case were Trezor signatures were wrong. (Thanks
+  [@Tyvdh](https://github.com/tyvdh))
+
 ## 1.15.0 - 2020-01-04
 
 ### Changed
