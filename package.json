@@ -67,10 +67,10 @@
     "@cosmic-plus/assets": "^1.0.2",
     "@cosmic-plus/base": "^2.5.2",
     "@cosmic-plus/domutils": "^2.1.0",
-    "@cosmic-plus/jsutils": "^2.0.2",
     "@cosmic-plus/ledger-wallet": "^2.1.0",
     "@cosmic-plus/trezor-wallet": "^1.0.1",
     "@cosmic-plus/tx-result": "^1.1.0",
+    "@kisbox/helpers": "^1.0.0-beta.0",
     "cosmic-lib": "^2.5.0",
     "qrcode": "^1.4.4"
   }

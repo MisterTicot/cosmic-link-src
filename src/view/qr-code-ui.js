@@ -7,7 +7,9 @@ const QrCode = require("qrcode")
 const dom = require("@cosmic-plus/domutils/es5/dom")
 const html = require("@cosmic-plus/domutils/es5/html")
 
-const { timeout } = require("@cosmic-plus/jsutils/es5/misc")
+const {
+  promise: { timeout }
+} = require("@kisbox/helpers")
 
 const the = require("../app.state")
 

@@ -5,10 +5,12 @@ const cosmicLib = require("cosmic-lib")
 const CosmicLink = cosmicLib.CosmicLink
 
 const dom = require("@cosmic-plus/domutils/es5/dom")
-const env = require("@cosmic-plus/jsutils/es5/env")
 const html = require("@cosmic-plus/domutils/es5/html")
 
-const { timeout } = require("@cosmic-plus/jsutils/es5/misc")
+const {
+  environment,
+  promise: { timeout }
+} = require("@kisbox/helpers")
 
 const TxResultView = require("./tx-result-view")
 const qrCodeUI = require("./qr-code-ui")
@@ -312,11 +314,14 @@ redirectionUI.click = async function (action) {
   if (typeof action === "string") {
     if (
       the.contextIsWidget
-      || env.isEmbedded && the.authenticator.target === "new"
+      || environment.isEmbedded && the.authenticator.target === "new"
     ) {
       open(action, "_blank")
       window.parent.postMessage("close", "*")
-    } else if (env.isEmbedded && the.authenticator.target === "external") {
+    } else if (
+      environment.isEmbedded
+      && the.authenticator.target === "external"
+    ) {
       open(action)
       window.parent.postMessage("close", "*")
     } else {
@@ -351,7 +356,7 @@ redirectionUI.sendTransaction = async function () {
   const result = await TxResultView.forCosmicLink(the.cosmicLink)
   redirectionUI.display("", result)
 
-  if (result.validated && env.isEmbedded) {
+  if (result.validated && environment.isEmbedded) {
     parent.postMessage("close", "*")
   }
   if (document.referrer) {
