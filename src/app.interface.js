@@ -4,8 +4,7 @@
  */
 const cosmicLib = require("cosmic-lib")
 
-const dom = require("@cosmic-plus/domutils/es5/dom")
-const html = require("@cosmic-plus/domutils/es5/html")
+const { dom, html } = require("@kisbox/browser")
 const Page = require("@cosmic-plus/domutils/es5/page")
 
 const the = require("./app.state")
@@ -41,7 +40,9 @@ function initNonWidgetInterface () {
     dom.websiteUrl.textContent = location.origin + location.pathname
   }
   dom.query.textContent = location.search
-  dom.header.onclick = () => copyContent(dom.header)
+
+  const header = html.grab("header")
+  header.onclick = () => copyContent(header)
 
   // About page
   Page.add("About", dom.about)

@@ -4,8 +4,7 @@
  */
 const helpers = exports
 
-const dom = require("@cosmic-plus/domutils/es5/dom")
-const html = require("@cosmic-plus/domutils/es5/html")
+const { dom, html } = require("@kisbox/browser")
 
 /*******************************************************************************
  * Form Elements Helpers
@@ -48,12 +47,8 @@ helpers.disableBox = function (box, placeholder) {
  * Other Helpers
  */
 
-helpers.display = function (element, type = "", message = "") {
-  const classname = type ? "." + type : null
-  const messageNode = classname
-    ? html.create("span", classname, message)
-    : message
-  html.rewrite(element, html.create("span", classname, messageNode))
+helpers.display = function (element, className = null, message = "") {
+  html.rewrite(element, html("span", { className }, message))
 }
 
 helpers.showIf = function (flag, element) {
@@ -69,7 +64,7 @@ helpers.copyContent = function (element) {
   if (html.copyContent(element) && document.activeElement.value) {
     const prevNode = html.grab("#copied")
     if (prevNode) html.destroy(prevNode)
-    const copiedNode = html.create("span", "#copied", "Copied")
+    const copiedNode = html("span", { id: "copied" }, "Copied")
     element.parentNode.insertBefore(copiedNode, element)
     setTimeout(() => {
       copiedNode.hidden = true

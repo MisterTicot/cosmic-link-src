@@ -2,7 +2,7 @@
 /**
  * Robot tamper.
  */
-const dom = require("@cosmic-plus/domutils/es5/dom")
+const { dom } = require("@kisbox/browser")
 
 function myHash () {
   if (localStorage.myHash) return localStorage.myHash

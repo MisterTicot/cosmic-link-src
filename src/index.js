@@ -5,6 +5,8 @@
  */
 require("@cosmic-plus/domutils/es5/polyfill")
 
+const { dom } = require("@kisbox/browser")
+
 const authenticators = require("./data/authenticators")
 const the = require("./app.state")
 
@@ -55,7 +57,10 @@ function loadInterface (pageName) {
   }
 
   // GUI loading
-  window.onload = () => import(/* webpackChunkName: "app" */ "./app")
+  window.onload = () => {
+    dom.$ingest()
+    import(/* webpackChunkName: "app" */ "./app")
+  }
 }
 
 init()

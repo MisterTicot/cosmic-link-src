@@ -4,8 +4,7 @@
  */
 const QrCode = require("qrcode")
 
-const dom = require("@cosmic-plus/domutils/es5/dom")
-const html = require("@cosmic-plus/domutils/es5/html")
+const { dom, html } = require("@kisbox/browser")
 
 const {
   promise: { timeout }
@@ -17,7 +16,8 @@ const the = require("../app.state")
 const qrCodeUI = {}
 
 qrCodeUI.loadingAnim = function () {
-  html.rewrite(dom.qrCode, html.create("span", ".cosmiclib_loadingAnim"))
+  const spinner = html("span", { className: "cosmiclib_loadingAnim" })
+  html.rewrite(dom.qrCode, spinner)
 }
 
 qrCodeUI.refresh = async function (value) {
@@ -26,7 +26,7 @@ qrCodeUI.refresh = async function (value) {
 
   if (!the.authenticator.qrCode || !value) return
 
-  const canvas = html.create("canvas", { title: value })
+  const canvas = html("canvas", { title: value })
   const scale = Math.max(3, 6 - Math.floor(Math.sqrt(value) / 10))
   QrCode.toCanvas(canvas, value, { margin: 0, scale })
 

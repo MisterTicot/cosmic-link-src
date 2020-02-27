@@ -4,8 +4,7 @@ const main = exports
 const cosmicLib = require("cosmic-lib")
 const CosmicLink = cosmicLib.CosmicLink
 
-const dom = require("@cosmic-plus/domutils/es5/dom")
-const html = require("@cosmic-plus/domutils/es5/html")
+const { dom, html } = require("@kisbox/browser")
 
 const {
   environment,

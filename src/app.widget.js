@@ -2,8 +2,7 @@
 /**
  * Widget interface initialization.
  */
-const html = require("@cosmic-plus/domutils/es5/html")
-const load = require("@cosmic-plus/domutils/es5/load")
+const { load, html } = require("@kisbox/browser")
 
 const authenticators = require("./data/authenticators")
 const the = require("./app.state")

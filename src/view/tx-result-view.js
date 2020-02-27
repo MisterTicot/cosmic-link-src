@@ -2,13 +2,11 @@
 /**
  * TxResultView - Displays TxResult instances
  */
-const Gui = require("@cosmic-plus/domutils/es5/gui")
-const html = require("@cosmic-plus/domutils/es5/html")
-
 const TxResult = require("@cosmic-plus/tx-result")
+const { View, html } = require("@kisbox/browser")
 
 /* Definition */
-class TxResultView extends Gui {
+class TxResultView extends View {
   static async forCosmicLink (cosmicLink) {
     const result = await TxResult.forCosmicLink(cosmicLink)
     return new TxResultView(result)
@@ -26,7 +24,7 @@ class TxResultView extends Gui {
   <span class=%state>%title</span>
 
   <ul class="error" hidden=%validated>
-    %{toLi:errors...}
+    %{toLi:...errors}
   </ul>
 
 </div>
@@ -35,14 +33,9 @@ class TxResultView extends Gui {
     Object.assign(this, txResult)
     this.state = this.validated ? "info" : "error"
   }
-
-  has (obj) {
-    return !!obj
-  }
-  toLi (msg) {
-    return html.create("li", null, msg)
-  }
 }
+
+TxResultView.helpers.toLi = (any) => html("li", [any])
 
 /* Exports */
 module.exports = TxResultView

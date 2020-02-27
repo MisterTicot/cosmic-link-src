@@ -1,7 +1,8 @@
 const authenticators = exports
 
-const html = require("@cosmic-plus/domutils/es5/html")
 const wallets = require("@cosmic-plus/base/es5/wallets")
+
+const { html } = require("@kisbox/browser")
 
 const protocols = require("./protocols")
 
@@ -24,7 +25,7 @@ class Authenticator {
   }
 
   get node () {
-    return html.create("option", { value: this.name }, this.fullName)
+    return html("option", { value: this.name }, this.fullName)
   }
 }
 
