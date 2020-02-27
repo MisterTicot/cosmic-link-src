@@ -1,6 +1,6 @@
 "use strict"
 
-const ServiceWorker = require("@cosmic-plus/domutils/es5/service-worker")
+const ServiceWorker = require("@kisbox/service-worker")
 const pkg = require("../package.json")
 
 new ServiceWorker(pkg.name, pkg.version, "verbose")

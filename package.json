@@ -72,6 +72,7 @@
     "@cosmic-plus/tx-result": "^1.1.0",
     "@kisbox/browser": "^1.0.0-beta.1",
     "@kisbox/helpers": "^1.0.0-beta.0",
+    "@kisbox/service-worker": "^1.0.0-beta.1",
     "cosmic-lib": "^2.5.0",
     "qrcode": "^1.4.4"
   }
