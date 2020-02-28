@@ -338,12 +338,18 @@ redirectionUI.click = async function (action) {
 
 redirectionUI.sendTransaction = async function () {
   redirectionUI.display("info", "Sending to the network...")
-  history.replaceState({}, "", the.cosmicLink.query)
+
+  // Ensure signatures are part of the XDR.
+  delete the.cosmicLink._query
+  delete the.cosmicLink._xdr
+  the.query = the.cosmicLink.query
+
+  history.replaceState({}, "", the.query)
   networkUI.lock()
 
   // Non-widget interface
   if (dom.query) {
-    dom.query.textContent = the.cosmicLink.query
+    dom.query.textContent = the.query
   }
 
   window.scrollTo(0, document.body.scrollHeight)
