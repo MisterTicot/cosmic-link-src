@@ -3,8 +3,6 @@
  * Entry point of Cosmic.Link application. We redirect without showing the
  * interface when possible. Else, we load the GUI.
  */
-require("@cosmic-plus/domutils/es5/polyfill")
-
 const { dom } = require("@kisbox/browser")
 
 const authenticators = require("./data/authenticators")
