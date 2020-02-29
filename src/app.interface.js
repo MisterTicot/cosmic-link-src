@@ -5,7 +5,7 @@
 const cosmicLib = require("cosmic-lib")
 
 const { dom, html } = require("@kisbox/browser")
-const Page = require("@cosmic-plus/domutils/es5/page")
+const Page = require("./lib/page")
 
 const the = require("./app.state")
 const { copyContent } = require("./helpers")
