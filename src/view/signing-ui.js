@@ -103,8 +103,6 @@ const authenticatorUI = {}
 
 authenticatorUI.init = function () {
   display(dom.accountMsgbox, "")
-  the.authenticator = authenticators[dom.authenticators.value]
-  localStorage.authenticator = the.authenticator.name
 
   if (the.authenticator.needSource) accountUI.init()
   else accountUI.disable()
@@ -136,7 +134,6 @@ accountUI.init = async function () {
         readOnlyBox(dom.accountIdBox, the.cosmicLink.tdesc.source)
       }
     } else {
-      the.accountId = localStorage.accountId
       readWriteBox(
         dom.accountIdBox,
         "Federated Address or Public Key",
@@ -177,7 +174,7 @@ networkUI.disable = function () {
 networkUI.init = function () {
   html.show(dom.networkDiv)
   html.hide(dom.customNetworkSetup)
-  the.network = the.cosmicLink.tdesc.network || localStorage.networkSelector
+  the.network = the.cosmicLink.tdesc.network || the.networkSelector
   the.horizon = undefined
 
   switch (the.network) {
@@ -196,7 +193,7 @@ networkUI.init = function () {
     dom.customNetwork.checked = true
 
     html.show(dom.customNetworkSetup)
-    if (!the.network) the.network = localStorage.customPassphrase
+    if (!the.network) the.network = the.customPassphrase
     the.horizon =
         cosmicLib.resolve.horizon(the.network || "")
         || the.cosmicLink.tdesc.horizon
@@ -215,7 +212,7 @@ networkUI.lock = function () {
 }
 
 networkUI.switch = function (selector) {
-  localStorage.networkSelector = selector
+  the.networkSelector = selector
   main.refresh()
 }
 
@@ -225,13 +222,14 @@ networkUI.switch = function (selector) {
 
 dom.authenticators.onchange = function () {
   if (the.authenticator && the.authenticator.onExit) the.authenticator.onExit()
-  the.redirect = localStorage.redirect = false
+  the.redirect = false
   dom.redirectionCheckbox.checked = false
+  the.authenticatorName = dom.authenticators.value
   main.refresh()
 }
 
 dom.accountIdBox.onchange = function () {
-  the.accountId = localStorage.accountId = dom.accountIdBox.value
+  the.accountId = the.accountId = dom.accountIdBox.value
   main.refresh()
 }
 
@@ -246,7 +244,7 @@ dom.customNetwork.onchange = () => networkUI.switch("")
 
 dom.customPassphrase.onchange = function () {
   const networkName = cosmicLib.resolve.networkName(dom.customPassphrase.value)
-  localStorage.customPassphrase = networkName
+  the.customPassphrase = networkName
   networkUI.switch("")
 }
 
@@ -376,5 +374,5 @@ redirectionUI.display = function (type, message) {
 dom.redirectionButton.onclick = redirectionUI.click
 
 dom.redirectionCheckbox.onchange = function () {
-  the.redirect = localStorage.redirect = !the.redirect
+  the.redirect = !the.redirect
 }

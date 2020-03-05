@@ -3,9 +3,10 @@
  * Robot tamper.
  */
 const { dom } = require("@kisbox/browser")
+const state = require("../app.state")
 
 function myHash () {
-  if (localStorage.myHash) return localStorage.myHash
+  if (state.myHash) return state.myHash
 
   var alphabet =
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -16,7 +17,7 @@ function myHash () {
     hash += alphabet.charAt(Math.floor(Math.random() * alphabet.length))
   }
 
-  localStorage.myHash = hash
+  state.myHash = hash
   return hash
 }
 

@@ -3,24 +3,11 @@
  * Entry point of Cosmic.Link application. We redirect without showing the
  * interface when possible. Else, we load the GUI.
  */
-const authenticators = require("./data/authenticators")
 const the = require("./app.state")
 
 /* Logic */
 
 function init () {
-  // Context awareness
-  const pageName = location.pathname.replace(/.*\//, "")
-  the.contextIsWidget = !!pageName.match(/^widget(.html)?$/)
-
-  // Variables initialization
-  the.query = location.search.length > 1 && location.search
-  the.authenticator =
-    authenticators[localStorage.authenticator]
-    || authenticators["Stellar Authenticator"]
-  the.redirect = !the.contextIsWidget && localStorage.redirect === "true"
-  the.qrCode = localStorage.QR === "true"
-
   if (
     the.query
     && the.redirect
@@ -28,7 +15,7 @@ function init () {
   ) {
     redirect()
   } else {
-    loadInterface(pageName)
+    loadInterface()
   }
 }
 
@@ -37,7 +24,7 @@ function redirect () {
   location.replace(target)
 }
 
-function loadInterface (pageName) {
+function loadInterface () {
   // Service worker (does it means users with automatic redirection set never
   // get updates?)
   const worker = navigator.serviceWorker
@@ -48,6 +35,7 @@ function loadInterface (pageName) {
 
   // (hack) api.cosmic.link redirects at `index.html` to shortcut itself, but we
   // don't want it to show into the address bar.
+  const pageName = location.pathname.replace(/.*\//, "")
   if (pageName === "index.html") {
     const path = location.pathname.replace(/index.html$/, "")
     const url = `${path}${location.search}${location.hash}`
