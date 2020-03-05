@@ -6,6 +6,7 @@ const TxResult = require("@cosmic-plus/tx-result")
 const { View, html } = require("@kisbox/browser")
 
 /* Definition */
+
 class TxResultView extends View {
   static async forCosmicLink (cosmicLink) {
     const result = await TxResult.forCosmicLink(cosmicLink)
@@ -30,12 +31,12 @@ class TxResultView extends View {
 </div>
     `)
 
-    Object.assign(this, txResult)
+    this.$import(txResult, ["title", "errors", "validated"])
     this.state = this.validated ? "info" : "error"
   }
 }
 
-TxResultView.helpers.toLi = (any) => html("li", [any])
+TxResultView.helpers.toLi = any => html("li", [any])
 
 /* Exports */
 module.exports = TxResultView
