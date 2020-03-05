@@ -3,10 +3,10 @@
  * Entry point of Cosmic.Link application. We redirect without showing the
  * interface when possible. Else, we load the GUI.
  */
-const { dom } = require("@kisbox/browser")
-
 const authenticators = require("./data/authenticators")
 const the = require("./app.state")
+
+/* Logic */
 
 function init () {
   // Context awareness
@@ -56,7 +56,6 @@ function loadInterface (pageName) {
 
   // GUI loading
   window.onload = () => {
-    dom.$ingest()
     import(/* webpackChunkName: "app" */ "./app")
   }
 }
