@@ -5,8 +5,7 @@
  * @exports Page
  */
 const { dom, html } = require("@kisbox/browser")
-
-const main = html.grab("main")
+dom.main = html.grab("main")
 
 /* Definition */
 
@@ -19,7 +18,7 @@ class Page {
     const page = new Page(title, domNode)
     Page.table[page.hash] = page
 
-    html.append(main, page.contentNode)
+    html.append(dom.main, page.contentNode)
     if (dom.nav) html.append(dom.nav, page.linkNode)
 
     if (location.hash === page.hash) page.select()
