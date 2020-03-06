@@ -7,6 +7,8 @@ const cosmicLib = require("cosmic-lib")
 const { dom, html } = require("@kisbox/browser")
 const Page = require("./lib/page")
 
+const AntiTamper = require("./view/anti-tamper")
+
 const the = require("./app.state")
 const { copyContent } = require("./helpers")
 
@@ -61,8 +63,13 @@ function initNonWidgetInterface () {
   }
   html.show(dom.registerSep7Handler)
 
-  // Robot tamper
-  require("./view/tamper")
+  // Robot anti-tamper
+  if (!the.antiTamperHash) {
+    the.antiTamperHash = AntiTamper.makeHash()
+  }
+  const robot = new AntiTamper()
+  robot.$pull("hash", the, "antiTamperHash")
+  robot.$mount("#anti-tamper")
 }
 
 /* Init */
