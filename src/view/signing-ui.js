@@ -38,7 +38,6 @@ main.init = function () {
 
   // Step 3: Signing
   if (the.redirect) dom.redirectionCheckbox.checked = true
-  if (the.qrCode) qrCodeUI.enable()
 
   // CosmicLib network setup
   for (let key in localStorage) {
@@ -283,7 +282,7 @@ redirectionUI.init = function () {
   } else {
     if (the.authenticator.redirection) disableButton(dom.redirectionButton, "…")
     if (the.authenticator.textarea) disableBox(dom.xdrBox, "Computing...")
-    if (the.authenticator.qrCode) qrCodeUI.loadingAnim()
+    if (the.authenticator.qrCode) qrCodeUI.disabled = false
   }
 }
 
@@ -298,13 +297,13 @@ redirectionUI.refresh = function (value) {
   }
 
   if (the.authenticator.textarea) readOnlyBox(dom.xdrBox, value)
-  if (the.authenticator.qrCode) qrCodeUI.refresh(value)
+  if (the.authenticator.qrCode) qrCodeUI.value = value
 }
 
 redirectionUI.error = function (error) {
   disableButton(dom.redirectionButton, error)
   disableBox(dom.xdrBox, error)
-  html.clear(dom.qrCode)
+  the.error = error
 }
 
 redirectionUI.click = async function (action) {
