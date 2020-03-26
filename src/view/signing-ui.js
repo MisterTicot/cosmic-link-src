@@ -5,14 +5,9 @@ const cosmicLib = require("cosmic-lib")
 const CosmicLink = cosmicLib.CosmicLink
 
 const { dom, html } = require("@kisbox/browser")
-
-const {
-  environment,
-  promise: { timeout }
-} = require("@kisbox/helpers")
+const { environment } = require("@kisbox/helpers")
 
 const TxResultView = require("./tx-result-view")
-const qrCodeUI = require("./qr-code-ui")
 
 const authenticators = require("../data/authenticators")
 const the = require("../app.state")
@@ -26,6 +21,10 @@ const {
   display,
   showIf
 } = require("../helpers")
+
+/* UI Components */
+const qrCodeUI = require("./qr-code-ui")
+const networkUI = require("./network-ui")
 
 // Run once page is fully loaded
 main.init = function () {
@@ -57,6 +56,8 @@ main.refresh = async function () {
   if (the.cosmicLink.query) transactionUI.refresh()
 }
 
+the.$on(["network", "horizon"], () => main.refresh())
+
 /*******************************************************************************
  * Step 1: Transaction UI
  */
@@ -71,7 +72,7 @@ transactionUI.refresh = function () {
     return
   }
   if (the.authenticator.needNetwork) {
-    if (dom.customNetwork.checked && (!the.horizon || !the.network)) {
+    if (!the.network || !the.horizon) {
       redirectionUI.error("Please fill custom network fields")
       return
     }
@@ -105,8 +106,6 @@ authenticatorUI.init = function () {
 
   if (the.authenticator.needSource) accountUI.init()
   else accountUI.disable()
-  if (the.authenticator.needNetwork) networkUI.init()
-  else networkUI.disable()
 
   if (the.authenticator.refresh) the.authenticator.refresh(main.refresh)
 }
@@ -160,62 +159,6 @@ accountUI.init = async function () {
 }
 
 /**
- * Network selection UI
- */
-const networkUI = {}
-
-networkUI.disable = function () {
-  html.hide(dom.networkDiv)
-  the.network = "public"
-  the.horizon = undefined
-}
-
-networkUI.init = function () {
-  html.show(dom.networkDiv)
-  html.hide(dom.customNetworkSetup)
-  the.network = the.cosmicLink.tdesc.network || the.networkSelector
-  the.horizon = undefined
-
-  switch (the.network) {
-  case undefined:
-  case "public":
-    dom.publicNetwork.checked = true
-    dom.networkSelector.scrollLeft = 0
-    break
-  case "test":
-    dom.testNetwork.checked = true
-    break
-  default:
-    if (dom.networkSelector.onscroll) dom.networkSelector.onscroll()
-    // Doesn't works when called synchronously.
-    timeout(1).then(() => dom.networkSelector.scrollLeft = 999)
-    dom.customNetwork.checked = true
-
-    html.show(dom.customNetworkSetup)
-    if (!the.network) the.network = the.customPassphrase
-    the.horizon =
-        cosmicLib.resolve.horizon(the.network || "")
-        || the.cosmicLink.tdesc.horizon
-    dom.customPassphrase.value = the.network || ""
-    dom.customHorizon.value = the.horizon || ""
-  }
-
-  if (the.cosmicLink.tdesc.network) networkUI.lock()
-}
-
-networkUI.lock = function () {
-  readOnlyBox(dom.customPassphrase)
-  dom.publicNetwork.disabled = true
-  dom.testNetwork.disabled = true
-  dom.customNetwork.disabled = true
-}
-
-networkUI.switch = function (selector) {
-  the.networkSelector = selector
-  main.refresh()
-}
-
-/**
  * HTML Elements Events
  */
 
@@ -230,34 +173,6 @@ dom.authenticators.onchange = function () {
 dom.accountIdBox.onchange = function () {
   the.accountId = the.accountId = dom.accountIdBox.value
   main.refresh()
-}
-
-dom.networkSelector.onscroll = function () {
-  dom.networkSelector.style.textOverflow = "initial"
-  dom.networkSelector.onscroll = undefined
-}
-
-dom.publicNetwork.onchange = () => networkUI.switch("public")
-dom.testNetwork.onchange = () => networkUI.switch("test")
-dom.customNetwork.onchange = () => networkUI.switch("")
-
-dom.customPassphrase.onchange = function () {
-  const networkName = cosmicLib.resolve.networkName(dom.customPassphrase.value)
-  the.customPassphrase = networkName
-  networkUI.switch("")
-}
-
-dom.customHorizon.onchange = function () {
-  the.horizon = dom.customHorizon.value
-  if (the.horizon && the.horizon.substr(0, 4) !== "http") {
-    the.horizon = "https://" + the.horizon
-  }
-  if (the.network && the.horizon) {
-    const passphrase = cosmicLib.resolve.networkPassphrase(the.network)
-    cosmicLib.config.setupNetwork(the.network, the.horizon, passphrase)
-    localStorage["network:" + passphrase] = the.horizon
-  }
-  if (the.network) main.refresh()
 }
 
 /*******************************************************************************
@@ -341,7 +256,7 @@ redirectionUI.click = async function (action) {
 redirectionUI.sendTransaction = async function () {
   redirectionUI.display("info", "Sending to the network...")
   history.replaceState({}, "", the.cosmicLink.query)
-  networkUI.lock()
+  networkUI.readonly = true
 
   // Non-widget interface
   if (dom.query) {

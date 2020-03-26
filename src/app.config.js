@@ -20,5 +20,10 @@ const config = new Storage({
   redirect: false
 })
 
+/* Upgrade from Cosmic.link v1 configuration */
+if (config.networkSelector === "") {
+  config.networkSelector = "custom"
+}
+
 /* Export */
 module.exports = config
