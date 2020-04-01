@@ -5,7 +5,7 @@
 const { load, html } = require("@kisbox/browser")
 
 const authenticators = require("./data/authenticators")
-const the = require("./app.state")
+const state = require("./app.state")
 
 /* Functions */
 
@@ -29,13 +29,13 @@ async function initWidget () {
   if (params.handler) {
     const handler = authenticators.byId[params.handler]
     if (handler) {
-      the.authenticator = handler
+      state.authenticator = handler
     } else {
       console.error(`Unknown handler: ${params.handler}`)
     }
   }
   if (params.qrcode) {
-    the.qrCode = params.qrcode !== "false"
+    state.qrCode = params.qrcode !== "false"
   }
   // eslint-disable-next-line no-console
   console.log("Valid handlers: ", Object.keys(authenticators.byId))

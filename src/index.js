@@ -3,15 +3,15 @@
  * Entry point of Cosmic.Link application. We redirect without showing the
  * interface when possible. Else, we load the GUI.
  */
-const the = require("./app.state")
+const state = require("./app.state")
 
 /* Logic */
 
 function init () {
   if (
-    the.query
-    && the.redirect
-    && the.authenticator.protocol === "cosmiclink"
+    state.query
+    && state.redirect
+    && state.authenticator.protocol === "cosmiclink"
   ) {
     redirect()
   } else {
@@ -20,7 +20,7 @@ function init () {
 }
 
 function redirect () {
-  const target = the.authenticator.url + location.search
+  const target = state.authenticator.url + location.search
   location.replace(target)
 }
 

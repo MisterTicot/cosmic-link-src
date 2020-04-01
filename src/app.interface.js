@@ -9,7 +9,7 @@ const Page = require("./lib/page")
 
 const AntiTamper = require("./view/anti-tamper")
 
-const the = require("./app.state")
+const state = require("./app.state")
 const { copyContent } = require("./helpers")
 
 /* Functions */
@@ -25,7 +25,7 @@ function initInterface () {
   signingUI.init()
 
   // Non-widget components
-  if (!the.contextIsWidget) {
+  if (!state.contextIsWidget) {
     initNonWidgetInterface()
   }
 
@@ -64,11 +64,11 @@ function initNonWidgetInterface () {
   html.show(dom.registerSep7Handler)
 
   // Robot anti-tamper
-  if (!the.antiTamperHash) {
-    the.antiTamperHash = AntiTamper.makeHash()
+  if (!state.antiTamperHash) {
+    state.antiTamperHash = AntiTamper.makeHash()
   }
   const robot = new AntiTamper()
-  robot.$pull("hash", the, "antiTamperHash")
+  robot.$pull("hash", state, "antiTamperHash")
   robot.$mount("#anti-tamper")
 }
 
