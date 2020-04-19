@@ -1,5 +1,9 @@
 /* Individual elements styling */
 
+.CosmicLinkApp {
+  width: 100%;
+}
+
 #about {
   h3 {
     margin-top: 4.2rem;
@@ -38,7 +42,7 @@
   transform: translate(-20%, -20%);
 }
 
-#cosmiclink_description {
+.cosmiclink_description {
   vertical-align: baseline;
 }
 
@@ -51,8 +55,7 @@
   }
 }
 
-#accountMsgbox,
-#redirectionMsgbox {
+.TxResultView {
   margin: 0.7em 0;
 }
 
