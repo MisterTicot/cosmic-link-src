@@ -13,15 +13,13 @@ new ServiceWorker(pkg.name, pkg.version, "verbose")
     "ledger.js",
     "stellar-sdk.js",
     "vendors~app.js",
-    "vendors~app~ledger.js",
-    "vendors~app~trezor.js",
     "vendors~ledger.js",
     "vendors~trezor.js",
 
-    // Widget
-    "widget",
-    "widget.css",
-    "widget.html",
+    // Embed
+    "embed",
+    "embed.css",
+    "embed.html",
 
     // Fonts
     "fonts/rubik.woff",
