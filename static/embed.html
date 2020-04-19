@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="
+    form-action 'none';
+    default-src 'none';
+    script-src 'unsafe-inline' 'unsafe-eval' 'self';
+    style-src 'unsafe-inline' *;
+    frame-src https://connect.trezor.io;
+    img-src 'self' data:;
+    manifest-src 'self';
+    connect-src *;
+  ">
+
+  <!-- Possible immediate redirection (blocking on purpose) -->
+  <script src="stellar-sdk.js"></script>
+  <script src="index.js"></script>
+
+  <link rel="preload" href="embed.css" as="style">
+
+  <title>Cosmic.Link ~ Stellar transactions over URL</title>
+  <meta property="og:title"
+    content="Cosmic.Link ~ Stellar transactions over URL">
+  <meta property="og:description" name="description"
+    content="Cosmic.Link provides a convenient way to share Stellar transactions as URLs.">
+
+  <meta property="og:image" content="https://cosmic.link/icons/512x512.png">
+  <meta property="og:image:height" content="512">
+  <meta property="og:image:width" content="512">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="msapplication-config" content="browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch.png">
+  <link rel="mask-icon" href="icons/safari.svg" color="#5bbad5">
+
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body></body>
+
+</html>
