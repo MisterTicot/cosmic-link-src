@@ -3,38 +3,44 @@
  * QR Code UI
  */
 const { View } = require("@kisbox/browser")
+const { type } = require("@kisbox/utils")
 
 const QrCodeCanvas = require("./qr-code-canvas")
 
 /* Definition */
 
 class QrCodeSwitcher extends View {
-  constructor (params = {}) {
+  constructor (params) {
     super(`
 <form id="qrForm">
   <input type="button" value="QR Code" onclick=%switch %disabled>
-  <div %hidden>
-    <span class="cosmiclib_loadingAnim" hidden=%has:value></span>
-    %canvas
-  </div>
+  <div %hidden>%canvas</div>
 </form>
   `)
 
     this.disabled = false
     this.hidden = true
-    this.value = null
-    this.$import(params, ["checked", "disabled", "value"])
+    this.target = null
+    this.$import(params, ["target"])
+    this.$link(params, ["showQrCode"])
 
-    this.canvas = new QrCodeCanvas(this)
+    this.canvas = new QrCodeCanvas(params)
   }
 
   switch () {
-    this.checked = !this.checked
+    this.showQrCode = !this.showQrCode
   }
 }
 
-QrCodeSwitcher.prototype.$define("hidden", ["checked", "disabled"], function () {
-  return !this.checked || this.disabled
+/* Computations */
+const proto = QrCodeSwitcher.prototype
+
+proto.$define("disabled", ["target"], function () {
+  return type(this.target) === "error"
+})
+
+proto.$define("hidden", ["showQrCode", "disabled"], function () {
+  return !this.showQrCode || this.disabled
 })
 
 /* Exports */
