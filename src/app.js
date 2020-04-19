@@ -1,16 +1,20 @@
 "use strict"
 /**
- * Cosmic.Link Graphical User Interface
+ * CosmicLink application.
  */
-const { dom } = require("@kisbox/browser")
-const state = require("./app.state")
 
-/* Logic */
-
-dom.$ingest()
-
-if (state.contextIsWidget) {
-  require("./app.widget")
-} else {
-  require("./app.interface")
+/* Definiton */
+class CosmicLinkApp {
+  constructor (params) {
+    if (params.mode === "embed") {
+      return new CosmicLinkApp.Embed(params)
+    } else {
+      return new CosmicLinkApp.Full(params)
+    }
+  }
 }
+
+/* Exports */
+CosmicLinkApp.Embed = require("./app.embed")
+CosmicLinkApp.Full = require("./app.full")
+module.exports = CosmicLinkApp

@@ -1,32 +1,63 @@
 "use strict"
 /**
- * Application State (extends app.config.js)
- */
+ * CosmicLinkApp.State
+ * */
+const { type } = require("@kisbox/utils")
+
 const authenticators = require("./data/authenticators")
-const config = require("./app.config")
+const SigningFlow = require("./model/signing-flow")
 
 /* Definition */
 
-const state = config
+class AppState extends SigningFlow {
+  constructor (params) {
+    super(params)
 
-const pageName = location.pathname.replace(/.*\//, "")
-state.contextIsWidget = !!pageName.match(/^widget(.html)?$/)
+    this.$import(params, [
+      "automaticRedirection",
+      "authenticators",
+      "authenticatorName",
+      "showQrCode"
+    ])
 
-state.query = location.search.length > 1 && location.search
-
-state.$define("authenticator", ["authenticatorName"], the => {
-  return authenticators[the.authenticatorName]
-})
-state.$push("authenticator", state, "authenticatorName", auth => auth.name)
-
-if (state.contextIsWidget) {
-  // Lock redirect.
-  state.$off("contextIsWidget")
-  state.redirect = false
+    // Prevent UI loading
+    if (this.interrupt) throw "redirect"
+  }
 }
 
-/* Exports */
-module.exports = state
+/* Defaults */
+const proto = AppState.prototype
+proto.authenticators = authenticators.array
 
-// eslint-disable-next-line no-console
-console.log("State", state, "(partly persistent, edit at your own risk)")
+/* Computations */
+
+proto.$define(
+  "authenticator",
+  ["authenticators", "authenticatorName"],
+  function () {
+    return this.authenticators.find(a => a.name === this.authenticatorName)
+  }
+)
+
+proto.$define(
+  "interrupt",
+  ["automaticRedirection", "cosmicLink", "authenticator", "target"],
+  function () {
+    if (type(this.target) !== "string") return
+
+    if (this.cosmicLink && this.automaticRedirection) {
+      this.sign()
+      return true
+    }
+  }
+)
+
+/* Events */
+proto.$on("authenticator", function (current, previous) {
+  if (previous && previous.onExit) {
+    previous.onExit()
+  }
+})
+
+/* Export */
+module.exports = AppState

@@ -7,8 +7,8 @@
   <meta http-equiv="Content-Security-Policy" content="
     form-action 'none';
     default-src 'none';
-    script-src 'self';
-    style-src 'self'
+    script-src 'unsafe-inline' 'unsafe-eval' 'self';
+    style-src 'unsafe-inline' 'self'
       'sha256-UpnKee22eAiBMULu1lvaV7de7xOzTjdN7K/WZDBil10='
     ;
     frame-src https://connect.trezor.io;
@@ -18,10 +18,10 @@
     connect-src *;
   ">
 
-  <!-- Possible immediate redirection (blocking on purpose) -->
+  <!-- Possible immediate redirection (blocking on purpose, to be improved) -->
+  <script src="stellar-sdk.js"></script>
   <script src="index.js"></script>
 
-  <script src="stellar-sdk.js" defer></script>
   <link rel="preload" href="index.css" as="style">
   <link rel="preload" href="fonts/cousine.woff2" as="font" type="font/woff2"
         crossorigin>
@@ -52,60 +52,8 @@
 </head>
 
 <body>
-
-  <header>
-    <h1 id="websiteUrl">=(G_G)=</h1><span id="query"></span>
-  </header>
-
-  <img id="logo" src="icons/512x512.png" alt="">
-
-  <main>
-    <nav id="nav"> </nav>
-    <hr>
-
-    <section id="sign">
-      <h2>Stellar Transaction Request</h2>
-      <hr>
-
-      <h3>Step 1: Check the transaction</h3>
-      <div id="cosmiclink_description">
-        Loading... <span class="cosmiclib_loadingAnim"></span>
-      </div>
-
-      <hr>
-
-      <h3>Step 2: Select a Signing Method</h3>
-      <form onsubmit="return false">
-        <select id="authenticators">
-          <option value="" disabled selected hidden>Loading...</option>
-        </select>
-        <div id="accountDiv" hidden>
-          <input id="accountIdBox" type="text">
-        </div>
-        <div id="networkDiv"></div>
-        <div id="accountMsgbox"></div>
-      </form>
-
-      <hr>
-
-      <h3>Step 3: Sign the Transaction</h3>
-
-      <form id="redirectionForm">
-        <input id="redirectionButton" type="button" value="…" disabled>
-        <input id="redirectionCheckbox" type="checkbox">
-        <label for="redirectionCheckbox">Automatic redirection</label>
-        <div id="redirectionMsgbox"></div>
-      </form>
-
-      <form id="textareaForm" hidden>
-        <textarea id="xdrBox" rows="3"></textarea>
-      </form>
-
-      <form id="qrForm" hidden>
-      </form>
-    </section>
-
-    <section id="about" hidden>
+  <main id="noscript">
+    <section id="about">
       <h2>Warm welcome to Cosmic.link!</h2>
       <hr>
 
@@ -266,14 +214,6 @@ ${handler}${tx_request}
 
     </section>
   </main>
-
-  <div id="anti-tamper"></div>
-
-  <footer>
-    <a id="registerSep7Handler" hidden>
-      Register as web+stellar links handler (SEP-0007)
-    </a>
-  </footer>
 
 </body>
 </html>
