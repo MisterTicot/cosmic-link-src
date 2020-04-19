@@ -100,7 +100,7 @@ const proto = AppFull.prototype
 
 proto.$define("route", ["query", "selectedTabId"], function () {
   const tab = this.selectedTabId
-  const query = tab === "sign" ? `${this.query}` : ""
+  const query = tab === "sign" ? this.query || "" : ""
   const hash = tab === "sign" ? "" : `#${this.selectedTabId}`
   return `${query}${hash}`
 })

@@ -22,7 +22,7 @@ class AppEmbed extends View {
 
     this.state = new AppState(params)
     this.signingWidget = new SigningWidget(this.state)
-    this.$pull("route", this.state, "query")
+    this.$pull("route", this.state, "query", x => x || "")
   }
 }
 
