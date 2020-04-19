@@ -2,90 +2,59 @@
 /**
  * Network Selector
  * */
-const cosmicLib = require("cosmic-lib")
 const { View } = require("@kisbox/browser")
-
-const {
-  constructor: { shortcuts }
-} = require("@kisbox/helpers")
 
 /* Definition */
 
 class NetworkSelector extends View {
-  constructor (params = {}) {
+  constructor (params) {
     super(`
-<section class="NetworkSelector">
+<div class="NetworkSelector">
 
   <div>
-    <input type="radio" $group="networkSelector" value="public" %disabled
-      $label="Public">
-    <input type="radio" $group="networkSelector" value="test" %disabled
-      $label="Test">
-    <input type="radio" $group="networkSelector" value="custom" %disabled
-      $label="Custom">
+    <input type="radio" $group="networkSelector" value="public"
+      disabled=%lockNetwork $label="Public">
+    <input type="radio" $group="networkSelector" value="test"
+      disabled=%lockNetwork $label="Test">
+    <input type="radio" $group="networkSelector" value="custom"
+      disabled=%lockNetwork $label="Custom">
   </div>
 
   <div hidden=%not:isCustom>
-    <input type="text" value=%network %disabled
+    <input type="text" value=%network disabled=%lockNetwork
       placeholder="Network Passphrase or Name">
     <input type="text" value=%horizon
       placeholder="Horizon URL">
   </div>
   
-</section>
+</div>
     `)
 
-    this.networkSelector = "public"
-    this.$import(params, [
-      "networkSelector",
-      "network",
-      "horizon",
-      "disabled",
-      "cosmicLink"
-    ])
+    this.$import(params, ["lockNetwork"])
+    this.$link(params, ["network", "horizon"])
   }
 }
 
-const { proto } = shortcuts(NetworkSelector)
+/* Computations */
+const proto = NetworkSelector.prototype
+
+proto.$define("networkSelector", ["network"], function () {
+  if (this.network === "public" || this.network === "test") {
+    return this.network
+  } else {
+    return "custom"
+  }
+})
 
 proto.$define("isCustom", ["networkSelector"], function () {
   return this.networkSelector === "custom"
 })
 
-proto.$on("cosmicLink", function () {
-  this.disabled = false
-  if (!this.cosmicLink) return
-
-  const tdesc = this.cosmicLink.tdesc
-  if (tdesc.network) {
-    this.disabled = true
-    if (tdesc.network === "public" || tdesc.network === "test") {
-      this.networkSelector = tdesc.network
-    } else {
-      this.networkSelector = "custom"
-      this.network = tdesc.network
-    }
-  }
-})
-
+/* Events */
 proto.$on("networkSelector", function () {
   if (!this.isCustom) {
     this.network = this.networkSelector
   }
-})
-
-proto.$on("network", function () {
-  // Turns passphrase into network name (e.g: "public")
-  const name = cosmicLib.resolve.networkName(this.network)
-  if (this.network !== name) {
-    this.network = name
-    return
-  }
-
-  this.horizon =
-    cosmicLib.resolve.horizon(this.network)
-    || this.cosmicLink && this.cosmicLink.tdesc.horizon
-    || ""
 })
 
 /* Export */
