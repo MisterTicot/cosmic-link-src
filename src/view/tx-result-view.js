@@ -20,7 +20,7 @@ class TxResultView extends View {
 
   constructor (txResult) {
     super(`
-<div class="cosmiclink_description">
+<div class="TxResultView cosmiclink_description">
 
   <span class=%state>%title</span>
 
@@ -36,6 +36,7 @@ class TxResultView extends View {
   }
 }
 
+/* Helpers */
 TxResultView.helpers.toLi = any => html("li", [any])
 
 /* Exports */
