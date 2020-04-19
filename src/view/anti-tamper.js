@@ -9,14 +9,23 @@ const { View } = require("@kisbox/browser")
 class AntiTamper extends View {
   constructor (params = {}) {
     super(`<img class="AntiTamper" %src>`)
-    this.$import(params, "hash")
+    this.$import(params, ["baseUrl", "set", "antiTamperHash"])
   }
 }
 
+/* Defaults */
 const proto = AntiTamper.prototype
-proto.$define("src", ["hash"], the => `https://robohash.org/${the.hash}`)
+proto.baseUrl = "https://robohash.org"
+proto.set = "set1"
+
+/* Computations */
+
+proto.$define("src", ["baseURl", "set", "antiTamperHash"], function () {
+  return `${this.baseUrl}/${this.antiTamperHash}?set=${this.set}`
+})
 
 /* Utilities */
+
 AntiTamper.makeHash = function (size = 32) {
   const alphabet =
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
