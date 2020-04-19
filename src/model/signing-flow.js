@@ -221,5 +221,13 @@ proto.$define("sign", ["request"], function () {
   }
 })
 
+/* Events */
+proto.$on(
+  ["cosmicLink", "authenticator", "network", "horizon", "sign"],
+  function () {
+    this.result = null
+  }
+)
+
 /* Export */
 module.exports = SigningFlow
