@@ -13,7 +13,7 @@ const defaults = {
 }
 
 protocols.cosmiclink = {
-  handler: function (authenticator, cosmicLink) {
+  handler: function (cosmicLink, authenticator) {
     return authenticator.url + cosmicLink.query
   }
 }
@@ -26,10 +26,12 @@ protocols.ledgerwallet = {
     await ledger.connect()
     return ledger.publicKey
   },
-  handler: async function (authenticator, cosmicLink) {
+  handler: async function (cosmicLink) {
     await cosmicLink.lock()
     const ledger = await getLedgerModule()
-    return async () => ledger.sign(cosmicLink.transaction)
+    const request = async () => ledger.sign(cosmicLink.transaction)
+    request.cosmicLink = cosmicLink
+    return request
   },
   refresh: async function (refresher) {
     const ledger = await getLedgerModule()
@@ -49,10 +51,12 @@ protocols.trezorwallet = {
     await trezor.connect()
     return trezor.publicKey
   },
-  handler: async function (authenticator, cosmicLink) {
+  handler: async function (cosmicLink) {
     await cosmicLink.lock()
     const trezor = await getTrezorModule()
-    return async () => trezor.sign(cosmicLink.transaction)
+    const request = async () => trezor.sign(cosmicLink.transaction)
+    request.cosmicLink = cosmicLink
+    return request
   },
   refresh: async function (refresher) {
     const trezor = await getTrezorModule()
@@ -65,12 +69,12 @@ protocols.trezorwallet = {
 }
 
 protocols.sep0007 = {
-  handler: async function (authenticator, cosmicLink) {
+  handler: async function (cosmicLink, authenticator) {
     await cosmicLink.lock()
 
     const url = cosmicLink.sep7
-    const handler = "web+stellar:"
-    if (authenticator.url !== handler) {
+    const endpoint = "web+stellar:"
+    if (authenticator.url !== endpoint) {
       const sep7 = encodeURIComponent(url)
       return `${authenticator.url}${sep7}`
     } else {
@@ -80,7 +84,7 @@ protocols.sep0007 = {
 }
 
 protocols.stellarlab = {
-  handler: async function (authenticator, cosmicLink) {
+  handler: async function (cosmicLink, authenticator) {
     await cosmicLink.lock()
     const encodedXdr = encodeURIComponent(cosmicLink.xdr)
     let query = `?xdr=${encodedXdr}`
@@ -98,7 +102,7 @@ protocols.stellarlab = {
 protocols.copy = {
   redirection: false,
   textarea: true,
-  handler: async function (authenticator, cosmicLink) {
+  handler: async function (cosmicLink) {
     await cosmicLink.lock()
     return cosmicLink.xdr
   }
