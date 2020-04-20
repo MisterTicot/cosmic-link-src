@@ -20,7 +20,7 @@ proto.set = "set1"
 
 /* Computations */
 
-proto.$define("src", ["baseURl", "set", "antiTamperHash"], function () {
+proto.$define("src", ["baseUrl", "set", "antiTamperHash"], function () {
   return `${this.baseUrl}/${this.antiTamperHash}?set=${this.set}`
 })
 
