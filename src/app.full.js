@@ -7,7 +7,7 @@
  *
  * */
 const { sep7Utils } = require("cosmic-lib")
-const { View, dom } = require("@kisbox/browser")
+const { View, html } = require("@kisbox/browser")
 
 const AppState = require("./app.state")
 const Navigation = require("./lib/navigation")
@@ -69,7 +69,7 @@ class AppFull extends View {
       {
         id: "about",
         title: "About",
-        view: dom.about
+        view: html.grab("#about")
       }
     ])
 
