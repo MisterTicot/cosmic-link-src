@@ -14,6 +14,36 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 2.0.0-beta.2 - 2020-04-26
+
+### Fixed
+
+- UI: Fix anti-tamper robot.
+- UI: Fix 'about' page display.
+
+## 2.0.0-beta.1 - 2020-04-19
+
+This is a rewrite ontop of Kisbox, providing identical features than the latest
+v1.
+
+## 1.15.1 - 2020-02-24
+
+### Fixed
+
+- Logic: Fix a case were Trezor signatures were wrong. (Thanks
+  [@Tyvdh](https://github.com/tyvdh))
+
+## 1.15.2 - 2020-02-29
+
+### Fixed
+
+- Logic: Fix a bug that caused XDR generation to fail. When using Cosmic.link
+  for the first time, users sometime faced a "No horizon node for that network"
+  error.
+- UI: Fix a bug that prevented XDR URL update. When users signed an XDR-based
+  request using a hardware wallet, the URL was supposed to get refreshed to
+  include the signature but wasn't. (Thanks [@Tyvdh](https://github.com/tyvdh))
+
 ## 1.15.0 - 2020-01-04
 
 ### Changed
