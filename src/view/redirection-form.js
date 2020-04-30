@@ -64,7 +64,7 @@ proto.$define(
   }
 )
 
-proto.$define("txResultView", ["result"], function () {
+proto.$customDefine("txResultView", ["result"], function () {
   if (type(this.result) === "error") {
     return html("span", { className: "error" }, this.result.message)
   } else {

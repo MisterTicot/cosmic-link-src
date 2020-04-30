@@ -13,7 +13,6 @@ const { CosmicLink, resolve, config } = require("cosmic-lib")
 const TxResult = require("@cosmic-plus/tx-result")
 
 const { LiveObject } = require("@kisbox/model")
-const { type } = require("@kisbox/utils")
 const {
   environment: { isEmbedded }
 } = require("@kisbox/helpers")
@@ -164,13 +163,6 @@ proto.$define(
       return this.authenticator.url || null
     }
 
-    if (
-      type(this.accountId) === "promise"
-      || type(this.accountId) === "error"
-    ) {
-      return new Promise(() => {})
-    }
-
     if (this.needSource && !(this.lockSource || this.accountId)) {
       return new Error("Please set a source account")
     }
@@ -192,12 +184,6 @@ proto.$define(
 )
 
 proto.$define("target", ["request"], function () {
-  if (type(this.request) === "promise") {
-    return new Promise(() => {})
-  } else if (type(this.request) === "error") {
-    return this.request
-  }
-
   if (typeof this.request === "string") {
     return this.request
   } else {
@@ -206,12 +192,6 @@ proto.$define("target", ["request"], function () {
 })
 
 proto.$define("sign", ["request"], function () {
-  if (type(this.request) === "promise") {
-    return new Promise(() => {})
-  } else if (type(this.request) === "error") {
-    return this.request
-  }
-
   if (typeof this.request === "string") {
     return () => this.signUsingUri()
   } else if (this.request) {

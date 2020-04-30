@@ -16,8 +16,8 @@ class QrCodeCanvas extends View {
   constructor (params) {
     super(`
 <div class="QrCodeCanvas">
-  <span class="cosmiclib_loadingAnim" hidden=%not:pending></span>
-  <canvas $ref="canvas" title=%target %hidden></canvas>
+  <span class="cosmiclib_loadingAnim" hidden=%notPending:target></span>
+  <canvas $ref="canvas" title=%target hidden=%not:target></canvas>
 </div>
 `)
 
@@ -28,19 +28,11 @@ class QrCodeCanvas extends View {
 /* Computations */
 const proto = QrCodeCanvas.prototype
 
-proto.$define("pending", ["target"], function () {
-  return type(this.target) === "promise"
-})
-
-proto.$define("hidden", ["target"], function () {
-  return !this.target || type(this.target) !== "string"
-})
-
 proto.$on("target", function () {
-  if (this.hidden) {
-    clearQr(this.$ref.canvas)
-  } else {
+  if (type(this.target) === "string") {
     setQr(this.$ref.canvas, this.target)
+  } else if (this.$ref.canvas) {
+    clearQr(this.$ref.canvas)
   }
 })
 

@@ -15,9 +15,9 @@ const {
 class AccountInput extends View {
   constructor (params) {
     super(`
-<input type="text" value=%filter:accountId %onclick %readonly %disabled
-  %placeholder autocomplete="stellar-address">
-    `)
+<input type="text" value=%filter:accountId %onclick %readonly %placeholder
+  disabled=%notAvailable:accountId autocomplete="stellar-address">
+      `)
 
     this.accountId = ""
     this.$import(params, ["cosmicLink", "authenticator"])
@@ -34,10 +34,6 @@ class AccountInput extends View {
 /* Computations */
 const proto = AccountInput.prototype
 
-proto.$define("disabled", ["cosmicLink", "authenticator"], function () {
-  return type(this.accountId) === "promise" || type(this.accountId) === "error"
-})
-
 proto.$define("readonly", ["cosmicLink", "authenticator"], function () {
   return !!(
     this.cosmicLink && this.cosmicLink.tdesc.source
@@ -45,12 +41,13 @@ proto.$define("readonly", ["cosmicLink", "authenticator"], function () {
   )
 })
 
-proto.$define("placeholder", ["accountId"], function () {
-  if (type(this.accountId) === "promise") {
+proto.$customDefine("placeholder", ["accountId"], function () {
+  switch (type(this.accountId)) {
+  case "promise":
     return "Connecting..."
-  } else if (type(this.accountId) === "error") {
+  case "error":
     return this.accountId
-  } else {
+  default:
     return "Federated Address or Public Key"
   }
 })

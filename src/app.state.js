@@ -21,7 +21,7 @@ class AppState extends SigningFlow {
     ])
 
     // Prevent UI loading
-    if (this.interrupt) throw "redirect"
+    if (this.interrupt === true) throw "redirect"
   }
 }
 

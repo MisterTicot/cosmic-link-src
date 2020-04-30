@@ -29,19 +29,19 @@ class RedirectionButton extends View {
 /* Computations */
 const proto = RedirectionButton.prototype
 
-proto.$define("buttonText", ["authenticator", "sign"], function () {
-  if (type(this.sign) === "promise") {
-    return "..."
-  } else if (type(this.sign) === "error") {
-    return this.sign
-  } else if (this.sign) {
+proto.$customDefine("buttonText", ["authenticator", "sign"], function () {
+  switch (type(this.sign)) {
+    case "error": return this.sign
+    case "promise": return "..."
+  }
+  if (this.sign) {
     return this.authenticator.buttonText
   } else {
     return "No transaction"
   }
 })
 
-proto.$define("value", ["buttonText", "result"], function () {
+proto.$customDefine("value", ["buttonText", "result"], function () {
   if (type(this.result) === "promise") {
     return "Signing..."
   } else if (this.result) {
@@ -51,7 +51,7 @@ proto.$define("value", ["buttonText", "result"], function () {
   }
 })
 
-proto.$define("disabled", ["sign", "result"], function () {
+proto.$customDefine("disabled", ["sign", "result"], function () {
   return (
     !this.sign
     || type(this.sign) === "promise"

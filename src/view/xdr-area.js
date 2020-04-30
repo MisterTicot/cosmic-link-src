@@ -14,35 +14,22 @@ const {
 class XdrArea extends View {
   constructor (params) {
     super(`
-<textarea rows=3 %value %onclick %disabled %readonly %placeholder></textarea>
+<textarea rows=3 readonly %value %onclick %placeholder disabled=%not:target>
+</textarea>
     `)
 
     this.$import(params, ["target"])
   }
 
   onclick () {
-    if (this.readonly) {
-      copyContent(this.domNode)
-    }
+    copyContent(this.domNode)
   }
 }
 
 /* Computations */
 const proto = XdrArea.prototype
 
-proto.$define("disabled", ["target"], function () {
-  return (
-    !this.target
-    || type(this.target) === "promise"
-    || type(this.target) === "error"
-  )
-})
-
-proto.$define("readonly", ["target"], function () {
-  return !!this.target
-})
-
-proto.$define("placeholder", ["target"], function () {
+proto.$customDefine("placeholder", ["target"], function () {
   if (!this.target) {
     return "No transaction"
   } else if (type(this.target) === "promise") {
@@ -52,11 +39,11 @@ proto.$define("placeholder", ["target"], function () {
   }
 })
 
-proto.$define("value", ["target"], function () {
-  if (this.disabled) {
-    return ""
-  } else {
+proto.$customDefine("value", ["target"], function () {
+  if (type(this.target) === "string" || type(this.target) === "error") {
     return this.target
+  } else {
+    return ""
   }
 })
 
