@@ -32,6 +32,10 @@ class AppState extends SigningFlow {
 
     // Prevent UI loading
     if (this.interrupt === true) throw "redirect"
+
+    // Beta debugging
+    // eslint-disable-next-line no-console
+    console.log("State:", this)
   }
 }
 
