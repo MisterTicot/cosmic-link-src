@@ -1,3 +1,4 @@
+"use strict"
 /**
  * Protocols handlers.
  *
@@ -6,11 +7,7 @@
  */
 const protocols = exports
 
-const defaults = {
-  redirection: true,
-  textarea: false,
-  qrCode: true
-}
+/* Data */
 
 protocols.cosmiclink = {
   handler: function (cosmicLink, authenticator) {
@@ -108,9 +105,7 @@ protocols.copy = {
   }
 }
 
-/**
- * Module loading
- */
+/* Module loading */
 
 function getLedgerModule () {
   return import(
@@ -126,13 +121,3 @@ function getTrezorModule () {
     return trezor.default
   })
 }
-
-/**
- * Apply defaults to each protocols.
- */
-
-for (let entry in protocols) {
-  protocols[entry] = Object.assign({}, defaults, protocols[entry])
-}
-
-protocols.defaults = defaults

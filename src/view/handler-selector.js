@@ -3,7 +3,7 @@
  * Handler Selector
  *
  * * Import: authenticators
- * * Link: authenticatorName
+ * * Link: authenticatorId
  *
  * */
 const { View, html } = require("@kisbox/browser")
@@ -13,13 +13,13 @@ const { View, html } = require("@kisbox/browser")
 class HandlerSelector extends View {
   constructor (params) {
     super(`
-<select class="HandlerSelector" value=%authenticatorName>
+<select class="HandlerSelector" value=%authenticatorId>
   %toOption:...authenticators
 </select>
     `)
 
     this.$import(params, ["authenticators"])
-    this.$link(params, ["authenticatorName"])
+    this.$link(params, ["authenticatorId"])
   }
 }
 
@@ -27,7 +27,7 @@ class HandlerSelector extends View {
 const helpers = HandlerSelector.helpers
 
 helpers.toOption = function (handler) {
-  return html("option", { value: handler.name }, handler.fullName)
+  return html("option", { value: handler.id }, handler.name)
 }
 
 /* Export */

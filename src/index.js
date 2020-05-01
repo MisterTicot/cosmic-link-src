@@ -52,7 +52,7 @@ window.onload = async function () {
 
   // Save user preferences.
   config.$import(app.state, [
-    "authenticatorName",
+    "authenticatorId",
     "showQrCode",
     "automaticRedirection"
   ])

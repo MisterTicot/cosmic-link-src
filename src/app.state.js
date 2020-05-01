@@ -4,8 +4,18 @@
  * */
 const { type } = require("@kisbox/utils")
 
-const authenticators = require("./data/authenticators")
+const CrudArray = require("./lib/crud-array")
+
+const Authenticator = require("./model/authenticator")
+const Protocol = require("./model/protocol")
 const SigningFlow = require("./model/signing-flow")
+
+/* Data */
+
+Authenticator.protocols = new CrudArray(Protocol)
+Authenticator.protocols.ingest(require("./data/protocols"))
+const authenticators = new CrudArray(Authenticator)
+authenticators.ingest(require("./data/wallets"))
 
 /* Definition */
 
@@ -16,7 +26,7 @@ class AppState extends SigningFlow {
     this.$import(params, [
       "automaticRedirection",
       "authenticators",
-      "authenticatorName",
+      "authenticatorId",
       "showQrCode"
     ])
 
@@ -27,15 +37,15 @@ class AppState extends SigningFlow {
 
 /* Defaults */
 const proto = AppState.prototype
-proto.authenticators = authenticators.array
+proto.authenticators = authenticators
 
 /* Computations */
 
 proto.$define(
   "authenticator",
-  ["authenticators", "authenticatorName"],
+  ["authenticators", "authenticatorId"],
   function () {
-    return this.authenticators.find(a => a.name === this.authenticatorName)
+    return this.authenticators.get(this.authenticatorId)
   }
 )
 
