@@ -8,7 +8,7 @@
   "license": "MIT",
   "keywords": [],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jasmine 'test/**/*.spec.js'",
     "get": "git submodule update -i --recursive",
     "clean": "rm -rf web/*",
     "prettier": "prettier --write --no-semi 'src/**/*.{js,json,md}' '*.{js,json,md}'",
@@ -76,6 +76,7 @@
     "@kisbox/utils": "^1.0.0-beta.2",
     "core-js": "^3.6.5",
     "cosmic-lib": "^2.7.0",
+    "jasmine": "^3.5.0",
     "qrcode": "^1.4.4"
   }
 }
