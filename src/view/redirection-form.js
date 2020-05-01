@@ -52,7 +52,7 @@ proto.$define("showButton", ["authenticator"], function () {
   return this.authenticator.redirection
 })
 
-proto.$define("showTextarea", ["cosmicLink", "authenticator"], function () {
+proto.$define("showTextarea", ["authenticator"], function () {
   return this.authenticator.textarea
 })
 
@@ -71,17 +71,6 @@ proto.$customDefine("txResultView", ["result"], function () {
     return new TxResultView(this.result)
   }
 })
-
-/* Helpers */
-const helpers = RedirectionForm.helpers
-
-helpers.filter = function (action) {
-  if (type(action) === "promise") {
-    return "Pending..."
-  } else {
-    return action
-  }
-}
 
 /* Export */
 module.exports = RedirectionForm

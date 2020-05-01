@@ -31,8 +31,10 @@ const proto = RedirectionButton.prototype
 
 proto.$customDefine("buttonText", ["authenticator", "sign"], function () {
   switch (type(this.sign)) {
-    case "error": return this.sign
-    case "promise": return "..."
+  case "error":
+    return this.sign
+  case "promise":
+    return "..."
   }
   if (this.sign) {
     return this.authenticator.buttonText
