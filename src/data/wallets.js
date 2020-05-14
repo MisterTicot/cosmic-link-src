@@ -49,9 +49,19 @@ wallets.Sep7Wallet = {
 }
 
 wallets.StellarLaboratory = {
-  name: "Stellar Laboratory",
+  name: "Stellar Laboratory (Sign)",
   protocol: "stellarlab",
   url: "https://stellar.org/laboratory/#txsigner?xdr=",
+  target: "new",
+  needSource: true,
+  needNetwork: true
+}
+
+wallets.StellarLaboratoryView = {
+  name: "Stellar Laboratory (View)",
+  protocol: "stellarlab",
+  url:
+    "https://stellar.org/laboratory/#xdr-viewer?type=TransactionEnvelope&input=",
   target: "new",
   needSource: true,
   needNetwork: true
