@@ -37,7 +37,7 @@ const proto = AccountInput.prototype
 proto.$define("readonly", ["cosmicLink", "authenticator"], function () {
   return !!(
     this.cosmicLink && this.cosmicLink.tdesc.source
-    || this.authenticator.getAccountId
+    || this.authenticator.getAddress
   )
 })
 

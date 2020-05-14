@@ -31,12 +31,7 @@ class RedirectionForm extends View {
 </div>
     `)
 
-    this.$import(signingFlow, [
-      "cosmicLink",
-      "authenticator",
-      "action",
-      "result"
-    ])
+    this.$import(signingFlow, ["cosmicLink", "authenticator", "result"])
 
     // Components
     this.redirectionButton = new RedirectionButton(signingFlow)
@@ -49,18 +44,21 @@ class RedirectionForm extends View {
 const proto = RedirectionForm.prototype
 
 proto.$define("showButton", ["authenticator"], function () {
-  return this.authenticator.redirection
+  return this.authenticator.requestToUri || this.authenticator.signRequest
 })
 
 proto.$define("showTextarea", ["authenticator"], function () {
-  return this.authenticator.textarea
+  return this.authenticator.requestToXdr
 })
 
 proto.$define(
   "showQrCodeSwitcher",
   ["cosmicLink", "authenticator"],
   function () {
-    return this.cosmicLink && this.authenticator.qrCode
+    return (
+      this.cosmicLink
+      && (this.authenticator.requestToUri || this.authenticator.requestToXdr)
+    )
   }
 )
 

@@ -16,30 +16,29 @@ const SigningContext = require("./signing-context")
 class SigningFlow extends SigningContext {
   constructor (params) {
     super(params)
-
-    this.result = null
   }
 
-  signUsingUri () {
+  open () {
+    if (!this.uri) return
+
+    // TODO: use an opening callback instead?
     if (
       isEmbedded
       && (this.authenticator.target === "new"
         || this.authenticator.target === "external")
     ) {
-      open(this.target)
+      open(this.uri)
       window.parent.postMessage("close", "*")
     } else {
-      location.replace(this.target)
+      location.replace(this.uri)
     }
   }
 
-  signUsingFunction () {
-    this.result = this.request()
-      .then(() => {
-        this.cosmicLink = this.request.cosmicLink
-        return TxResult.forCosmicLink(this.cosmicLink)
-      })
-      .catch(error => error)
+  async sign () {
+    if (!this.authenticator.signRequest) return null
+
+    const returned = await this.authenticator.signRequest(this.resolved)
+    this.signed = returned || this.resolved
   }
 }
 
@@ -47,12 +46,10 @@ class SigningFlow extends SigningContext {
 const proto = SigningFlow.prototype
 
 proto.$define(
-  "request",
-  ["cosmicLink", "authenticator", "accountId", "network", "horizon"],
+  "resolved",
+  ["authenticator", "accountId", "network", "horizon"],
   function () {
-    if (!this.cosmicLink) {
-      return this.authenticator.url || null
-    }
+    if (!this.cosmicLink) return
 
     if (this.needSource && !(this.lockSource || this.accountId)) {
       return new Error("Please set a source account")
@@ -69,36 +66,49 @@ proto.$define(
     config.source = this.accountId
     config.network = this.network
 
-    const response = this.authenticator.handler(clone, this.authenticator)
-    return response
+    return this.authenticator.resolveRequest(clone, this.authenticator)
   }
 )
 
-proto.$define("target", ["request"], function () {
-  if (typeof this.request === "string") {
-    return this.request
+proto.$on("authenticator", function () {
+  this.signed = null
+})
+
+proto.$define("uri", ["resolved"], function () {
+  if (!this.resolved) {
+    return this.authenticator.uri
+  } else if (this.authenticator.requestToUri) {
+    return this.authenticator.requestToUri(this.resolved, this.authenticator)
   } else {
     return null
   }
 })
 
-proto.$define("sign", ["request"], function () {
-  if (typeof this.request === "string") {
-    return () => this.signUsingUri()
-  } else if (this.request) {
-    return () => this.signUsingFunction()
+proto.$define("xdr", ["resolved"], function () {
+  if (this.resolved && this.authenticator.requestToXdr) {
+    return this.authenticator.requestToXdr(this.resolved, this.authenticator)
   } else {
     return null
   }
 })
 
-/* Events */
-proto.$on(
-  ["cosmicLink", "authenticator", "network", "horizon", "sign"],
-  function () {
-    this.result = null
+proto.$define("action", ["resolved"], function () {
+  if (this.authenticator.signRequest) {
+    return () => this.sign()
+  } else {
+    return () => this.open()
   }
-)
+})
+
+proto.$on("signed", function () {
+  if (this.signed) {
+    this.query = this.signed.query
+  }
+})
+
+proto.$define("result", ["signed"], function () {
+  return this.signed && TxResult.forCosmicLink(this.signed)
+})
 
 /* Export */
 module.exports = SigningFlow

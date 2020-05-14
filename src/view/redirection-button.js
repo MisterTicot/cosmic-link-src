@@ -17,47 +17,47 @@ class RedirectionButton extends View {
 </div>
     `)
 
-    this.$import(params, ["authenticator", "sign", "result"])
+    this.$import(params, ["authenticator", "resolved", "action", "result"])
     this.$link(params, ["automaticRedirection"])
   }
 
   onclick () {
-    this.sign()
+    this.action()
   }
 }
 
 /* Computations */
 const proto = RedirectionButton.prototype
 
-proto.$customDefine("buttonText", ["authenticator", "sign"], function () {
-  switch (type(this.sign)) {
-  case "error":
-    return this.sign
-  case "promise":
-    return "..."
+proto.$customDefine(
+  "value",
+  ["authenticator", "resolved", "result"],
+  function () {
+    if (type(this.signed) === "promise") {
+      return "Signing..."
+    } else if (type(this.result) === "promise") {
+      return "Sending..."
+    } else if (this.result) {
+      return "Done"
+    } else if (type(this.resolved) === "error") {
+      return this.resolved
+    } else if (type(this.resolved) === "promise") {
+      return "..."
+    } else if (!this.resolved) {
+      return "No transaction"
+    } else if (this.authenticator.signRequest) {
+      return `Sign with ${this.authenticator.name}`
+    } else if (this.authenticator.requestToUri) {
+      return `Go to ${this.authenticator.name}`
+    }
   }
-  if (this.sign) {
-    return this.authenticator.buttonText
-  } else {
-    return "No transaction"
-  }
-})
+)
 
-proto.$customDefine("value", ["buttonText", "result"], function () {
-  if (type(this.result) === "promise") {
-    return "Signing..."
-  } else if (this.result) {
-    return "Done"
-  } else {
-    return this.buttonText
-  }
-})
-
-proto.$customDefine("disabled", ["sign", "result"], function () {
+proto.$customDefine("disabled", ["action", "result"], function () {
   return (
-    !this.sign
-    || type(this.sign) === "promise"
-    || type(this.sign) === "error"
+    !this.action
+    || type(this.action) === "promise"
+    || type(this.action) === "error"
     || this.result
   )
 })

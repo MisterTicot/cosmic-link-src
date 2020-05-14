@@ -1,6 +1,15 @@
 "use strict"
 /**
- * Protocols handlers.
+ * Wallet protocols.
+ *
+ * Properties:
+ *
+ * - getAddress
+ * - resolveRequest
+ * - signRequest
+ * - requestToUri
+ * - requestToXdr
+ * - onExit
  *
  * @exports protocols
  * @private
@@ -10,31 +19,27 @@ const protocols = exports
 /* Data */
 
 protocols.cosmiclink = {
-  handler: function (cosmicLink, authenticator) {
-    return authenticator.url + cosmicLink.query
+  resolveRequest (cosmicLink) {
+    return cosmicLink
+  },
+  requestToUri (cosmicLink, authenticator) {
+    return `${authenticator.url}${cosmicLink.query}`
   }
 }
 
 protocols.ledgerwallet = {
   buttonText: "Sign with Ledger Wallet",
   qrCode: false,
-  getAccountId: async function () {
+  async getAddress () {
     const ledger = await getLedgerModule()
     await ledger.connect()
     return ledger.publicKey
   },
-  handler: async function (cosmicLink) {
-    await cosmicLink.lock()
+  async signRequest (cosmicLink) {
     const ledger = await getLedgerModule()
-    const request = async () => ledger.sign(cosmicLink.transaction)
-    request.cosmicLink = cosmicLink
-    return request
+    await ledger.sign(cosmicLink.transaction)
   },
-  refresh: async function (refresher) {
-    const ledger = await getLedgerModule()
-    ledger.onDisconnect = () => refresher()
-  },
-  onExit: async function () {
+  async onExit () {
     const ledger = await getLedgerModule()
     ledger.disconnect()
   }
@@ -43,64 +48,56 @@ protocols.ledgerwallet = {
 protocols.trezorwallet = {
   buttonText: "Sign with Trezor Wallet",
   qrCode: false,
-  getAccountId: async function () {
+  async getAddress () {
     const trezor = await getTrezorModule()
     await trezor.connect()
     return trezor.publicKey
   },
-  handler: async function (cosmicLink) {
-    await cosmicLink.lock()
+  async signRequest (cosmicLink) {
     const trezor = await getTrezorModule()
-    const request = async () => trezor.sign(cosmicLink.transaction)
-    request.cosmicLink = cosmicLink
-    return request
+    await trezor.sign(cosmicLink.transaction)
   },
-  refresh: async function (refresher) {
-    const trezor = await getTrezorModule()
-    trezor.onDisconnect = () => refresher()
-  },
-  onExit: async function () {
+  async onExit () {
     const trezor = await getTrezorModule()
     trezor.disconnect()
   }
 }
 
 protocols.sep0007 = {
-  handler: async function (cosmicLink, authenticator) {
-    await cosmicLink.lock()
-
-    const url = cosmicLink.sep7
+  requestToUri (cosmicLink, authenticator) {
+    const uri = cosmicLink.sep7
     const endpoint = "web+stellar:"
     if (authenticator.url !== endpoint) {
-      const sep7 = encodeURIComponent(url)
+      const sep7 = encodeURIComponent(uri)
       return `${authenticator.url}${sep7}`
     } else {
-      return url
+      return uri
     }
   }
 }
 
 protocols.stellarlab = {
-  handler: async function (cosmicLink, authenticator) {
-    await cosmicLink.lock()
+  async requestToUri (cosmicLink, authenticator) {
     const encodedXdr = encodeURIComponent(cosmicLink.xdr)
-    let query = `?xdr=${encodedXdr}`
+    let query = `${encodedXdr}`
+
     if (cosmicLink.network === "public" || cosmicLink.network === "test") {
       query += `&network=${cosmicLink.network}`
     } else {
       const passphrase = encodeURIComponent(cosmicLink.network)
       const horizon = encodeURIComponent(cosmicLink.horizon)
-      query += `&network=custom&horizonURL=${horizon}&networkPassphrase=${passphrase}`
+      query += `&network=custom&horizonURL=${horizon}`
+      query += `&networkPassphrase=${passphrase}`
     }
-    return authenticator.url + query
+
+    return `${authenticator.url}${query}`
   }
 }
 
 protocols.copy = {
   redirection: false,
   textarea: true,
-  handler: async function (cosmicLink) {
-    await cosmicLink.lock()
+  requestToXdr (cosmicLink) {
     return cosmicLink.xdr
   }
 }

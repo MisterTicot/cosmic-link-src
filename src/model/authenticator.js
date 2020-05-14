@@ -2,15 +2,14 @@
 /**
  * Authenticator
  */
-const { LiveObject } = require("@kisbox/model")
+const Protocol = require("./protocol")
 
 /* Definition */
 
-class Authenticator extends LiveObject {
+class Authenticator extends Protocol {
   constructor (params) {
-    super()
-
-    Object.assign(this, Authenticator.protocols.get(params.protocol))
+    const protocol = Authenticator.protocols.get(params.protocol)
+    super(protocol)
     delete this.id
 
     this.$import(params, [

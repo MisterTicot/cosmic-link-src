@@ -23,11 +23,18 @@ class Protocol extends LiveObject {
       "qrCode",
       "buttonText",
       // Actions
-      "getAccountId",
-      "handler",
-      "refresh",
+      "getAddress",
+      "resolveRequest",
+      "requestToUri",
+      "requestToXdr",
+      "signRequest",
       "onExit"
     ])
+  }
+
+  async resolveRequest (cosmicLink) {
+    await cosmicLink.lock()
+    return cosmicLink
   }
 }
 

@@ -86,8 +86,8 @@ proto.$define("lockNetwork", ["cosmicLink"], function () {
 })
 
 proto.$define("accountId", ["authenticator", "cosmicLink"], function () {
-  if (this.authenticator.getAccountId) {
-    return this.authenticator.getAccountId()
+  if (this.authenticator.getAddress) {
+    return this.authenticator.getAddress()
   } else if (this.lockSource) {
     return this.cosmicLink.tdesc.source
   } else if (typeof this.accountId === "string") {

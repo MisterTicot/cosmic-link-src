@@ -18,13 +18,10 @@ class QrCodeSwitcher extends View {
 </form>
   `)
 
-    this.disabled = false
-    this.hidden = true
-    this.target = null
-    this.$import(params, ["target"])
+    this.$import(params, ["uri", "xdr"])
     this.$link(params, ["showQrCode"])
 
-    this.canvas = new QrCodeCanvas(params)
+    this.canvas = new QrCodeCanvas(this)
   }
 
   switch () {
@@ -34,6 +31,10 @@ class QrCodeSwitcher extends View {
 
 /* Computations */
 const proto = QrCodeSwitcher.prototype
+
+proto.$define("target", ["uri", "xdr"], function () {
+  return this.uri || this.xdr
+})
 
 proto.$customDefine("disabled", ["target"], function () {
   return type(this.target) === "error"
