@@ -5,9 +5,7 @@
 const { CosmicLink, config } = require("cosmic-lib")
 const TxResult = require("@cosmic-plus/tx-result")
 
-const {
-  environment: { isEmbedded }
-} = require("@kisbox/helpers")
+const { isEmbedded } = require("@kisbox/helpers")
 
 const SigningContext = require("./signing-context")
 

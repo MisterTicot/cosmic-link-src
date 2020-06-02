@@ -3,10 +3,7 @@
  * CrudArray
  */
 const { LiveArray } = require("@kisbox/model")
-const {
-  function: { xeach },
-  property: { hide }
-} = require("@kisbox/helpers")
+const { xeach, hide } = require("@kisbox/helpers")
 
 /* Definition */
 

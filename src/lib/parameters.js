@@ -3,9 +3,7 @@
  * Parameters
  * */
 const { LiveObject } = require("@kisbox/model")
-const {
-  function: { xassoc }
-} = require("@kisbox/helpers")
+const { xassoc } = require("@kisbox/helpers")
 
 /* Definition */
 

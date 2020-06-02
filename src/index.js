@@ -3,15 +3,13 @@
  * Entry point of Cosmic.Link application. We redirect without showing the
  * interface when possible. Else, we load the GUI.
  */
+require("./helpers")
+
 const { load } = require("@kisbox/browser")
+const { extractPagename, extractQuery } = require("@kisbox/helpers")
 
 const config = require("./storage")
 const Parameters = require("./lib/parameters")
-
-require("./helpers/index")
-const {
-  url: { extractPagename, extractQuery }
-} = require("@kisbox/helpers")
 
 /* Initialization */
 

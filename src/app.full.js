@@ -15,9 +15,7 @@ const Navigation = require("./lib/navigation")
 const AntiTamper = require("./view/anti-tamper")
 const SigningWidget = require("./view/signing-widget")
 
-const {
-  html: { copyContent }
-} = require("@kisbox/helpers")
+const { copyContent } = require("@kisbox/helpers")
 
 /* Definition */
 

@@ -6,9 +6,7 @@ const QrCode = require("qrcode")
 
 const { View } = require("@kisbox/browser")
 const { type } = require("@kisbox/utils")
-const {
-  promise: { timeout }
-} = require("@kisbox/helpers")
+const { timeout } = require("@kisbox/helpers")
 
 /* Definition */
 

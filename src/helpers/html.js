@@ -5,9 +5,7 @@
 const my = exports
 
 const { html } = require("@kisbox/browser")
-const {
-  promise: { timeout }
-} = require("@kisbox/helpers")
+const { timeout } = require("@kisbox/helpers")
 
 /* Library */
 

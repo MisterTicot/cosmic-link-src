@@ -4,10 +4,7 @@
  **/
 const { View } = require("@kisbox/browser")
 const { type } = require("@kisbox/utils")
-
-const {
-  html: { copyContent }
-} = require("@kisbox/helpers")
+const { copyContent } = require("@kisbox/helpers")
 
 /* Definition */
 
