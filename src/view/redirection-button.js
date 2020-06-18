@@ -11,26 +11,52 @@ class RedirectionButton extends View {
   constructor (params) {
     super(`
 <div class="RedirectionButton">
-  <input type="button" %value %onclick %disabled>
+  <input type="button" hidden=%not:cosmicLink value=%buttonText
+    onclick=%linkAction disabled=%disabled>
+  <input type="button" hidden=%has:cosmicLink value=%noLinkButtonText
+    onclick=%noLinkAction disabled=%noLinkDisabled>
   <input type="checkbox" checked=%automaticRedirection
     $label="Automatic redirection">
 </div>
     `)
 
-    this.$import(params, ["authenticator", "resolved", "action", "result"])
+    this.$import(params, [
+      "authenticator",
+      "resolved",
+      "action",
+      "result",
+      "cosmicLink"
+    ])
     this.$link(params, ["automaticRedirection"])
   }
 
-  onclick () {
+  linkAction () {
     this.action()
+  }
+
+  noLinkAction () {
+    open(this.authenticator.url)
   }
 }
 
 /* Computations */
 const proto = RedirectionButton.prototype
 
+proto.$define("noLinkButtonText", ["authenticator"], function () {
+  if (this.authenticator.url) {
+    const shortName = this.authenticator.name.replace(/ \(.*/, "")
+    return `Go to ${shortName}`
+  } else {
+    return "No transaction"
+  }
+})
+
+proto.$define("noLinkDisabled", ["authenticator"], function () {
+  return !this.authenticator.url
+})
+
 proto.$customDefine(
-  "value",
+  "buttonText",
   ["authenticator", "resolved", "result"],
   function () {
     if (type(this.signed) === "promise") {
@@ -43,12 +69,8 @@ proto.$customDefine(
       return this.resolved
     } else if (type(this.resolved) === "promise") {
       return "..."
-    } else if (!this.resolved) {
-      return "No transaction"
-    } else if (this.authenticator.signRequest) {
+    } else {
       return `Sign with ${this.authenticator.name}`
-    } else if (this.authenticator.requestToUri) {
-      return `Go to ${this.authenticator.name}`
     }
   }
 )

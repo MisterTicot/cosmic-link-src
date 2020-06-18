@@ -15,7 +15,7 @@ class XdrArea extends View {
 </textarea>
     `)
 
-    this.$import(params, ["xdr"])
+    this.$import(params, ["cosmicLink", "xdr"])
   }
 
   onclick () {
@@ -26,8 +26,8 @@ class XdrArea extends View {
 /* Computations */
 const proto = XdrArea.prototype
 
-proto.$customDefine("placeholder", ["xdr"], function () {
-  if (!this.xdr) {
+proto.$customDefine("placeholder", ["cosmicLink", "xdr"], function () {
+  if (!this.cosmicLink) {
     return "No transaction"
   } else if (type(this.xdr) === "promise") {
     return "Pending..."
