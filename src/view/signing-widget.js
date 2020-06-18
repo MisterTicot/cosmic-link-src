@@ -24,7 +24,7 @@ class SigningWidget extends View {
   <hr>
 
   <section>
-    <h3>Step 2: Selection a Signing Method</h3>
+    <h3>Step 2: Select a Signing Method</h3>
     %handlerForm
   </section>
   <hr>
