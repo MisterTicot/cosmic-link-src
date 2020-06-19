@@ -2,32 +2,55 @@
 
 // Configuration //
 
-// Backgrounds
-$bg-inset: ghostwhite;
-$bg-outset: #f0f0f0;
-$bg-hover: $lightgray;
+// Base
+$bg-inset: grey(1);
+$bg-outset: grey(2);
+$border: grey(4);
 
-// Borders
-$border: $lightgray;
-$hover: #909090;
-$focus: lightsteelblue;
+// Hover
+$bg-hover: primary(3);
+$hover: primary(4);
 
 // States
-$disabled: $darkgray;
-$readonly: $darkgray;
+$disabled: grey(6);
+$readonly: grey(6);
 
 // Styles //
 
 form {
   clear: both;
   position: relative;
-  max-width: 30em;
-  margin: 1.05em auto;
-  
+  max-width: 34em;
+  margin: 1em auto;
+  padding: 0 1em;
   text-align: center;
+}
 
-  & > :first-child { margin-top: 0!important; }
-  & > :last-child { margin-bottom: 0!important; }
+fieldset,
+form label {
+  display: inline-block;
+  width: 100%;
+  max-width: 34em;
+  border: none;
+  margin: auto;
+
+  & > span:first-child,
+  & > legend:first-child
+  {
+    display: inline-block;
+    float: left;
+    line-height: 2em;
+    margin: 0.35em 0;
+    min-width: 20%;
+
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  &:hover > span:first-child,
+  &:hover > legend:first-child {
+    color: primary(6);
+  }
 }
 
 // Cross-browser select //
@@ -40,7 +63,9 @@ select {
 textarea,
 select,
 input,
-label {
+button,
+[type="checkbox"] + label,
+[type="radio"] + label {
   display: inline-block;
   width: 100%;
   height: 2em;
@@ -48,10 +73,7 @@ label {
   max-width: 30em;
   margin: 0.35em 0;
 
-  border: solid thin $border;
   border-radius: 0.1em;
-  outline: 0;
-  background-color: $bg-inset;
 
   padding: 0 0.5em;
   overflow: hidden;
@@ -69,27 +91,34 @@ textarea {
 // Input elements //
 textarea,
 select,
-input {
+input,
+button {
+  border: solid thin $border;
+  background-color: $bg-inset;
+
   &[readonly] {
     color: $readonly;
   }
 
-  &:hover:enabled {
-    cursor: pointer;
-    border: solid thin $hover;
-  }
-
+  &:hover:enabled,
   &:focus:enabled {
-    // box-shadow: 0 0 0px 2px $focus;
+    cursor: pointer;
+    outline: 0;
+    box-shadow: 0em 0em 0.1em primary(6);
+    background-color: primary(1);
+    border: solid thin $hover;
   }
 }
 
 // Outset elements //
-[type="button"],
-[type="submit"] {
+button,
+input[type="button"],
+input[type="submit"] {
   background: $bg-outset;
 
-  &:hover:enabled, &.enabled {
+  &:hover:enabled,
+  &:focus:enabled,
+  &.enabled {
     cursor: pointer;
     background: $bg-hover;
   }
@@ -105,6 +134,8 @@ input {
   &:checked + label::before { content: "✔ "; }
 
   & + label {
+    width: unset;
+    padding: 0 1em;
     line-height: 2em;
     border: none;
     background: $white;
@@ -113,7 +144,6 @@ input {
   &:enabled + label:hover {
     cursor: pointer;
     background: $fg-info;
-    font-style: normal;
     color: $black;
   }
 
@@ -128,7 +158,29 @@ input {
   }
 
   &:checked:disabled + label {
-    box-shadow: inset 0 0 3px 1px $disabled;
+    border: solid thin $disabled;
     color: $black;
   }
+}
+
+/* Sizing */
+
+form label > :not(span),
+form fieldset > :not(legend)
+{
+  width: 76%;
+}
+
+form .half,
+form .half + label
+{
+  width: 38%;
+  min-width: 8em;
+}
+
+form .third,
+form .third + label
+{
+  width: 25%;
+  min-width: 6em;
 }

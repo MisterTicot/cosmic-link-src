@@ -1,18 +1,18 @@
 /* Colors Theme */
 
 $white: #ffffff;
-$lightgray: lightgray;
-$gray: darkgray;
-$darkgray: dimgray;
+$lightgray: grey(3);
+$gray: grey(5);
+$darkgray: grey(7);
 $black: #292929;
 
 $shadow: $gray;
 
-$bg-dark: #001738;
-$fg-dark: #b7c0d1;
+$bg-dark: primary(9);
+$fg-dark: primary(5);
 
-$bg-light: #f6f9ff;
-$fg-light: #607492;
+$bg-light: primary(2);
+$fg-light: primary(6);
 
 $bg-info: lightgreen;
 $fg-info: mediumseagreen;

@@ -10,8 +10,8 @@
   }
 
   pre {
-    background: $bg-light;
-    color: $fg-light;
+    background: primary(1);
+    color: primary(7);
     padding: 0 1.4em;
   }
 
@@ -61,25 +61,26 @@
 
 #copied {
   position: absolute;
-  right: 0;
-  width: 4.5em;
-  transform: translate(-0.1em,0.45em);
-  line-height: 1.8em;
+  padding: 0.2em 0.6em;
+  transform: translate(0.1em, 0.45em);
 
-  background: ghostwhite;
-  background: rgba(248, 248, 255, 0.8);
-
+  color: primary(5);
   font-weight: bold;
-  color: mediumseagreen;
+  background: $white;
+  opacity: 0.9;
 
   // (hack) fix textarea moving because of margin collapse shortcut.
-  + textarea { margin-top: 0; }
+  // + textarea { margin-top: 0; }
 }
 
 
 #qrForm {
   > div {
-    background-color: ghostwhite;
+    background-color: grey(1);
+    border: solid thin grey(4);
+    border-top: none;
+    max-width: 30em;
+    margin: 0 auto;
   }
 
   input {
