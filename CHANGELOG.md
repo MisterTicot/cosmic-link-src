@@ -14,6 +14,20 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 2.0.0-beta.4 - 2020-06-21
+
+### Added
+
+- UI: Better handling of the no-transaction case.
+
+### Changed
+
+- UI: Upgrade graphic style.
+
+### Fixed
+
+- UI: Fix a typo.
+
 ## 2.0.0-beta.3 - 2020-05-17
 
 ### Added
