@@ -16,6 +16,10 @@
  */
 const protocols = exports
 
+const { friendbot } = require("@cosmic-plus/base")
+const cosmicLib = require("cosmic-lib")
+const testnet = cosmicLib.withConfig({ network: "test" })
+
 /* Data */
 
 protocols.cosmiclink = {
@@ -99,6 +103,22 @@ protocols.copy = {
   textarea: true,
   requestToXdr (cosmicLink) {
     return cosmicLink.xdr
+  }
+}
+
+protocols.testAccount = {
+  buttonText: "Sign with Testnet Account",
+  qrCode: false,
+  async getAddress () {
+    if (!this.keypair) return
+    const pubkey = this.keypair.publicKey()
+    if (await testnet.resolve.isAccountEmpty(pubkey)) {
+      await friendbot(pubkey).catch(() => null)
+    }
+    return pubkey
+  },
+  signRequest (cosmicLink) {
+    cosmicLink.sign(this.keypair)
   }
 }
 

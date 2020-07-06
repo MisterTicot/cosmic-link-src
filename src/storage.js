@@ -19,7 +19,8 @@ const config = new Storage({
   antiTamperHash: "",
   authenticatorId: "StellarAuthenticator",
   automaticRedirection: false,
-  showQrCode: false
+  showQrCode: false,
+  testAccount: null
 })
 
 /* Export */

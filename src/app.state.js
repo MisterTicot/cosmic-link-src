@@ -4,6 +4,8 @@
  * */
 const { type } = require("@kisbox/utils")
 
+const { StellarSdk } = require("@cosmic-plus/base")
+
 const CrudArray = require("./lib/crud-array")
 
 const Authenticator = require("./model/authenticator")
@@ -29,6 +31,13 @@ class AppState extends SigningFlow {
       "authenticatorId",
       "showQrCode"
     ])
+
+    // Setup test account
+    const testAccount = this.authenticators.get("TestAccount")
+    testAccount.keypair = StellarSdk.Keypair.fromSecret(params.testAccount)
+    if (this.authenticator === testAccount) {
+      this.$trigger("authenticator")
+    }
 
     // Prevent UI loading
     if (this.interrupt === true) throw "redirect"

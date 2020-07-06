@@ -6,7 +6,10 @@
 require("./helpers")
 
 const { load } = require("@kisbox/browser")
+const { type } = require("@kisbox/utils")
 const { extractPagename, extractQuery } = require("@kisbox/helpers")
+
+const { StellarSdk } = require("@cosmic-plus/base")
 
 const config = require("./storage")
 const Parameters = require("./lib/parameters")
@@ -39,6 +42,10 @@ window.onload = async function () {
   config.query = location.search
   config.selectedTabId = location.hash.substr(1)
   const assetsLoading = parseHashQuery(config, location.hash)
+
+  if (!config.testAccount) {
+    config.testAccount = StellarSdk.Keypair.random().secret()
+  }
 
   // Application
   const appModule = await import(/* webpackChunkName: "app" */ "./app")

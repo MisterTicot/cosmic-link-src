@@ -67,6 +67,13 @@ wallets.StellarLaboratoryView = {
   needNetwork: true
 }
 
+wallets.TestAccount = {
+  name: "Test Account",
+  protocol: "testAccount",
+  needSource: true,
+  needNetwork: true
+}
+
 wallets.CopyPasteXdr = {
   name: "Copy/Paste XDR",
   protocol: "copy",
