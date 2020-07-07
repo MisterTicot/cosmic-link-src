@@ -15,6 +15,10 @@ const config = require("./storage")
 const Parameters = require("./lib/parameters")
 
 /* Initialization */
+document.addEventListener("DOMContentLoaded", () => {
+  const noscript = document.querySelector("#noscript")
+  if (noscript) noscript.hidden = true
+})
 
 window.onload = async function () {
   // Service worker.
@@ -23,12 +27,6 @@ window.onload = async function () {
     worker.register("worker.js")
     worker.addEventListener("controllerchange", () => location.reload())
   }
-
-  // Hide noscript content.
-  document.addEventListener("DOMContentLoaded", () => {
-    const noscript = document.querySelector("#noscript")
-    if (noscript) noscript.hidden = true
-  })
 
   // Context
   let pagename = extractPagename(location.pathname)
