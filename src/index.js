@@ -59,7 +59,8 @@ window.onload = async function () {
   config.$import(app.state, [
     "authenticatorId",
     "showQrCode",
-    "automaticRedirection"
+    "automaticRedirection",
+    "lastAccountId"
   ])
 
   // Sync address bar.
@@ -67,6 +68,16 @@ window.onload = async function () {
     history.replaceState(null, null, `/${pagename}${route}`)
   })
   history.replaceState(null, null, `/${pagename}${app.route}`)
+
+  // Save last network.
+  const state = app.state
+  state.$on(["open", "cosmicLink"], (_, initialCosmicLink) => {
+    const cosmicLink = initialCosmicLink || state.cosmicLink
+    if (state.needNetwork && !cosmicLink.tdesc.network) {
+      config.network = state.network
+      config.horizon = state.horizon
+    }
+  })
 }
 
 async function parseHashQuery (config, hash = "#") {

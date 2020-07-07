@@ -43,6 +43,13 @@ class SigningFlow extends SigningContext {
 /* Computations */
 const proto = SigningFlow.prototype
 
+proto.$on(["open", "cosmicLink"], function (_, initialCosmicLink) {
+  const cosmicLink = initialCosmicLink || this.cosmicLink
+  if (this.needSource && !cosmicLink.tdesc.source) {
+    this.lastAccountId = this.accountId
+  }
+})
+
 proto.$define(
   "resolved",
   ["authenticator", "accountId", "network", "horizon"],

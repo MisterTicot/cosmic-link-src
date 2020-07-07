@@ -11,11 +11,16 @@ class SigningContext extends LiveObject {
   constructor (params) {
     super()
 
+    /* Defaults */
     this.network = "public"
+    this.accountId = null
+
+    /* Imports */
     this.$import(params, [
       "network",
       "horizon",
       "accountId",
+      "lastAccountId",
       "authenticator",
       "query",
       "cosmicLink"
@@ -85,15 +90,19 @@ proto.$define("lockNetwork", ["cosmicLink"], function () {
   }
 })
 
-proto.$define("accountId", ["authenticator", "cosmicLink"], function () {
+proto.$on("authenticator", function (_, previous) {
+  if (previous.getAddress) {
+    this.accountId = null
+  }
+})
+
+proto.$on(["authenticator", "cosmicLink"], function () {
   if (this.authenticator.getAddress) {
-    return this.authenticator.getAddress()
+    this.accountId = this.authenticator.getAddress()
   } else if (this.lockSource) {
-    return this.cosmicLink.tdesc.source
-  } else if (typeof this.accountId === "string") {
-    return this.accountId
-  } else {
-    return ""
+    this.accountId = this.cosmicLink.tdesc.source
+  } else if (!this.accountId) {
+    this.accountId = this.lastAccountId
   }
 })
 
