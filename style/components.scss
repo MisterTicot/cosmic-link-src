@@ -112,6 +112,9 @@
 
   text-align: center;
   font-style: italic;
+  color: primary(7);
+
+  &:hover { color: primary(5); }
 }
 
 .AntiTamper {
