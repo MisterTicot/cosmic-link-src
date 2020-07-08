@@ -14,6 +14,12 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 2.0.0-beta.6 - 2020-07-08
+
+### Fixed
+
+- UI: Fix SideFrame closing for hardware wallet & test account.
+
 ## 2.0.0-beta.5 - 2020-07-08
 
 ### Added
