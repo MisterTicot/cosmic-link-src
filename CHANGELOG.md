@@ -14,6 +14,20 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 2.0.0-beta.5 - 2020-07-08
+
+### Added
+
+- UI: Add "Test Account" signing method.
+- UI: Save network/accountId accross sessions. (CosmicLink v1 feature catchup)
+- UI: Show details for failed transactions. (CosmicLink v1 feature catchup)
+- UI: List signers when relevant. (CosmicLink v1 feature catchup)
+
+### Fixed
+
+- Style: Fix network selector on small screens.
+- UI: Fix "about" tab blinking at loading.
+
 ## 2.0.0-beta.4 - 2020-06-21
 
 ### Added
