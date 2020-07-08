@@ -53,7 +53,7 @@ proto.$on(["open", "cosmicLink"], function (_, initialCosmicLink) {
 proto.$define(
   "resolved",
   ["authenticator", "accountId", "network", "horizon"],
-  function () {
+  async function () {
     if (!this.cosmicLink) return
 
     if (this.needSource && !(this.lockSource || this.accountId)) {
@@ -71,7 +71,12 @@ proto.$define(
     config.source = this.accountId
     config.network = this.network
 
-    return this.authenticator.resolveRequest(clone, this.authenticator)
+    try {
+      return await this.authenticator.resolveRequest(clone)
+    } catch (error) {
+      error.cosmicLink = clone
+      throw error
+    }
   }
 )
 
