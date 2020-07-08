@@ -1,7 +1,6 @@
 @import "../node_modules/@cosmic-plus/assets/scss/base";
 @import "../node_modules/cosmic-lib/web/cosmic-lib";
 
-
 @import "./fonts";
 @import "./colors";
 
@@ -26,8 +25,7 @@ html {
   overflow-y: scroll;
 }
 
-body
-{
+body {
   background-color: primary(0);
 
   padding: 0 2%;
@@ -36,9 +34,8 @@ body
   line-height: 1.4em;
 }
 
-main
-{
-  @include elevation(1)
+main {
+  @include elevation(1);
 
   border-radius: 1em;
   background-color: $white;
@@ -47,7 +44,7 @@ main
   overflow: hidden;
 }
 
-// Full interface only 
+// Full interface only
 h3 {
   font-family: "Cousine", Arial, sans-serif;
 }

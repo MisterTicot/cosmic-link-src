@@ -1,6 +1,6 @@
 /* Colors Theme */
 
-$white: #ffffff;
+$white: #fff;
 $lightgray: grey(3);
 $gray: grey(5);
 $darkgray: grey(7);
@@ -19,15 +19,12 @@ $fg-info: mediumseagreen;
 $bg-error: salmon;
 $fg-error: tomato;
 
-.error
-{
+.error {
   font-weight: bold;
   color: $fg-error;
 }
 
-.info
-{
+.info {
   font-weight: bold;
   color: $fg-info;
 }
-

@@ -74,7 +74,6 @@
   // + textarea { margin-top: 0; }
 }
 
-
 #qrForm {
   > div {
     background-color: grey(1);
@@ -99,7 +98,7 @@
   canvas {
     min-width: 50%;
     max-width: 100%;
-    height: auto!important;
+    height: auto !important;
     margin: auto;
 
     padding: 1em;

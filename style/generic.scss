@@ -13,7 +13,7 @@ h2 {
 
 h3 {
   margin: 1.4rem 0;
-  
+
   font-weight: bolder;
   font-size: 0.9em;
   text-transform: uppercase;
@@ -32,8 +32,7 @@ a {
 
   transition: 0.2s color;
 
-  &:hover:not(.selected)
-  {
+  &:hover:not(.selected) {
     cursor: pointer;
     color: $fg-dark;
   }

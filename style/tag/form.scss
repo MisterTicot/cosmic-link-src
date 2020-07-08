@@ -35,8 +35,7 @@ form label {
   margin: auto;
 
   & > span:first-child,
-  & > legend:first-child
-  {
+  & > legend:first-child {
     display: inline-block;
     float: left;
     line-height: 2em;
@@ -55,6 +54,7 @@ form label {
 
 // Cross-browser select //
 $select-arrow: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50" fill="%23292929"><polygon points="0,0 60,0 30,50"/></svg>';
+
 select {
   appearance: none;
   background: url($select-arrow) right/1em no-repeat;
@@ -104,7 +104,7 @@ button {
   &:focus:enabled {
     cursor: pointer;
     outline: 0;
-    box-shadow: 0em 0em 0.1em primary(6);
+    box-shadow: 0 0 0.1em primary(6);
     background-color: primary(1);
     border: solid thin $hover;
   }
@@ -166,21 +166,18 @@ input[type="submit"] {
 /* Sizing */
 
 form label > :not(span),
-form fieldset > :not(legend)
-{
+form fieldset > :not(legend) {
   width: 76%;
 }
 
 form .half,
-form .half + label
-{
+form .half + label {
   width: 38%;
   min-width: 8em;
 }
 
 form .third,
-form .third + label
-{
+form .third + label {
   width: 25%;
   min-width: 6em;
 }
