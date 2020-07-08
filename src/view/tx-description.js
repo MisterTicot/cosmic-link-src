@@ -5,17 +5,20 @@
  * Input: cosmicLink
  * */
 
-const { View } = require("@kisbox/browser")
+const { View, html } = require("@kisbox/browser")
 
 /* Definition */
 
 class TxDescription extends View {
   constructor (params) {
     super(`
-<div class="TxDescription">%description</div>
+<div class="TxDescription cosmiclink_description">
+  %description
+  %status
+</div>
     `)
 
-    this.$import(params, ["cosmicLink"])
+    this.$import(params, ["cosmicLink", "resolved"])
   }
 }
 
@@ -28,6 +31,18 @@ proto.$define("description", ["cosmicLink"], function () {
   } else {
     return "No transaction"
   }
+})
+
+proto.$customDefine("status", ["resolved"], function () {
+  if (this.cosmicLink.status) return
+  if (!(this.resolved instanceof Error)) return
+
+  const cosmicLink = this.resolved.cosmicLink
+  if (!cosmicLink) return
+
+  const descriptionDiv = cosmicLink.htmlDescription
+  const statusDiv = html.grab(".cosmiclib_statusNode", descriptionDiv)
+  return statusDiv
 })
 
 /* Export */
