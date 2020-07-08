@@ -56,8 +56,6 @@ const helpers = AccountInput.helpers
 helpers.filter = function (accountId) {
   if (type(accountId) === "string") {
     return accountId
-  } else {
-    return ""
   }
 }
 

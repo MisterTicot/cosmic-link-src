@@ -6,7 +6,6 @@
 require("./helpers")
 
 const { load } = require("@kisbox/browser")
-const { type } = require("@kisbox/utils")
 const { extractPagename, extractQuery } = require("@kisbox/helpers")
 
 const { StellarSdk } = require("@cosmic-plus/base")

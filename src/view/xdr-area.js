@@ -31,16 +31,12 @@ proto.$customDefine("placeholder", ["cosmicLink", "xdr"], function () {
     return "No transaction"
   } else if (type(this.xdr) === "promise") {
     return "Pending..."
-  } else {
-    return this.xdr
   }
 })
 
 proto.$customDefine("value", ["xdr"], function () {
   if (type(this.xdr) === "string" || type(this.xdr) === "error") {
     return this.xdr
-  } else {
-    return ""
   }
 })
 
