@@ -13,11 +13,20 @@ const { copyContent } = require("@kisbox/helpers")
 class AccountInput extends View {
   constructor (params) {
     super(`
-<input type="text" value=%filter:accountId %onclick %readonly %placeholder
-  disabled=%notAvailable:accountId autocomplete="stellar-address">
+<div class="AccountInput">
+  <input type="text" value=%user autocomplete="stellar-user"
+    placeholder="Username"
+    hidden=%not:federation>
+  <input type="text" value=%filter:accountId %onclick %readonly %placeholder
+    disabled=%notAvailable:accountId autocomplete="stellar-address"
+    hidden=%federation >
+</div>
       `)
 
+    /* Defaults */
     this.accountId = ""
+
+    /* Imports */
     this.$import(params, ["cosmicLink", "authenticator"])
     this.$link(params, ["accountId"])
   }
@@ -31,6 +40,31 @@ class AccountInput extends View {
 
 /* Computations */
 const proto = AccountInput.prototype
+
+proto.$on(["user", "federation"], function () {
+  if (!this.federation) return
+  this.accountId = this.user ? `${this.user}*${this.federation}` : null
+})
+
+proto.$on(["federation", "accountId"], function () {
+  if (!this.federation || !this.accountId) {
+    this.user = null
+    return
+  }
+
+  const federationPattern = `\\*${this.federation}$`
+  const federationRegexp = new RegExp(federationPattern)
+
+  if (this.accountId.match(federationRegexp)) {
+    this.user = this.accountId.replace(federationRegexp, "")
+  } else {
+    this.user = null
+  }
+})
+
+proto.$define("federation", ["authenticator"], function () {
+  return this.authenticator.federation
+})
 
 proto.$define("readonly", ["cosmicLink", "authenticator"], function () {
   return !!(
