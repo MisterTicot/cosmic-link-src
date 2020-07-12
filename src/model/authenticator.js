@@ -18,6 +18,7 @@ class Authenticator extends Protocol {
       "name",
       "protocol",
       "url",
+      "federation",
       "target",
       "needSource",
       "needNetwork"

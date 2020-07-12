@@ -17,7 +17,7 @@ Storage.rename("redirect", "automaticRedirection")
 /* Load */
 const config = new Storage({
   antiTamperHash: "",
-  authenticatorId: "StellarAuthenticator",
+  authenticatorId: "Keybase",
   automaticRedirection: false,
   horizon: "https://horizon.stellar.org",
   lastAccountId: null,

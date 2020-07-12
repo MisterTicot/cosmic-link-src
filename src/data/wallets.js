@@ -5,6 +5,17 @@
 const wallets = exports
 
 /* Data */
+
+wallets.Keybase = {
+  name: "Keybase",
+  protocol: "sep0007",
+  url: "web+stellar:",
+  federation: "keybase.io",
+  target: "external",
+  needSource: true,
+  needNetwork: true
+}
+
 wallets.LedgerWallet = {
   name: "Ledger Wallet",
   protocol: "ledgerwallet",
