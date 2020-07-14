@@ -36,7 +36,7 @@ proto.$define("description", ["cosmicLink"], function () {
 })
 
 proto.$customDefine("status", ["resolved"], function () {
-  if (this.cosmicLink.status) return
+  if (!this.cosmicLink || this.cosmicLink.status) return
   if (!(this.resolved instanceof Error)) return
 
   const cosmicLink = this.resolved.cosmicLink
