@@ -58,6 +58,7 @@ proto.$on(["federation", "accountId"], function () {
   if (this.accountId.match(federationRegexp)) {
     this.user = this.accountId.replace(federationRegexp, "")
   } else {
+    this.accountId = null
     this.user = null
   }
 })
