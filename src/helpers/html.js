@@ -17,7 +17,7 @@ my.copyContent = function (element) {
   const prevNode = html.grab("#copied")
   if (prevNode) html.destroy(prevNode)
 
-  const copiedTag = html("span", { id: "copied" }, "Copied")
+  const copiedTag = html("span", { id: "copied" }, "⇠ Copied")
   html.insertBefore(element, copiedTag)
 
   return timeout(3000).then(() => html.hide(copiedTag))

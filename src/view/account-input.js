@@ -19,7 +19,7 @@ class AccountInput extends View {
     hidden=%not:federation>
   <input type="text" value=%filter:accountId %onclick %readonly %placeholder
     disabled=%notAvailable:accountId autocomplete="stellar-address"
-    hidden=%federation >
+    $ref="accountIdInput" hidden=%federation>
 </div>
       `)
 
@@ -33,7 +33,7 @@ class AccountInput extends View {
 
   onclick () {
     if (this.readonly) {
-      copyContent(this.domNode)
+      copyContent(this.$ref.accountIdInput)
     }
   }
 }
