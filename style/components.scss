@@ -63,12 +63,12 @@
 
 #copied {
   position: absolute;
+  right: 6.5%;
   padding: 0.2em 0.6em;
-  transform: translate(0.1em, 0.45em);
+  transform: translateY(0.45em);
 
   color: primary(5);
-  font-weight: bold;
-  background: $white;
+  background: grey(1);
   opacity: 0.9;
 
   // (hack) fix textarea moving because of margin collapse shortcut.
