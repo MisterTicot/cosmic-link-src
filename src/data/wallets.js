@@ -13,7 +13,7 @@ wallets.Keybase = {
   federation: "keybase.io",
   target: "external",
   needSource: true,
-  needNetwork: true
+  needNetwork: "public"
 }
 
 wallets.LedgerWallet = {
@@ -40,14 +40,16 @@ wallets.Lobstr = {
   name: "Lobstr Web (partial support)",
   protocol: "sep0007",
   url: "https://lobstr.co/?tx=",
-  target: "new"
+  target: "new",
+  needNetwork: "public"
 }
 
 wallets.StellarTerm = {
   name: "StellarTerm (partial support)",
   protocol: "sep0007",
   url: "https://stellarterm.com/?tx=",
-  target: "new"
+  target: "new",
+  needNetwork: "public"
 }
 
 wallets.Sep7Wallet = {
@@ -82,7 +84,7 @@ wallets.TestAccount = {
   name: "Test Account",
   protocol: "testAccount",
   needSource: true,
-  needNetwork: true
+  needNetwork: "test"
 }
 
 wallets.CopyPasteXdr = {
