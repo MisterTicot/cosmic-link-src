@@ -14,6 +14,20 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 2.0.0-beta.8 - 2020-07-19
+
+### Changed
+
+- Style: Tweak "copied" tag.
+- UI: Only show signing methods that can sign on the requested network. (thanks
+  [r/stake_pool](https://www.reddit.com/user/stake_pool))
+
+### Fixed
+
+- UI: Fix an out-of-place error message related to "Test Account".
+- UI: Fix an edge case in Keybase account handling.
+- UI: Fix "copied" tag positioning.
+
 ## 2.0.0-beta.7 - 2020-07-12
 
 ### Added
