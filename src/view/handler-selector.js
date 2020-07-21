@@ -7,7 +7,6 @@
  *
  * */
 const { View, html } = require("@kisbox/browser")
-const { timeout } = require("@kisbox/helpers")
 
 /* Definition */
 
@@ -21,6 +20,12 @@ class HandlerSelector extends View {
 
     this.$import(params, ["authenticators", "cosmicLink"])
     this.$link(params, ["authenticatorId"])
+  }
+
+  isTxHandlerValid (txHandlerId) {
+    return this.filteredHandlers.some(txHandler => {
+      return txHandler.id === txHandlerId
+    })
   }
 }
 
@@ -37,25 +42,22 @@ proto.$define("filteredHandlers", ["authenticators", "cosmicLink"], function () 
   })
 })
 
+// Make sure selected handler is a valid option for this network.
 proto.$on("authenticatorId", function (authenticatorId) {
   if (!authenticatorId) return
+  if (this.isTxHandlerValid(this.authenticatorId)) return
 
-  timeout(0).then(() => {
-    const selectedHandler = this.$ref("select")
-    if (selectedHandler) return
-
-    switch (this.cosmicLink.network) {
-    case "public":
-    case null:
-      this.authenticatorId = "Keybase"
-      break
-    case "test":
-      this.authenticatorId = "TestAccount"
-      break
-    default:
-      this.authenticatorId = "StellarLaboratory"
-    }
-  })
+  switch (this.cosmicLink.network) {
+  case "public":
+  case null:
+    this.authenticatorId = "Keybase"
+    break
+  case "test":
+    this.authenticatorId = "TestAccount"
+    break
+  default:
+    this.authenticatorId = "StellarLaboratory"
+  }
 })
 
 /* Helpers */
