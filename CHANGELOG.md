@@ -14,6 +14,12 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 2.0.0-beta.9 - 2020-07-21
+
+### Fixed
+
+- UI: Fix a nasty bug that prevented txHandler selection.
+
 ## 2.0.0-beta.8 - 2020-07-19
 
 ### Changed
