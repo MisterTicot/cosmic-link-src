@@ -31,8 +31,10 @@ class RedirectionButton extends View {
   }
 
   linkAction () {
-    window.scrollTo(0, window.innerHeight)
     this.action()
+    if (this.authenticator.signRequest) {
+      window.scrollTo(0, window.innerHeight)
+    }
   }
 
   noLinkAction () {

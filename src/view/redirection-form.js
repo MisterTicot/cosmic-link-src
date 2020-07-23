@@ -4,6 +4,7 @@
  * */
 const { View, html } = require("@kisbox/browser")
 const { type } = require("@kisbox/utils")
+const { timeout } = require("@kisbox/helpers")
 
 const QrCodeSwitcher = require("./qr-code-switcher")
 const RedirectionButton = require("./redirection-button")
@@ -68,6 +69,10 @@ proto.$customDefine("txResultView", ["result"], function () {
   } else {
     return new TxResultView(this.result)
   }
+})
+
+proto.$on("txResultView", function () {
+  timeout(0).then(() => window.scrollTo(0, window.innerHeight))
 })
 
 /* Export */

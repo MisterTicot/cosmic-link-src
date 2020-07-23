@@ -52,7 +52,7 @@ proto.$customDefine("signers", ["resolved"], function () {
 
   const context = this.resolved
   const transaction = this.resolved.transaction
-  if (!transaction) return
+  if (!transaction) return this.signers
 
   const signersNode = format.signatures(context, transaction)
   return signersNode
