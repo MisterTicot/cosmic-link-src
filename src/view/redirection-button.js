@@ -31,6 +31,7 @@ class RedirectionButton extends View {
   }
 
   linkAction () {
+    window.scrollTo(0, window.innerHeight)
     this.action()
   }
 
