@@ -18,7 +18,7 @@ class HandlerSelector extends View {
 </select>
     `)
 
-    this.$import(params, ["authenticators", "cosmicLink"])
+    this.$import(params, ["authenticators", "cosmicLink", "resolved"])
     this.$link(params, ["authenticatorId"])
   }
 
@@ -35,6 +35,7 @@ const proto = HandlerSelector.prototype
 proto.$define("filteredHandlers", ["authenticators", "cosmicLink"], function () {
   const network = this.cosmicLink && this.cosmicLink.tdesc.network
   if (!network) return this.authenticators
+  if (this.resolved) return this.filteredHandlers
 
   return this.authenticators.filter(handler => {
     const wantNetwork = handler.needNetwork
