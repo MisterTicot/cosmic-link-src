@@ -1,6 +1,6 @@
 {
   "name": "cosmic-link",
-  "version": "2.0.0-beta.9",
+  "version": "2.0.0-beta.10",
   "description": "The Cosmic.link website",
   "author": "MisterTicot <mister.ticot@cosmic.plus>",
   "homepage": "https://cosmic.link",
@@ -59,7 +59,7 @@
     "live-server-https": "0.0.2",
     "node-sass": "^4.14.0",
     "prettier": "^1.19.1",
-    "webpack": "^4.43.0",
+    "webpack": "^4.44.0",
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
@@ -71,12 +71,12 @@
     "@cosmic-plus/tx-result": "^1.4.0",
     "@kisbox/browser": "^1.0.0-beta.15",
     "@kisbox/helpers": "^1.0.0-beta.10",
-    "@kisbox/model": "^1.0.0-beta.14",
+    "@kisbox/model": "^1.0.0-beta.16",
     "@kisbox/service-worker": "^1.0.0-beta.10",
     "@kisbox/utils": "^1.0.0-beta.10",
     "core-js": "^3.6.5",
     "cosmic-lib": "^2.10.1",
-    "jasmine": "^3.5.0",
+    "jasmine": "^3.6.1",
     "qrcode": "^1.4.4"
   }
 }
