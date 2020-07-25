@@ -72,6 +72,7 @@ proto.$customDefine("txResultView", ["result"], function () {
 })
 
 proto.$on("txResultView", function () {
+  if (!this.result) return
   timeout(0).then(() => window.scrollTo(0, window.innerHeight))
 })
 
