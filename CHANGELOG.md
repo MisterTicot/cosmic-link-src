@@ -14,6 +14,12 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 2.0.0-beta.12 - 2020-09-12
+
+### Changed
+
+- Meta: Update dependencies.
+
 ## 2.0.0-beta.11 - 2020-07-25
 
 ### Fixed
