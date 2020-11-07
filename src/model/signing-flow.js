@@ -119,7 +119,7 @@ proto.$on("signed", function () {
 proto.$define("result", ["signed"], function () {
   if (!this.signed) return this.signed
 
-  return TxResult.forCosmicLink(this.signed).then(result => {
+  return TxResult.forCosmicLink(this.signed).then((result) => {
     if (result.validated) {
       window.parent.postMessage("close", "*")
     }

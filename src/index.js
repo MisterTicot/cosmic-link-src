@@ -61,7 +61,7 @@ window.onload = async function () {
   ])
 
   // Sync address bar.
-  app.$on("route", route => {
+  app.$on("route", (route) => {
     history.replaceState(null, null, `/${pagename}${route}`)
   })
   history.replaceState(null, null, `/${pagename}${app.route}`)

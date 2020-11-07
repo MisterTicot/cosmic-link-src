@@ -127,13 +127,13 @@ protocols.testAccount = {
 function getLedgerModule () {
   return import(
     /* webpackChunkName: "ledger" */ "@cosmic-plus/ledger-wallet"
-  ).then(ledger => ledger.default)
+  ).then((ledger) => ledger.default)
 }
 
 function getTrezorModule () {
   return import(
     /* webpackChunkName: "trezor" */ "@cosmic-plus/trezor-wallet"
-  ).then(trezor => {
+  ).then((trezor) => {
     trezor.register("https://cosmic.link", "mister.ticot@cosmic.plus")
     return trezor.default
   })

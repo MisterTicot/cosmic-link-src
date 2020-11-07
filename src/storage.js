@@ -5,10 +5,10 @@
 const Storage = require("./lib/storage")
 
 /* Upgrade from Cosmic.link v1 configuration */
-Storage.rename("QR", "showQrCode", x => x === "true")
+Storage.rename("QR", "showQrCode", (x) => x === "true")
 Storage.rename("accountId", "lastAccountId")
 Storage.rename("authenticator", "authenticatorName")
-Storage.rename("authenticatorName", "authenticatorId", x => {
+Storage.rename("authenticatorName", "authenticatorId", (x) => {
   return x.replace("/ /g", "")
 })
 Storage.rename("myHash", "antiTamperHash")

@@ -23,7 +23,7 @@ const helpers = Navigation.helpers
 helpers.toNavigationLink = function (tab) {
   const link = html("a", null, tab.title)
   link.onclick = () => this.selectedTabId = tab.id
-  this.$on("selectedTabId", selectedTabId => {
+  this.$on("selectedTabId", (selectedTabId) => {
     link.className = selectedTabId === tab.id ? "selected" : ""
   })
   return link
@@ -33,7 +33,7 @@ helpers.toNavigationLink = function (tab) {
 const proto = Navigation.prototype
 
 proto.$define("selectedTabView", ["selectedTabId"], function () {
-  const tab = this.tabs.find(t => t.id === this.selectedTabId)
+  const tab = this.tabs.find((t) => t.id === this.selectedTabId)
   if (tab) return tab.view
 })
 

@@ -18,7 +18,7 @@ Parameters.fromQuery = function (query) {
   query
     .substr(1)
     .split("&")
-    .forEach(entry => {
+    .forEach((entry) => {
       const key = entry.split("=")[0]
       const value = entry.substr(key.length + 1)
       params[key] = decodeURIComponent(value)

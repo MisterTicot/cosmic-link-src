@@ -37,7 +37,7 @@ class TxResultView extends View {
 }
 
 /* Helpers */
-TxResultView.helpers.toLi = any => html("li", [any])
+TxResultView.helpers.toLi = (any) => html("li", [any])
 
 /* Exports */
 module.exports = TxResultView
