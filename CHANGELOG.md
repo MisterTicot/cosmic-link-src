@@ -14,6 +14,12 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 2.0.0 - 2020-11-01
+
+### Changed
+
+- Meta: Update dependencies.
+
 ## 2.0.0-beta.12 - 2020-09-12
 
 ### Changed
@@ -117,6 +123,59 @@ releases, please check this changelog before upgrading.
 
 This is a rewrite ontop of Kisbox, providing identical features than the latest
 v1.
+
+## 1.21.0 - 2020-09-12
+
+### Changed
+
+- Meta: Update dependencies.
+
+## 1.20.1 - 2020-07-01
+
+### Fixed
+
+- API: Fix decoding of escaped xdrUri.
+
+## 1.20.0 - 2020-05-31
+
+### Changed
+
+- Logic: Support for protocol v13.
+
+## 1.19.0 - 2020-04-26
+
+### Changed
+
+- Logic: Improve transaction feedback.
+
+## 1.18.0 - 2020-04-18
+
+### Changed
+
+- Logic: Update hardware wallets libraries.
+
+## 1.17.0 - 2020-04-11
+
+### Changed
+
+- Data: Update known pubkeys aliases.
+
+## 1.16.0 - 2020-03-28
+
+### Changed
+
+- Logic: Update cosmic-lib to 2.7.0 (SEP29 support).
+
+## 1.15.2 - 2020-02-29
+
+### Fixed
+
+- Logic: Fix a bug that caused XDR generation to fail. When using Cosmic.link
+  for the first time, users sometime faced a "No horizon node for that network"
+  error.
+- UI: Fix a bug that prevented XDR URL update. When users signed an XDR-based
+  request using a hardware wallet, the URL was supposed to get refreshed to
+  include the signature but wasn't. (Thanks [@Tyvdh](https://github.com/tyvdh))
 
 ## 1.15.1 - 2020-02-24
 
