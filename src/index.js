@@ -9,17 +9,14 @@ const { load } = require("@kisbox/browser")
 const { extractPagename, extractQuery } = require("@kisbox/helpers")
 
 const { StellarSdk } = require("@cosmic-plus/base")
+const CosmicLink = require("./app")
 
 const config = require("./storage")
 const Parameters = require("./lib/parameters")
 
-/* Initialization */
-document.addEventListener("DOMContentLoaded", () => {
-  const noscript = document.querySelector("#noscript")
-  if (noscript) noscript.hidden = true
-})
+/* Library */
 
-window.onload = async function () {
+function initApp () {
   // Service worker.
   const worker = navigator.serviceWorker
   if (worker) {
@@ -45,11 +42,15 @@ window.onload = async function () {
   }
 
   // Application
-  const appModule = await import(/* webpackChunkName: "app" */ "./app")
-  const CosmicLinkApp = appModule.default
-  const app = new CosmicLinkApp(config)
+  const app = new CosmicLink(config)
 
-  await assetsLoading
+  window.onload = async () => {
+    await assetsLoading
+    mountApp(app, pagename)
+  }
+}
+
+function mountApp (app, pagename) {
   app.$mount()
 
   // Save user preferences.
@@ -112,3 +113,6 @@ function loadStyle (url, base = ".") {
   const href = url.match(/^https:\/\//) ? url : `${base}/${url}`
   return load.css(href).catch(console.error)
 }
+
+/* Execute */
+initApp()

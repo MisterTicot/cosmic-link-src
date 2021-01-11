@@ -2,8 +2,6 @@
 /**
  * CosmicLinkApp.State
  * */
-const { type } = require("@kisbox/utils")
-
 const { StellarSdk } = require("@cosmic-plus/base")
 
 const CrudArray = require("./lib/crud-array")
@@ -39,9 +37,6 @@ class AppState extends SigningFlow {
       this.$trigger("authenticator")
     }
 
-    // Prevent UI loading
-    if (this.interrupt === true) throw "redirect"
-
     // Beta debugging
     // eslint-disable-next-line no-console
     console.log("State:", this)
@@ -64,18 +59,19 @@ proto.$define(
 
 proto.$define(
   "interrupt",
-  ["automaticRedirection", "cosmicLink", "authenticator", "target"],
+  ["automaticRedirection", "authenticator", "uri"],
   function () {
-    if (type(this.target) !== "string") return
+    if (!this.authenticator.url) return
 
     if (this.cosmicLink && this.automaticRedirection) {
-      this.sign()
+      this.open()
       return true
     }
   }
 )
 
 /* Events */
+
 proto.$on("authenticator", function (current, previous) {
   if (previous && previous.onExit) {
     previous.onExit()
