@@ -14,6 +14,17 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 2.1.0 - 2021-01-11
+
+### Changed
+
+- Logic: Switch to stellar-sdk 7.x.
+
+### Fixed
+
+- Logic: Fix automatic redirection. (Thanks
+  [@davek6sr](https://keybase.io/davek6sr))
+
 ## 2.0.1 - 2020-11-09
 
 ### Fixed
