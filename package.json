@@ -69,9 +69,9 @@
   "dependencies": {
     "@babel/runtime": "^7.12.5",
     "@cosmic-plus/assets": "^1.6.0",
-    "@cosmic-plus/base": "^2.9.0",
-    "@cosmic-plus/ledger-wallet": "^2.6.0",
-    "@cosmic-plus/trezor-wallet": "^1.5.0",
+    "@cosmic-plus/base": "^2.10.0",
+    "@cosmic-plus/ledger-wallet": "^2.7.0",
+    "@cosmic-plus/trezor-wallet": "^1.6.0",
     "@cosmic-plus/tx-result": "^1.4.0",
     "@kisbox/browser": "^1.0.0-beta.15",
     "@kisbox/browserslist-config": "^1.0.0-beta.17",
@@ -80,7 +80,7 @@
     "@kisbox/service-worker": "^1.0.0-beta.10",
     "@kisbox/utils": "^1.0.0-beta.10",
     "core-js": "^3.7.0",
-    "cosmic-lib": "^2.12.0",
+    "cosmic-lib": "^2.23.0",
     "jasmine": "^3.6.3",
     "qrcode": "^1.4.4"
   }
