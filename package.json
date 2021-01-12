@@ -1,6 +1,6 @@
 {
   "name": "cosmic-link",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "The Cosmic.link website",
   "author": "MisterTicot <mister.ticot@cosmic.plus>",
   "homepage": "https://cosmic.link",
@@ -76,7 +76,7 @@
     "@kisbox/browser": "^1.0.0-beta.18",
     "@kisbox/browserslist-config": "^1.0.0-beta.17",
     "@kisbox/helpers": "^1.0.0-beta.19",
-    "@kisbox/model": "^1.0.0-beta.19",
+    "@kisbox/model": "^1.0.0-beta.20",
     "@kisbox/service-worker": "^1.0.0-beta.10",
     "@kisbox/utils": "^1.0.0-beta.19",
     "core-js": "^3.8.2",
