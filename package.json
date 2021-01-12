@@ -1,6 +1,6 @@
 {
   "name": "cosmic-link",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "The Cosmic.link website",
   "author": "MisterTicot <mister.ticot@cosmic.plus>",
   "homepage": "https://cosmic.link",
@@ -63,7 +63,7 @@
     "postcss": "^8.2.4",
     "postcss-cli": "^8.3.1",
     "prettier": "^2.2.1",
-    "webpack": "^4.45.0",
+    "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {

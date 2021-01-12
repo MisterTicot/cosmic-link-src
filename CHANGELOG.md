@@ -14,6 +14,12 @@ Versioning](https://semver.org/spec/v2.0.0.html)**. Version syntax is
 backward-compatibility and can be updated to without risk of breakage. For major
 releases, please check this changelog before upgrading.
 
+## 2.1.1 - 2021-01-12
+
+### Fixed
+
+- Meta: Fix application update.
+
 ## 2.1.0 - 2021-01-11
 
 ### Changed
